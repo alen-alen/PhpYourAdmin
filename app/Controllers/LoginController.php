@@ -12,7 +12,6 @@ class LoginController extends Controller
 {
     public function index()
     {
-      
         return $this->view('login');
     }
 
@@ -30,6 +29,6 @@ class LoginController extends Controller
 
         Cookie::set('user', time());
 
-        App::redirect('');
+        App::redirect('/');
     }
 }

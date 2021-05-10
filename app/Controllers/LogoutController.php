@@ -19,6 +19,6 @@ class LogoutController extends Controller
 
         Cookie::destroy('user');
 
-        App::redirect('');
+        App::redirect('/');
     }
 }

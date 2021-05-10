@@ -13,3 +13,5 @@ function sessionGet($key, $secondKey = false)
 
     return false;
 }
+
+
