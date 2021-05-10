@@ -3,6 +3,7 @@
 namespace PhpYourAdimn\Core;
 
 use PhpYourAdimn\Core\Request;
+use PhpYourAdimn\Core\Env\DotEnv;
 use PhpYourAdimn\App\Helpers\Cookie;
 use PhpYourAdimn\App\Helpers\Session;
 use PhpYourAdimn\Core\Database\Connection;
@@ -14,6 +15,8 @@ class App
     public function __construct(Router $router)
     {
         $this->router = $router;
+
+       
     }
 
     public function run()
@@ -36,10 +39,10 @@ class App
         header("Location:/{$path}");
         die();
     }
-  public static  function dd($data)
-{
-    echo "<pre>";
-    die(var_dump($data));
-    echo "</pre>";
-}
+    public static  function dd($data)
+    {
+        echo "<pre>";
+        die(var_dump($data));
+        echo "</pre>";
+    }
 }

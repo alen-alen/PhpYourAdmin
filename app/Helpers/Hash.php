@@ -4,12 +4,11 @@ namespace PhpYourAdimn\App\Helpers;
 
 class Hash
 {
+
     const CIPHERING = "AES-128-CTR";
 
     const ENCRYPTION_IV = "1234567891011121";
 
-
-    // NE ZABORAVAJ DA NAPRAIS ENV I TAMU DA  GO CUVAS $encryption_key
     public static function encrypt($string)
     {
         $simple_string = $string;
@@ -24,7 +23,7 @@ class Hash
         $encryption_iv = self::ENCRYPTION_IV;
 
         // Store the encryption key
-        $encryption_key = 'alen';
+        $encryption_key = getenv("ECNRYPTION_KEY");
 
         // Use openssl_encrypt() function to encrypt the data
         $encryption = openssl_encrypt(
@@ -37,7 +36,7 @@ class Hash
 
         return $encryption;
     }
-    
+
     public static function decrypt($string)
     {
         $encryption = $string;
@@ -50,7 +49,7 @@ class Hash
         $decryption_iv = self::ENCRYPTION_IV;
 
         // Store the decryption key
-        $decryption_key = 'alen';
+        $decryption_key = getenv("ECNRYPTION_KEY");
 
         // Use openssl_decrypt() function to decrypt the data
         $decryption = openssl_decrypt(

@@ -9,7 +9,6 @@ use PhpYourAdimn\App\Helpers\Cookie;
 use PhpYourAdimn\App\Helpers\UserFile;
 use PhpYourAdimn\Core\Database\Connection;
 
-
 class LogoutController extends Controller
 {
     public function logout()
