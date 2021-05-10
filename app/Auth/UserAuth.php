@@ -13,7 +13,7 @@ class UserAuth
     public static function autorize()
     {
         if (!Cookie::isSet('user')) {
-            App::redirect('');
+            App::redirect('login');
         }
     }
 }

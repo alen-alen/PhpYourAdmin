@@ -30,6 +30,6 @@ class LoginController extends Controller
 
         Cookie::set('user', time());
 
-        App::redirect('home');
+        App::redirect('');
     }
 }

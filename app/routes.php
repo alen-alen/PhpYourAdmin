@@ -1,8 +1,8 @@
 <?php
 
-$router->get('', 'LoginController@index');
+$router->get('', 'HomeController@index');
 
-$router->get('home', 'HomeController@index');
+$router->get('login', 'LoginController@index');
 
 $router->post('login', 'LoginController@login');
 
