@@ -2,8 +2,8 @@
 
 namespace PhpYourAdimn\Core\Database;
 
-use PhpYourAdimn\App\Helpers\File;
 use PhpYourAdimn\App\Helpers\Cookie;
+use PhpYourAdimn\App\Helpers\UserFile;
 
 class Connection
 {
@@ -20,7 +20,7 @@ class Connection
      */
     public static function make()
     {
-        $config = File::getUserById(Cookie::get('user'));
+        $config = UserFile::getUserById(Cookie::get('user'));
 
         if (self::$pdo == null) {
             try {

@@ -18,7 +18,7 @@ class UserFile
      */
     public static function getUserById($userId)
     {
-        $users = StringHelper::convertStringToArray(self::getDecryptedData());
+        $users = self::convertToArray(self::getDecryptedData());
 
         $user = array_filter($users, function ($user) use ($userId) {
             return $user['id'] == $userId;
@@ -36,7 +36,7 @@ class UserFile
      */
     public static function getUserByName($username)
     {
-        $users = StringHelper::convertStringToArray(self::getDecryptedData());
+        $users = self::convertToArray(self::getDecryptedData());
 
         $user = array_filter($users, function ($user) use ($username) {
             return $user['username'] == $username;
