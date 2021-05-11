@@ -36,7 +36,7 @@ class Hash
 
         $encryptionIv = self::ENCRYPTION_IV;
 
-        $encryptionKey = getenv("ECNRYPTION_KEY");
+        $encryptionKey = getenv("ENCRYPTION_KEY");
 
         $encryption = openssl_encrypt(
             $simpleString,
@@ -64,7 +64,7 @@ class Hash
 
         $decryptionIv = self::ENCRYPTION_IV;
 
-        $decryptionKey = getenv("ECNRYPTION_KEY");
+        $decryptionKey = getenv("ENCRYPTION_KEY");
 
         $decryption = openssl_decrypt(
             $encryption,

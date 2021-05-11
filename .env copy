@@ -1,2 +1,2 @@
-ECNRYPTION_KEY=key
+ENCRYPTION_KEY=key
 FILE_PATH=users.txt

@@ -33,6 +33,7 @@ class Connection
     private function createConnection(): void
     {
         $config = UserFile::getUserById(Cookie::get('user'));
+     
         try {
             self::$connection = new \PDO("mysql:host={$config['host']}", $config['username'], $config['password']);
         } catch (\PDOException $e) {
