@@ -7,28 +7,24 @@ use PhpYourAdimn\Core\Database\Connection;
 
 class User
 {
+    /**
+     * User id
+     * 
+     * @var string $id
+     */
     private $id;
 
     public function __construct()
     {
-        $this->id = time();
-    }
-    /**
-     * Connects the user to the SQL server
-     * 
-     * @return void
-     */
-    public function connectToDb($credentials)
-    {
-        // Connection::connect($credentials['host'], $credentials['username'], $credentials['password']);
+        $this->id = (string) time();
     }
 
     /**
      * Returns the id of the user.
-     * @return int user id
+     * @return string user id
      */
-    public function getId()
+    public function getId(): string
     {
-        return $this->id;
+        return (string) $this->id;
     }
 }

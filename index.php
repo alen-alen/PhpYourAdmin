@@ -5,14 +5,13 @@
 use PhpYourAdimn\Core\App;
 use PhpYourAdimn\Core\Router;
 use PhpYourAdimn\Core\Env\DotEnv;
+use PhpYourAdimn\App\Helpers\Session;
 
 
 
 require __DIR__ . '/vendor/autoload.php';
 
-require __DIR__ . '/core/helpers.php';
-
-session_start();
+Session::start();
 
 (new DotEnv(__DIR__ . '/.env'))->load();
 

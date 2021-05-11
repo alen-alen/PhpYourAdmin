@@ -4,8 +4,18 @@ namespace PhpYourAdimn\App\Helpers;
 
 class Session
 {
+    /**
+     * Active session flag
+     * 
+     * @var bool $active 
+     */
     private static $active = false;
 
+    /**
+     * Start a session
+     * 
+     * @return void
+     */
     public static function start()
     {
         if (self::$active === false) {
@@ -13,13 +23,27 @@ class Session
             self::$active = true;
         }
     }
-    
-    public static function set($key, $value)
+
+    /**
+     * Set a new session item 
+     * 
+     * @param string $key
+     * @param string|array $value
+     * 
+     * @return void
+     */
+    public static function set(string $key, $value): void
     {
         $_SESSION[$key] = $value;
     }
-
-    public static function get($key, $secondKey = false)
+    /**
+     * Get a session item by it's key
+     * @param string $key
+     * @param string $secondKey if session value is an array
+     * 
+     * @return string session item value
+     */
+    public static function get(string $key, $secondKey = false): string
     {
         if ($secondKey === true) {
             if (isset($_SESSION[$key][$secondKey])) {
@@ -32,15 +56,12 @@ class Session
 
         return false;
     }
-
-    public static function display()
-    {
-        echo '<pre>';
-        print_r($_SESSION);
-        echo '</pre>';
-    }
-
-    public static function destroy()
+    /**
+     * Destroy the active session
+     * 
+     * @return void
+     */
+    public static function destroy(): void
     {
         if (self::$active === true) {
             session_destroy();

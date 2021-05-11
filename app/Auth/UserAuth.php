@@ -12,7 +12,7 @@ class UserAuth
      */
     public static function autorize()
     {
-        if (!Cookie::isSet('user')) {
+        if (!Cookie::exist('user')) {
             App::redirect('login');
         }
     }

@@ -4,9 +4,10 @@ namespace PhpYourAdimn\App\Controllers;
 
 use PhpYourAdimn\Core\App;
 use PhpYourAdimn\App\Models\User;
+use PhpYourAdimn\App\File\UserFile;
 use PhpYourAdimn\App\Helpers\Cookie;
-use PhpYourAdimn\App\Helpers\UserFile;
 use PhpYourAdimn\App\Requests\LoginRequest;
+
 
 class LoginController extends Controller
 {
@@ -15,10 +16,14 @@ class LoginController extends Controller
         return $this->view('login');
     }
 
-    public function login()
-    {
-        $request = $_POST;
 
+    /**
+     * Saves the user in a txt file and creates a connection with mysql
+     * 
+     * @param array $request
+     */
+    public function login($request)
+    {
         $loginRequest = new LoginRequest($request);
 
         $request = $loginRequest->validate();

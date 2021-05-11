@@ -2,20 +2,22 @@
 
 namespace PhpYourAdimn\App\Controllers;
 
-
 use PhpYourAdimn\Core\App;
-
+use PhpYourAdimn\App\File\UserFile;
 use PhpYourAdimn\App\Helpers\Cookie;
-use PhpYourAdimn\App\Helpers\UserFile;
-use PhpYourAdimn\Core\Database\Connection;
 
 class LogoutController extends Controller
 {
-    public function logout()
-    {
-        UserFile::deleteUser($_COOKIE['user']);
 
-        Connection::disconect();
+    /**
+     * Delete the user from the txt file and
+     * destroy the user cookie
+     * 
+     * @return void
+     */
+    public function logout(): void
+    {
+        UserFile::deleteUser(Cookie::get('user'));
 
         Cookie::destroy('user');
 

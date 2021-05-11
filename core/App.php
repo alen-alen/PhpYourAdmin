@@ -3,7 +3,7 @@
 namespace PhpYourAdimn\Core;
 
 use PhpYourAdimn\Core\Request;
-use PhpYourAdimn\Core\Env\DotEnv;
+use PhpYourAdimn\App\File\UserFile;
 use PhpYourAdimn\App\Helpers\Cookie;
 use PhpYourAdimn\App\Helpers\Session;
 use PhpYourAdimn\Core\Database\Connection;
@@ -15,14 +15,14 @@ class App
     public function __construct(Router $router)
     {
         $this->router = $router;
-
-       
     }
 
     public function run()
     {
-        if (Cookie::isSet('user')) {
-            Connection::make();
+        UserFile::createFile(getenv('FILE_PATH'));
+
+        if (Cookie::exist('user')) {
+            Connection::getInstance();
         }
 
         $this->router->load('app/routes.php')
@@ -31,7 +31,7 @@ class App
 
     public static function redirect($path, array $data = null)
     {
-        if ($data == null) {
+        if (!$data) {
             header("Location:/{$path}");
             die();
         }
@@ -39,10 +39,9 @@ class App
         header("Location:/{$path}");
         die();
     }
-    public static  function dd($data)
+
+    public function __destruct()
     {
-        echo "<pre>";
-        die(var_dump($data));
-        echo "</pre>";
+        Connection::close();
     }
 }

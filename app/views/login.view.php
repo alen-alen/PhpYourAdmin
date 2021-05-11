@@ -1,11 +1,14 @@
 <?php
 
+use PhpYourAdimn\App\Helpers\Cookie;
+use PhpYourAdimn\App\Helpers\Session;
+
 require 'app/views/parcels/head.php';
 ?>
 
 <div class="container">
     <div class="row my-5">
-        <?php if (isset($_COOKIE['user'])) { ?>
+        <?php if (Cookie::exist('user')) { ?>
             <div class="col-8 offset-2">
                 <div class=' border shadow p-5'>
                     <div class="alert alert-success">You are already logged in!</div>
@@ -17,9 +20,9 @@ require 'app/views/parcels/head.php';
                 <div class=' border shadow p-5'>
                     <h1 class='mb-5 text-center'>Login</h1>
 
-                    <?php if (sessionGet('error')) { ?>
+                    <?php if (Session::get('error')) { ?>
 
-                        <div class='alert alert-danger text-center'><?= sessionGet('error') ?></div>
+                        <div class='alert alert-danger text-center'><?= Session::get('error') ?></div>
                     <?php } ?>
 
                     <form action='login' method="POST">
@@ -60,8 +63,6 @@ require 'app/views/parcels/head.php';
                     </form>
 
                 </div>
-
-
             </div>
         <?php } ?>
     </div>

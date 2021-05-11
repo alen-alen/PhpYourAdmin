@@ -4,40 +4,57 @@ namespace PhpYourAdimn\App\Helpers;
 
 class Hash
 {
+    /**
+     *  Algorithm for performing encryption and decryption
+     * 
+     * @var string CIPHERING
+     */
+    private const CIPHERING = "AES-128-CTR";
 
-    const CIPHERING = "AES-128-CTR";
+    /**
+     *   Random number that guarantees the encrypted text is unique
+     * 
+     * @var string ENCRYPTION_IV
+     */
+    private const ENCRYPTION_IV = "1234567891011121";
 
-    const ENCRYPTION_IV = "1234567891011121";
-
-    public static function encrypt($string)
+    /**
+     * Use openssl_encrypt() function to encrypt the data
+     * 
+     * @param string $string
+     * @return string encrypted string
+     */
+    public static function encrypt(string $string): string
     {
-        $simple_string = $string;
+        $simpleString = $string;
 
         $ciphering = self::CIPHERING;
 
-        // Use OpenSSl Encryption method
         $iv_length = openssl_cipher_iv_length($ciphering);
+
         $options = 0;
 
-        // Non-NULL Initialization Vector for encryption
-        $encryption_iv = self::ENCRYPTION_IV;
+        $encryptionIv = self::ENCRYPTION_IV;
 
-        // Store the encryption key
-        $encryption_key = getenv("ECNRYPTION_KEY");
+        $encryptionKey = getenv("ECNRYPTION_KEY");
 
-        // Use openssl_encrypt() function to encrypt the data
         $encryption = openssl_encrypt(
-            $simple_string,
+            $simpleString,
             $ciphering,
-            $encryption_key,
+            $encryptionKey,
             $options,
-            $encryption_iv
+            $encryptionIv
         );
-
         return $encryption;
     }
 
-    public static function decrypt($string)
+    /**
+     * Use openssl_decrypt() function to decrypt the data
+     * 
+     * @param string $string encrypted
+     * @return string decrypted string
+     */
+    public static function decrypt(string $string): string
     {
         $encryption = $string;
 
@@ -45,23 +62,17 @@ class Hash
 
         $options = 0;
 
-        // Non-NULL Initialization Vector for decryption
-        $decryption_iv = self::ENCRYPTION_IV;
+        $decryptionIv = self::ENCRYPTION_IV;
 
-        // Store the decryption key
-        $decryption_key = getenv("ECNRYPTION_KEY");
+        $decryptionKey = getenv("ECNRYPTION_KEY");
 
-        // Use openssl_decrypt() function to decrypt the data
         $decryption = openssl_decrypt(
             $encryption,
             $ciphering,
-            $decryption_key,
+            $decryptionKey,
             $options,
-            $decryption_iv
+            $decryptionIv
         );
-
-        // Display the decrypted string
-
         return $decryption;
     }
 }

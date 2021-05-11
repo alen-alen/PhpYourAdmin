@@ -2,34 +2,64 @@
 
 namespace PhpYourAdimn\Core\Database;
 
+use PhpYourAdimn\App\File\UserFile;
 use PhpYourAdimn\App\Helpers\Cookie;
-use PhpYourAdimn\App\Helpers\UserFile;
+
 
 class Connection
 {
     /**
-     * @var PDO $pdo
+     * @var PDO $connection
      */
-    public static $pdo = null;
+    public static $connection = NULL;
 
     /**
-     * Sets the pdo connection to mysql server
+     * Instance of this class
      * 
-     * @return PDOException on failure
-     * @return void on success
+     * @var Connection $instance
      */
-    public static function make()
+    public static $instance = NULL;
+
+    private function __construct()
+    {
+        $this->createConnection();
+    }
+
+    /**
+     * Creates a connection with the logged in user's credentials
+     * 
+     * @return void
+     */
+    private function createConnection(): void
     {
         $config = UserFile::getUserById(Cookie::get('user'));
+        try {
+            self::$connection = new \PDO("mysql:host={$config['host']}", $config['username'], $config['password']);
+        } catch (\PDOException $e) {
 
-        if (self::$pdo == null) {
-            try {
-                self::$pdo = new \PDO("mysql:host={$config['host']}", $config['username'], $config['password']);
-            } catch (\PDOException $e) {
-
-                die($e->getMessage());
-            }
+            die($e->getMessage());
         }
+    }
+    /**
+     * Create an instance of this class and return it
+     * 
+     * @return Connection
+     */
+    public static function getInstance(): Connection
+    {
+        if (self::$instance === NULL) {
+            self::$instance = new Connection();
+        }
+        return self::$instance;
+    }
+    /**
+     * Return the PDO connection
+     * 
+     * @return \PDO
+     */
+    public function getConnection()
+    {
+        return self::$connection;
     }
 
     /**
@@ -42,9 +72,9 @@ class Connection
      * @return true -on success
      * @return false -on failure
      */
-    public static function validate($host, $username, $password): bool
+    public static function validate(string $host, string $username, string $password): bool
     {
-        if (self::$pdo == null) {
+        if (self::$connection === null) {
             try {
                 new \PDO("mysql:host=$host", $username, $password);
                 return true;
@@ -54,22 +84,38 @@ class Connection
         }
     }
 
-    public static function showDatabases()
+    /**
+     * Query for showing all databases from the connection
+     * 
+     * @return array
+     */
+    public function showDatabases(): array
     {
-        $stmt = self::$pdo->query('SHOW DATABASES');
+        $stmt = self::$connection->query('SHOW DATABASES');
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public static function selectDatabase($database)
+    /**
+     * Query for selecting a database
+     * 
+     * @param string $databaseName
+     * @return void
+     */
+    public function selectDatabase(string $databaseName): void
     {
-        self::$pdo->exec("USE $database");
+        self::$connection->exec("USE $databaseName");
     }
 
-    public static function disconect()
+    /**
+     * Close the PDO connection
+     * 
+     * @return void
+     */
+    public static function close(): void
     {
-        if (self::$pdo !== null) {
-            self::$pdo = null;
+        if (self::$connection !== null) {
+            self::$connection = null;
         }
     }
 }

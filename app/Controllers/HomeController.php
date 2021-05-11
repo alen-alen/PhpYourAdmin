@@ -3,7 +3,7 @@
 namespace PhpYourAdimn\App\Controllers;
 
 use PhpYourAdimn\App\Auth\UserAuth;
-
+use PhpYourAdimn\Core\Database\Connection;
 
 class HomeController extends Controller
 {

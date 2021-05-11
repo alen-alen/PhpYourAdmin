@@ -11,10 +11,9 @@ class DotEnv
      */
     protected $path;
 
-
+   
     public function __construct(string $path)
     {
-        // die(var_dump($path));
         if (!file_exists($path)) {
             throw new \InvalidArgumentException(sprintf('%s does not exist', $path));
         }
@@ -34,7 +33,7 @@ class DotEnv
                 continue;
             }
 
-            list($name, $value) = explode('=', $line, 2);
+            [$name, $value] = explode('=', $line, 2);
             $name = trim($name);
             $value = trim($value);
 
