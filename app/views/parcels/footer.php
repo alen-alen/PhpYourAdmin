@@ -3,4 +3,4 @@
 </body>
 
 </html>
-<?php session_destroy() ?>
+<?php \PhpYourAdimn\App\Helpers\Session::destroy() ?>

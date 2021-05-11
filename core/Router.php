@@ -2,17 +2,24 @@
 
 namespace PhpYourAdimn\Core;
 
-use PhpYourAdimn\App\Requests\LoginRequest;
-
 class Router
 {
+    /**
+     * Array of GET and POST routes
+     *@var array $routes 
+     */
     public $routes = [
         'GET' => [],
 
         'POST' => [],
     ];
-
-    public function load($file)
+    /**
+     * Loads routes from the routes file path
+     * 
+     * @param string $file 
+     * @return Router
+     */
+    public function load(string $file)
     {
         $router = new $this;
 
@@ -20,27 +27,50 @@ class Router
 
         return $router;
     }
-
-    public function get($uri, $controller)
+    /**
+     * Set a get route in the routes property array
+     * 
+     * @param string $uri
+     * @param string $controller
+     * @return void
+     */
+    public function get(string $uri, string $controller): void
     {
         $this->routes['GET'][$uri] = $controller;
     }
-
-    public function post($uri, $controller)
+    /**
+     * Set a post route in the routes property array
+     * 
+     * @param string $uri
+     * @param string $controller
+     * @return void
+     */
+    public function post(string $uri, string $controller): void
     {
         $this->routes['POST'][$uri] = $controller;
     }
 
-    public function direct($uri, $requestType)
+    /**
+     * Redirects the user to the appropriate Controller and method
+     * 
+     * @param string $uri
+     * @param string $requestType GET or POST
+     */
+    public function direct(string $uri, string $requestType)
     {
         if (array_key_exists($uri, $this->routes[$requestType])) {
-            
+
             return  $this->callAction(...explode('@', $this->routes[$requestType][$uri]));
         }
         throw new \Exception('No routes defined');
     }
-
-    protected function callAction($controller, $action)
+    /**
+     * Create a controller instance and call the appropriate method-action
+     * 
+     * @param string $controller
+     * @param string $action
+     */
+    protected function callAction(string $controller, string $action)
     {
         $controller = "PhpYourAdimn\\App\\Controllers\\{$controller}";
 

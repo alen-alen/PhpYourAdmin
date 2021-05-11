@@ -4,18 +4,32 @@ namespace PhpYourAdimn\Core;
 
 class Request
 {
-    public static function uri()
+    /**
+     * Return the current uri
+     * @return string
+     */
+    public static function uri(): string
     {
         trim($_SERVER['REQUEST_URI'], '/');
         return  trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
     }
 
-    public static function method()
+    /**
+     * Return the current method GET or POST
+     * 
+     * @return string
+     */
+    public static function method(): string
     {
         return $_SERVER['REQUEST_METHOD'];
     }
 
-    public static function requestData()
+    /**
+     * Return The data from the request 
+     * 
+     * @return array
+     */
+    public static function requestData(): array
     {
         if (self::isPost()) {
             return $_POST;
@@ -23,7 +37,12 @@ class Request
         return $_GET;
     }
 
-    public static function isPost()
+    /**
+     * Check if the request method is POST
+     * 
+     * @return bool;
+     */
+    public static function isPost(): bool
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             return true;
