@@ -11,8 +11,11 @@ class HomeController extends Controller
   {
     UserAuth::autorize();
   }
+
   public function index()
   {
-    return $this->view('home');
+    $databases = Connection::getInstance()->getDatabases();
+
+    return $this->view('home', compact('databases'));
   }
 }

@@ -30,6 +30,7 @@ class LoginRequest
      */
     public function __construct(array $userInputs)
     {
+      
         $this->data = $userInputs;
     }
     /**

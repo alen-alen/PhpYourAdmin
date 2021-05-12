@@ -33,12 +33,21 @@ class Connection
     private function createConnection(): void
     {
         $config = UserFile::getUserById(Cookie::get('user'));
-     
-        try {
-            self::$connection = new \PDO("mysql:host={$config['host']}", $config['username'], $config['password']);
-        } catch (\PDOException $e) {
 
-            die($e->getMessage());
+        if (isset($_GET['db'])) {
+            try {
+                self::$connection = new \PDO("mysql:host={$config['host']};dbname={$_GET['db']}", $config['username'], $config['password']);
+            } catch (\PDOException $e) {
+
+                die($e->getMessage());
+            }
+        } else {
+            try {
+                self::$connection = new \PDO("mysql:host={$config['host']}", $config['username'], $config['password']);
+            } catch (\PDOException $e) {
+
+                die($e->getMessage());
+            }
         }
     }
     /**
@@ -90,7 +99,7 @@ class Connection
      * 
      * @return array
      */
-    public function showDatabases(): array
+    public function getDatabases(): array
     {
         $stmt = self::$connection->query('SHOW DATABASES');
 
@@ -98,14 +107,52 @@ class Connection
     }
 
     /**
-     * Query for selecting a database
+     * Query for showing all databases from the connection
      * 
-     * @param string $databaseName
-     * @return void
+     * @return array
      */
-    public function selectDatabase(string $databaseName): void
+    public function getTables(): array
     {
-        self::$connection->exec("USE $databaseName");
+        $stmt = self::$connection->query('SHOW TABLES');
+
+        $tables = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        $tables = array_map(function ($table) {
+            $table = array_values($table);
+            return array_pop($table);
+        }, $tables);
+
+        return $tables;
+    }
+
+    /**
+     * Returns the table columns
+     * 
+     * @param string $table table name
+     * @return array
+     */
+    public function getTableColumns(string $table): array
+    {
+        $sql = "SHOW COLUMNS FROM $table;";
+
+        $stmt = self::$connection->query($sql);
+
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Return everything from table $table
+     * 
+     * @param string $table table name
+     * @return array
+     */
+    public function select(string $table): array
+    {
+        $sql = "SELECT * FROM $table";
+
+        $stmt = self::$connection->query($sql);
+
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
