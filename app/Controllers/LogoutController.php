@@ -2,13 +2,12 @@
 
 namespace PhpYourAdimn\App\Controllers;
 
-use PhpYourAdimn\Core\App;
 use PhpYourAdimn\App\File\UserFile;
+use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\App\Helpers\Cookie;
 
 class LogoutController extends Controller
 {
-
     /**
      * Delete the user from the txt file and
      * destroy the user cookie
@@ -21,6 +20,6 @@ class LogoutController extends Controller
 
         Cookie::destroy('user');
 
-        App::redirect('');
+        Route::redirect('');
     }
 }

@@ -12,3 +12,8 @@
     tr {
         max-height: 50px;
     }
+    
+    .dashboard {
+        resize: line;
+        overflow: auto;
+    }

@@ -5,13 +5,12 @@ namespace PhpYourAdimn\Core\Database;
 use PhpYourAdimn\App\File\UserFile;
 use PhpYourAdimn\App\Helpers\Cookie;
 
-
 class Connection
 {
     /**
      * @var PDO $connection
      */
-    public static $connection = NULL;
+    public static $pdo = NULL;
 
     /**
      * Instance of this class
@@ -20,9 +19,21 @@ class Connection
      */
     public static $instance = NULL;
 
+    /**
+     * Connection configuration data
+     * 
+     * @var array $config
+     */
+    private array $config = [];
+
     private function __construct()
     {
-        $this->createConnection();
+        $this->config = UserFile::getUserById(Cookie::get('user'));
+
+        if (isset($_GET['db'])) {
+            return $this->connectDb($_GET['db']);
+        }
+        return  $this->createConnection();
     }
 
     /**
@@ -32,24 +43,29 @@ class Connection
      */
     private function createConnection(): void
     {
-        $config = UserFile::getUserById(Cookie::get('user'));
+        try {
+            self::$pdo = new \PDO("mysql:host={$this->config['host']}", $this->config['username'], $this->config['password']);
+        } catch (\PDOException $e) {
 
-        if (isset($_GET['db'])) {
-            try {
-                self::$connection = new \PDO("mysql:host={$config['host']};dbname={$_GET['db']}", $config['username'], $config['password']);
-            } catch (\PDOException $e) {
-
-                die($e->getMessage());
-            }
-        } else {
-            try {
-                self::$connection = new \PDO("mysql:host={$config['host']}", $config['username'], $config['password']);
-            } catch (\PDOException $e) {
-
-                die($e->getMessage());
-            }
+            die($e->getMessage());
         }
     }
+
+    /**
+     * Update the connection with the selected database
+     * 
+     * @param string $dbName
+     * @return void
+     */
+    private function connectDb(string $dbName): void
+    {
+        try {
+            self::$pdo = new \PDO("mysql:host={$this->config['host']};dbname={$dbName}", $this->config['username'], $this->config['password']);
+        } catch (\PDOException $e) {
+            die($e->getMessage());
+        }
+    }
+
     /**
      * Create an instance of this class and return it
      * 
@@ -69,7 +85,7 @@ class Connection
      */
     public function getConnection()
     {
-        return self::$connection;
+        return self::$pdo;
     }
 
     /**
@@ -84,7 +100,7 @@ class Connection
      */
     public static function validate(string $host, string $username, string $password): bool
     {
-        if (self::$connection === null) {
+        if (self::$pdo === null) {
             try {
                 new \PDO("mysql:host=$host", $username, $password);
                 return true;
@@ -95,75 +111,14 @@ class Connection
     }
 
     /**
-     * Query for showing all databases from the connection
-     * 
-     * @return array
-     */
-    public function getDatabases(): array
-    {
-        $stmt = self::$connection->query('SHOW DATABASES');
-
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-    }
-
-    /**
-     * Query for showing all databases from the connection
-     * 
-     * @return array
-     */
-    public function getTables(): array
-    {
-        $stmt = self::$connection->query('SHOW TABLES');
-
-        $tables = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-        $tables = array_map(function ($table) {
-            $table = array_values($table);
-            return array_pop($table);
-        }, $tables);
-
-        return $tables;
-    }
-
-    /**
-     * Returns the table columns
-     * 
-     * @param string $table table name
-     * @return array
-     */
-    public function getTableColumns(string $table): array
-    {
-        $sql = "SHOW COLUMNS FROM $table;";
-
-        $stmt = self::$connection->query($sql);
-
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-    }
-
-    /**
-     * Return everything from table $table
-     * 
-     * @param string $table table name
-     * @return array
-     */
-    public function select(string $table): array
-    {
-        $sql = "SELECT * FROM $table";
-
-        $stmt = self::$connection->query($sql);
-
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-    }
-
-    /**
      * Close the PDO connection
      * 
      * @return void
      */
     public static function close(): void
     {
-        if (self::$connection !== null) {
-            self::$connection = null;
+        if (self::$pdo !== null) {
+            self::$pdo = null;
         }
     }
 }

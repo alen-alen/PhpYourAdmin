@@ -3,18 +3,20 @@
 namespace PhpYourAdimn\App\Controllers;
 
 use PhpYourAdimn\App\Auth\UserAuth;
-use PhpYourAdimn\Core\Database\Connection;
+use PhpYourAdimn\Core\Database\Query;
 
 class HomeController extends Controller
 {
-  public function __construct()
+  public function __construct(Query $query)
   {
+    parent::__construct($query);
+
     UserAuth::autorize();
   }
 
   public function index()
   {
-    $databases = Connection::getInstance()->getDatabases();
+    $databases = $this->query->getDatabases();
 
     return $this->view('home', compact('databases'));
   }

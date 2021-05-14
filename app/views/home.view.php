@@ -1,19 +1,21 @@
 <?php require 'app/views/parcels/head.php'; ?>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-3 border">
-            <?php require 'parcels/dashboard.php' ?>
+        <div class="col-2 border">
+            <div class='dashboard'>
+                <?php require 'parcels/dashboard.php' ?>
+            </div>
         </div>
-        <div class="col-9 border ">
-            <div class='table'>
+        <div class="col-9 border mt-5 ">
+            <div class='table '>
                 <?php if (isset($columns)) { ?>
 
-                    <table id='myTable'class='table-responsive' style="width:100%" >
+                    <table id='myTable' class=''>
                         <thead class='table-dark'>
                             <tr>
-                            <?php foreach ($columns as $key => $columns) {
-                                echo "<th>{$columns['Field']}</th>";
-                            } ?>
+                                <?php foreach ($columns as $key => $columns) {
+                                    echo "<th>{$columns['Field']}</th>";
+                                } ?>
                             </tr>
                         </thead>
                         <tbody>

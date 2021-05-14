@@ -2,6 +2,10 @@
 
 namespace PhpYourAdimn\Core;
 
+use PhpYourAdimn\App\Helpers\Cookie;
+use PhpYourAdimn\Core\Database\Query;
+use PhpYourAdimn\Core\Database\Connection;
+
 class Router
 {
     /**
@@ -74,11 +78,22 @@ class Router
     {
         $controller = "PhpYourAdimn\\App\\Controllers\\{$controller}";
 
-        $controller =  new $controller();
+        $pdo = null;
+        if (Cookie::exist('user')) {
+            $pdo = Connection::getInstance()->getConnection();
+        }
+
+
+        $controller =  new $controller(new Query($pdo));
 
         if (!method_exists($controller, $action)) {
             throw new \Exception("{$controller} does not respond to the {$action} action.");
         }
         return $controller->$action(Request::requestData());
+    }
+    public function route($route)
+    {
+        $router =$this;
+        return $this;
     }
 }

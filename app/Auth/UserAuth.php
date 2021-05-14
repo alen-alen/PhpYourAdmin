@@ -2,7 +2,7 @@
 
 namespace PhpYourAdimn\App\Auth;
 
-use PhpYourAdimn\Core\App;
+use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\App\Helpers\Cookie;
 
 class UserAuth
@@ -13,7 +13,7 @@ class UserAuth
     public static function autorize()
     {
         if (!Cookie::exist('user')) {
-            App::redirect('login');
+            Route::redirect('login');
         }
     }
 }

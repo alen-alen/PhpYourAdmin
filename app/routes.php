@@ -2,7 +2,7 @@
 
 $router->get('', 'HomeController@index');
 
-$router->get('dashboard', 'DatabaseController@index');
+$router->get('dashboard', 'DashboardController@index');
 
 $router->get('login', 'LoginController@index');
 
