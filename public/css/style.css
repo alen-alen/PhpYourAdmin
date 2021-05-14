@@ -1,11 +1,9 @@
     th,
     td {
-        /* white-space: nowrap; */
         width: 70px;
     }
     
     div.dataTables_wrapper {
-        /* width: 75%; */
         margin: 2px auto;
     }
     

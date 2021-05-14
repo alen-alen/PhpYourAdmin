@@ -4,22 +4,23 @@ namespace PhpYourAdimn\App\Helpers;
 
 class Route
 {
-
-
     /**
+     * Redirect to given path
      * 
-     * @param $path redirect route
+     * @param array $data
+     * @param string $path redirect route
      */
-    public static function redirect($path, array $data = null)
+    public static function redirect($path, array $data = null): void
     {
         if (!$data) {
             header("Location:/{$path}");
-            die();
+            exit();
         }
         Session::set($data[0], $data[1]);
         header("Location:/{$path}");
         exit();
     }
+
     /**
      * Returns the route path with the apropriete GET params
      * 
@@ -27,7 +28,7 @@ class Route
      * @param string $path
      * @return string
      */
-    public static function path($path = null, $params = [])
+    public static function path($path = null, $params = []): string
     {
         if (!$path) {
             $path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
@@ -41,7 +42,6 @@ class Route
                 }
             }
         }
-
         return "$path";
     }
 }

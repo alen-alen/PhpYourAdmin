@@ -4,13 +4,14 @@ namespace PhpYourAdimn\Core\Database;
 
 class Query
 {
+    /**
+     * @var PDO $pdo 
+     */
     public $pdo;
 
-    public function __construct($pdo=null)
+    public function __construct($pdo = null)
     {
-        $this->pdo=$pdo;
-     
-    
+        $this->pdo = $pdo;
     }
 
     /**
@@ -20,14 +21,13 @@ class Query
      */
     public function getDatabases(): array
     {
-        
         $stmt = $this->pdo->query('SHOW DATABASES');
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
-     * Query for showing all databases from the connection
+     * Query for showing all tables from the selected database
      * 
      * @return array
      */

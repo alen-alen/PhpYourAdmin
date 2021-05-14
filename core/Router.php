@@ -17,6 +17,7 @@ class Router
 
         'POST' => [],
     ];
+
     /**
      * Loads routes from the routes file path
      * 
@@ -63,11 +64,11 @@ class Router
     public function direct(string $uri, string $requestType)
     {
         if (array_key_exists($uri, $this->routes[$requestType])) {
-
             return  $this->callAction(...explode('@', $this->routes[$requestType][$uri]));
         }
         throw new \Exception('No routes defined');
     }
+
     /**
      * Create a controller instance and call the appropriate method-action
      * 
@@ -82,18 +83,11 @@ class Router
         if (Cookie::exist('user')) {
             $pdo = Connection::getInstance()->getConnection();
         }
-
-
         $controller =  new $controller(new Query($pdo));
 
         if (!method_exists($controller, $action)) {
             throw new \Exception("{$controller} does not respond to the {$action} action.");
         }
         return $controller->$action(Request::requestData());
-    }
-    public function route($route)
-    {
-        $router =$this;
-        return $this;
     }
 }

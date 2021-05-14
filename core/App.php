@@ -3,9 +3,6 @@
 namespace PhpYourAdimn\Core;
 
 use PhpYourAdimn\Core\Request;
-use PhpYourAdimn\App\File\UserFile;
-use PhpYourAdimn\App\Helpers\Cookie;
-use PhpYourAdimn\App\Helpers\Session;
 use PhpYourAdimn\Core\Database\Connection;
 
 class App
@@ -25,12 +22,10 @@ class App
      */
     public function run()
     {
-   
         $this->router->load('app/routes.php')
             ->direct(Request::uri(), Request::method());
     }
   
-
     public function __destruct()
     {
         Connection::close();
