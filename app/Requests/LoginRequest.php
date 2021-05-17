@@ -2,7 +2,7 @@
 
 namespace PhpYourAdimn\App\Requests;
 
-use PhpYourAdimn\Core\App;
+use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\Core\Database\Connection;
 
 class LoginRequest
@@ -30,7 +30,6 @@ class LoginRequest
      */
     public function __construct(array $userInputs)
     {
-      
         $this->data = $userInputs;
     }
     /**
@@ -53,12 +52,12 @@ class LoginRequest
         }
 
         if (!$this->error) {
-        
+
             if (Connection::validate($this->data['host'], $this->data['username'], $this->data['password'])) {
                 return $this->data;
             }
-            App::redirect('login', ['error', 'Invalid Credentials']);
+            Route::redirect('login', ['error', 'Invalid Credentials']);
         }
-        App::redirect('login', ['error', 'Inputs cannot be empty']);
+        Route::redirect('login', ['error', 'Inputs cannot be empty']);
     }
 }

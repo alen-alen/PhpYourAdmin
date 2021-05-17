@@ -9,6 +9,12 @@ class Query
      */
     public $pdo;
 
+    /**
+     * All tables for the selected database
+     * @var array $tables
+     */
+    public array $tables;
+
     public function __construct($pdo = null)
     {
         $this->pdo = $pdo;
@@ -23,19 +29,28 @@ class Query
     {
         $stmt = $this->pdo->query('SHOW DATABASES');
 
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $databases = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        $databases = array_map(function ($database) {
+            array_values($database);
+            return array_pop($database);
+        }, $databases);
+
+        return $databases;
     }
 
     /**
+     * Query for creating a database
      * 
      * @param string $dbName
-     * @
+     * @param string $charset
+     * @param string $collate
      */
     public function createDatabase($dbName, $charset, $collate)
     {
-        $sql = "CREATE DATABASE $dbName CHARACTER SET $charset COLLATE $collate;";
+        $sql = "CREATE DATABASE $dbName CHARACTER SET $charset COLLATE $collate";
 
-        $stmt = $this->pdo->query($sql);
+        $stmt = $this->pdo->prepare($sql);
 
         $stmt->execute();
     }
@@ -52,28 +67,32 @@ class Query
         $tables = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         $tables = array_map(function ($table) {
-            $table = array_values($table);
+            array_values($table);
             return array_pop($table);
         }, $tables);
 
+        $this->tables = $tables;
         return $tables;
     }
 
     /**
-     * Returns the table columns
+     * Returns the selected table columns
      * 
      * @param string $table table name
      * @return array
      */
     public function getTableColumns(string $table): array
     {
-        $sql = "SHOW COLUMNS FROM $table;";
+        $table = $this->tableExists($table);
 
-        $stmt = $this->pdo->query($sql);
+        $sql = "SHOW COLUMNS FROM $table";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute();
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
-
 
     /**
      * Returns the table columns
@@ -83,9 +102,11 @@ class Query
      */
     public function showCollations(): array
     {
-        $sql = "SHOW COLLATION ";
+        $sql = "SHOW COLLATION";
 
-        $stmt = $this->pdo->query($sql);
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute();
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
@@ -97,9 +118,10 @@ class Query
      */
     public function getCollationById($id)
     {
-        $sql = "SHOW COLLATION WHERE ID={$id}";
+        $sql = "SHOW COLLATION WHERE ID=:id";
 
-        $stmt = $this->pdo->query($sql);
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':id' => $id]);
 
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
@@ -112,10 +134,26 @@ class Query
      */
     public function selectAll(string $table): array
     {
+        $table = $this->tableExists($table);
+
         $sql = "SELECT * FROM $table";
 
-        $stmt = $this->pdo->query($sql);
+        $stmt = $this->pdo->prepare($sql);
+
+        $stmt->execute();
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Check if the table exists in the database
+     * @param string $tableName
+     */
+    private function tableExists($tableName)
+    {
+        $table = array_values(array_filter($this->tables, function ($tbl) use ($tableName) {
+            return $tableName === $tbl ? $tbl : null;
+        }));
+        return !empty($table[0]) ? $table[0] : die('Table does not exist');
     }
 }

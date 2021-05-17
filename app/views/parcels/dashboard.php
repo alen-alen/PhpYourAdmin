@@ -10,9 +10,9 @@ use PhpYourAdimn\App\Helpers\Route; ?>
     <form action="<?= Route::path('database/dashboard') ?>" method="GET">
         <div class="input-group">
             <select class="custom-select" name='db' id="inputGroupSelect04" aria-label="Example select with button addon">
-                <option selected>Database...</option>
-                <?php foreach ($databases as $db) { ?>
-                    <option <?= isset($_GET['db']) && $db['Database'] === $_GET['db'] ? 'selected' : '' ?> value="<?= $db['Database'] ?>"><?= $db['Database'] ?></option>
+                <option hidden>Database...</option>
+                <?php foreach ($databases as $dbName) { ?>
+                    <option <?= isset($_GET['db']) && $dbName === $_GET['db'] ? 'selected' : '' ?> value="<?= $dbName ?>"><?= $dbName ?></option>
                 <?php } ?>
             </select>
 

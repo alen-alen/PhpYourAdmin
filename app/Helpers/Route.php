@@ -21,6 +21,12 @@ class Route
         exit();
     }
 
+    public static function redirectHome()
+    {
+            header("Location:database/dashboard");
+            exit();
+    }
+
     /**
      * Returns the route path with the apropriete GET params
      * 
@@ -30,18 +36,18 @@ class Route
      */
     public static function path($path = null, $params = []): string
     {
-        if ($path === null) {
+        if (!$path) {
             $path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
         }
+
         if (!empty($params)) {
             foreach ($params as $key => $param) {
-                if ($key === 0) {
-                    $path .= "?{$param[0]}={$param[1]}";
-                } else {
-                    $path .= "&{$param[0]}={$param[1]}";
-                }
+                $path .= ($key === 0) ? "?" : "&";
+                $path .= "{$param[0]}={$param[1]}";
             }
         }
         return "http://{$_SERVER['HTTP_HOST']}/$path";
     }
+
+  
 }

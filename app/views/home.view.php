@@ -1,4 +1,8 @@
-<?php require 'app/views/parcels/head.php'; ?>
+<?php
+
+use PhpYourAdimn\App\Helpers\Session;
+
+require 'app/views/parcels/head.php'; ?>
 <div class="container-fluid">
     <div class="row">
         <div class="col-2 border">
@@ -7,10 +11,14 @@
             </div>
         </div>
         <div class="col-9 border mt-5 ">
-            <div class='table '>
+            <?php if (Session::get('success')) { ?>
+                <div class='alert alert-success'><?= Session::get('success') ?></div>
+            <?php } ?>
+
+            <div class='table'>
                 <?php if (isset($columns)) { ?>
 
-                    <table id='myTable' class=''>
+                    <table id='databaseDataTable' class=''>
                         <thead class='table-dark'>
                             <tr>
                                 <?php foreach ($columns as $key => $columns) {
@@ -22,7 +30,7 @@
                             <?php foreach ($data as $row) { ?>
                                 <tr class='h-25'>
                                     <?php foreach ($row as $column => $value) { ?>
-                                        <td><?=$value===null?'NULL':$value ?></td>
+                                        <td><?= $value === null ? 'NULL' : $value ?></td>
                                     <?php } ?>
                                 </tr>
                             <?php } ?>

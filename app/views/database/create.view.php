@@ -2,6 +2,7 @@
 require 'app/views/parcels/head.php';
 
 use PhpYourAdimn\App\Helpers\Route;
+use PhpYourAdimn\App\Helpers\Session;
 
 ?>
 <div class="container-fluid">
@@ -10,12 +11,16 @@ use PhpYourAdimn\App\Helpers\Route;
             <h1>Create Database</h1>
             <form action="<?= Route::path('database/store') ?>" method="POST">
                 <form>
+                    <?php if (Session::get('error')) { ?>
+                        <div class='alert alert-danger'><?= Session::get('error') ?></div>
+                    <?php } ?>
                     <div class="form-group">
                         <label for="dbName">Database name</label>
                         <input type="text" name='dbName' class="form-control" id="dbName">
                     </div>
+
                     <select class="custom-select" name='collationId' id="inputGroupSelect04" aria-label="Example select with button addon">
-                        <option selected>Choose...</option>
+                        <option  hidden>Choose...</option>
                         <?php foreach ($collations as $collate) { ?>
                             <option value=" <?= $collate['Id'] ?>"> <?= $collate['Collation'] ?></option>
                         <?php } ?>

@@ -2,6 +2,7 @@
 
 namespace PhpYourAdimn\Core\Database;
 
+use PhpYourAdimn\Core\Request;
 use PhpYourAdimn\App\File\UserFile;
 use PhpYourAdimn\App\Helpers\Cookie;
 
@@ -26,12 +27,12 @@ class Connection
      */
     private array $config = [];
 
-    private function __construct()
+    private function __construct($dbName = NULL)
     {
         $this->config = UserFile::getUserById(Cookie::get('user'));
 
-        if (isset($_GET['db'])) {
-            return $this->connectDb($_GET['db']);
+        if ($dbName) {
+            return $this->connectDb($dbName);
         }
         return  $this->createConnection();
     }
@@ -46,7 +47,6 @@ class Connection
         try {
             self::$pdo = new \PDO("mysql:host={$this->config['host']}", $this->config['username'], $this->config['password']);
         } catch (\PDOException $e) {
-
             die($e->getMessage());
         }
     }
@@ -73,8 +73,8 @@ class Connection
      */
     public static function getInstance(): Connection
     {
-        if (self::$instance === NULL) {
-            self::$instance = new Connection();
+        if (!self::$instance) {
+            self::$instance = new Connection(Request::getDatabaseName());
         }
         return self::$instance;
     }
@@ -100,7 +100,7 @@ class Connection
      */
     public static function validate(string $host, string $username, string $password): bool
     {
-        if (self::$pdo === null) {
+        if (!self::$pdo) {
             try {
                 new \PDO("mysql:host=$host", $username, $password);
                 return true;
@@ -117,7 +117,7 @@ class Connection
      */
     public static function close(): void
     {
-        if (self::$pdo !== null) {
+        if (!self::$pdo) {
             self::$pdo = null;
         }
     }
