@@ -27,6 +27,20 @@ class Query
     }
 
     /**
+     * 
+     * @param string $dbName
+     * @
+     */
+    public function createDatabase($dbName, $charset, $collate)
+    {
+        $sql = "CREATE DATABASE $dbName CHARACTER SET $charset COLLATE $collate;";
+
+        $stmt = $this->pdo->query($sql);
+
+        $stmt->execute();
+    }
+
+    /**
      * Query for showing all tables from the selected database
      * 
      * @return array
@@ -58,6 +72,36 @@ class Query
         $stmt = $this->pdo->query($sql);
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+
+    /**
+     * Returns the table columns
+     * 
+     * @param string $table table name
+     * @return array
+     */
+    public function showCollations(): array
+    {
+        $sql = "SHOW COLLATION ";
+
+        $stmt = $this->pdo->query($sql);
+
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+    /**
+     * Returns the table columns
+     * 
+     * @param string $table table name
+     * @return array
+     */
+    public function getCollationById($id)
+    {
+        $sql = "SHOW COLLATION WHERE ID={$id}";
+
+        $stmt = $this->pdo->query($sql);
+
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
     /**

@@ -22,7 +22,7 @@
                             <?php foreach ($data as $row) { ?>
                                 <tr class='h-25'>
                                     <?php foreach ($row as $column => $value) { ?>
-                                        <td><?= $value ?></td>
+                                        <td><?=$value===null?'NULL':$value ?></td>
                                     <?php } ?>
                                 </tr>
                             <?php } ?>

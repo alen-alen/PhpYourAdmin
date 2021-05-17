@@ -5,7 +5,7 @@ namespace PhpYourAdimn\App\Helpers;
 class Route
 {
     /**
-     * Redirect to given path
+     * Redirect to given path with $data in session
      * 
      * @param array $data
      * @param string $path redirect route
@@ -30,7 +30,7 @@ class Route
      */
     public static function path($path = null, $params = []): string
     {
-        if (!$path) {
+        if ($path === null) {
             $path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
         }
         if (!empty($params)) {
@@ -42,6 +42,6 @@ class Route
                 }
             }
         }
-        return "$path";
+        return "http://{$_SERVER['HTTP_HOST']}/$path";
     }
 }

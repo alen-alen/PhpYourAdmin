@@ -10,6 +10,8 @@ class Request
      */
     public static function uri(): string
     {
+        // echo "<pre>";
+        // die(var_dump(( $_SERVER )));
         return  trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
     }
 

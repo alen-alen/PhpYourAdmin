@@ -20,6 +20,6 @@ class LogoutController extends Controller
 
         Cookie::destroy('user');
 
-        Route::redirect('');
+        Route::redirect('database/dashboard');
     }
 }

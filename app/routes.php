@@ -1,8 +1,10 @@
 <?php
 
-$router->get('', 'HomeController@index');
+$router->get('database/dashboard', 'DatabaseController@dashboard');
 
-$router->get('dashboard', 'DashboardController@index');
+$router->get('database/create', 'DatabaseController@create');
+
+$router->post('database/store', 'DatabaseController@store');
 
 $router->get('login', 'LoginController@index');
 
