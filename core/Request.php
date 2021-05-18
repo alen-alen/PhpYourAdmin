@@ -38,11 +38,11 @@ class Request
 
     public static function isGet()
     {
-        return $_SERVER['REQUEST_METHOD'] === 'GET' ? true : false;
+        return $_SERVER['REQUEST_METHOD'] === 'GET';
     }
     public static function isPost()
     {
-        return $_SERVER['REQUEST_METHOD'] === 'POST' ? true : false;
+        return $_SERVER['REQUEST_METHOD'] === 'POST';
     }
 
     /**

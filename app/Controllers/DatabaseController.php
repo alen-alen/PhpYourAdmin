@@ -4,10 +4,10 @@ namespace PhpYourAdimn\App\Controllers;
 
 use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\App\Helpers\Route;
+use PhpYourAdimn\App\Requests\DatabaseRequest;
 
 class DatabaseController extends Controller
 {
-
   public function __construct($query)
   {
     parent::__construct($query);
@@ -24,21 +24,20 @@ class DatabaseController extends Controller
   {
     $databases = $this->query->getDatabases();
 
+    $tables = [];
+    $columns = [];
+    $data = [];
+
     if (!empty($request)) {
-
       $tables = $this->query->getTables();
-
       if (isset($request['table'])) {
 
         $columns =  $this->query->getTableColumns($request['table']);
 
         $data =  $this->query->selectAll($request['table']);
-
-        return $this->view('home', compact('databases', 'tables', 'columns', 'data'));
       }
-      return $this->view('home', compact('databases', 'tables'));
     }
-    return $this->view('home', compact('databases'));
+    return $this->view('home', compact('databases', 'tables', 'columns', 'data'));
   }
 
   /**
@@ -55,17 +54,19 @@ class DatabaseController extends Controller
   /**
    * Save a new database
    * 
-   * @param $request
+   * @param array $request
+   * @return void
    */
-  public function store($request)
+  public function store(array $request): void
   {
-    if (array_search($request['dbName'], $this->query->getDatabases())) {
-      return Route::redirect('database/create', ['error', 'Database Already exists!']);
-    }
+    $databaseRequest = new DatabaseRequest($request);
+
+    $request = $databaseRequest->validate($this->query->getDatabases());
+
     $dbOptions = $this->query->getCollationById($request['collationId']);
 
     $this->query->createDatabase($request['dbName'], $dbOptions['Charset'], $dbOptions['Collation']);
 
-    return Route::redirectHome(['success', 'Database Created!']);
+    Route::redirectHome(['success', 'Database Created!']);
   }
 }

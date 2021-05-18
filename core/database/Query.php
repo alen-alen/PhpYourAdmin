@@ -27,9 +27,9 @@ class Query
      */
     public function getDatabases(): array
     {
-        $stmt = $this->pdo->query('SHOW DATABASES');
+        $statement = $this->pdo->query('SHOW DATABASES');
 
-        $databases = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $databases = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         $databases = array_map(function ($database) {
             array_values($database);
@@ -46,13 +46,13 @@ class Query
      * @param string $charset
      * @param string $collate
      */
-    public function createDatabase($dbName, $charset, $collate)
+    public function createDatabase(string $dbName, string $charset, string $collate)
     {
         $sql = "CREATE DATABASE $dbName CHARACTER SET $charset COLLATE $collate";
 
-        $stmt = $this->pdo->prepare($sql);
+        $statement = $this->pdo->prepare($sql);
 
-        $stmt->execute();
+        $statement->execute();
     }
 
     /**
@@ -62,9 +62,9 @@ class Query
      */
     public function getTables(): array
     {
-        $stmt = $this->pdo->query('SHOW TABLES');
+        $statement = $this->pdo->query('SHOW TABLES');
 
-        $tables = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $tables = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         $tables = array_map(function ($table) {
             array_values($table);
@@ -87,11 +87,11 @@ class Query
 
         $sql = "SHOW COLUMNS FROM $table";
 
-        $stmt = $this->pdo->prepare($sql);
+        $statement = $this->pdo->prepare($sql);
 
-        $stmt->execute();
+        $statement->execute();
 
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -104,11 +104,11 @@ class Query
     {
         $sql = "SHOW COLLATION";
 
-        $stmt = $this->pdo->prepare($sql);
+        $statement = $this->pdo->prepare($sql);
 
-        $stmt->execute();
+        $statement->execute();
 
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
     /**
      * Returns the table columns
@@ -118,12 +118,12 @@ class Query
      */
     public function getCollationById($id)
     {
-        $sql = "SHOW COLLATION WHERE ID=:id";
+        $sql = "SHOW COLLATION WHERE ID = :id";
 
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':id' => $id]);
+        $statement = $this->pdo->prepare($sql);
+        $statement->execute([':id' => $id]);
 
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $statement->fetch(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -138,18 +138,20 @@ class Query
 
         $sql = "SELECT * FROM $table";
 
-        $stmt = $this->pdo->prepare($sql);
+        $statement = $this->pdo->prepare($sql);
 
-        $stmt->execute();
+        $statement->execute();
 
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
      * Check if the table exists in the database
+     * 
      * @param string $tableName
+     * @return $tablename
      */
-    private function tableExists($tableName)
+    private function tableExists(string $tableName)
     {
         $table = array_values(array_filter($this->tables, function ($tbl) use ($tableName) {
             return $tableName === $tbl ? $tbl : null;

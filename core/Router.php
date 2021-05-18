@@ -69,7 +69,6 @@ class Router
         if (array_key_exists($uri, $this->routes[$requestType])) {
             return  $this->callAction(...explode('@', $this->routes[$requestType][$uri]));
         }
-        Route::redirect('database/dashboard');
         throw new \Exception('No routes defined');
     }
 
@@ -81,15 +80,14 @@ class Router
      */
     protected function callAction(string $controller, string $action)
     {
-        // die(var_dump($controller));
         $controller = "PhpYourAdimn\\App\\Controllers\\{$controller}";
 
         $pdo = null;
-        if (Cookie::exist('user')) {
+        if (Cookie::has('user')) {
             $pdo = Connection::getInstance()->getConnection();
         }
         $controller = new $controller(new Query($pdo));
-   
+
         if (!method_exists($controller, $action)) {
             throw new \Exception("{$controller} does not respond to the {$action} action.");
         }

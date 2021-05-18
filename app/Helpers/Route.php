@@ -31,11 +31,11 @@ class Route
     public static function redirectHome($data = null)
     {
         if (!$data) {
-            header("Location:" . self::HOME_ROUTE);
+            header("Location:/" . self::HOME_ROUTE);
             exit();
         }
         Session::set($data[0], $data[1]);
-        header("Location:" . self::HOME_ROUTE);
+        header("Location:/" . self::HOME_ROUTE);
         exit();
     }
 
