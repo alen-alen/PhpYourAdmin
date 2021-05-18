@@ -33,6 +33,6 @@ class LoginController extends Controller
 
         Cookie::set('user', time());
 
-        Route::redirect('database/dashboard');
+        Route::redirectHome();
     }
 }

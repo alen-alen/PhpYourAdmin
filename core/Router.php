@@ -88,7 +88,7 @@ class Router
         if (Cookie::exist('user')) {
             $pdo = Connection::getInstance()->getConnection();
         }
-        $controller =  new $controller(new Query($pdo));
+        $controller = new $controller(new Query($pdo));
    
         if (!method_exists($controller, $action)) {
             throw new \Exception("{$controller} does not respond to the {$action} action.");

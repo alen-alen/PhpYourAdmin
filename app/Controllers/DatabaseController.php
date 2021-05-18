@@ -24,7 +24,7 @@ class DatabaseController extends Controller
   {
     $databases = $this->query->getDatabases();
 
-    if ($request) {
+    if (!empty($request)) {
 
       $tables = $this->query->getTables();
 
@@ -62,11 +62,10 @@ class DatabaseController extends Controller
     if (array_search($request['dbName'], $this->query->getDatabases())) {
       return Route::redirect('database/create', ['error', 'Database Already exists!']);
     }
-
     $dbOptions = $this->query->getCollationById($request['collationId']);
 
     $this->query->createDatabase($request['dbName'], $dbOptions['Charset'], $dbOptions['Collation']);
 
-    return Route::redirect('database/dashboard', ['success', 'Database Created!']);
+    return Route::redirectHome(['success', 'Database Created!']);
   }
 }

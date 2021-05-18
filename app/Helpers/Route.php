@@ -4,6 +4,8 @@ namespace PhpYourAdimn\App\Helpers;
 
 class Route
 {
+    const HOME_ROUTE = "database/dashboard";
+
     /**
      * Redirect to given path with $data in session
      * 
@@ -21,10 +23,20 @@ class Route
         exit();
     }
 
-    public static function redirectHome()
+    /**
+     * Redirect to home route with $data in session
+     * 
+     * @param array $data 
+     */
+    public static function redirectHome($data = null)
     {
-            header("Location:database/dashboard");
+        if (!$data) {
+            header("Location:" . self::HOME_ROUTE);
             exit();
+        }
+        Session::set($data[0], $data[1]);
+        header("Location:" . self::HOME_ROUTE);
+        exit();
     }
 
     /**
@@ -39,7 +51,6 @@ class Route
         if (!$path) {
             $path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
         }
-
         if (!empty($params)) {
             foreach ($params as $key => $param) {
                 $path .= ($key === 0) ? "?" : "&";
@@ -48,6 +59,4 @@ class Route
         }
         return "http://{$_SERVER['HTTP_HOST']}/$path";
     }
-
-  
 }
