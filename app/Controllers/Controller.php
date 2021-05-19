@@ -3,6 +3,7 @@
 namespace PhpYourAdimn\App\Controllers;
 
 use PhpYourAdimn\Core\Database\Query;
+use PhpYourAdimn\Core\Request;
 
 class Controller
 {
@@ -11,7 +12,7 @@ class Controller
     /**
      * @param Query $query
      */
-    public function __construct(Query $query=null)
+    public function __construct(Query $query = null)
     {
         $this->query = $query;
     }
@@ -24,7 +25,9 @@ class Controller
      */
     public function view($name, array $data = [])
     {
+        $request = new Request();
         extract($data);
+        extract(['request' => $request]);
 
         return require "app/views/${name}.view.php";
     }

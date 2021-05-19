@@ -12,7 +12,7 @@ use PhpYourAdimn\Core\Request;
             <h1>Import Database</h1>
 
             <form action="<?= Route::path('database/import') ?>" method="POST" enctype="multipart/form-data">
-            <input type="text"hidden name='db'value="<?=Request::getParameter('db')?>">
+            <input type="text"hidden name='db'value="<?=$request->getParameter('db')?>">
                 <div class="form-group">
                     <label for="exampleFormControlFile1">Example file input</label>
                     <input type="file" name='database' class="form-control-file" id="exampleFormControlFile1">

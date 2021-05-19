@@ -1,5 +1,5 @@
 <div class='table'>
-    <?php if (isset($_GET['table'])) { ?>
+    <?php if ($request->getParameter('table')) { ?>
         <table id='databaseDataTable' class=''>
             <thead class='table-dark'>
                 <tr>

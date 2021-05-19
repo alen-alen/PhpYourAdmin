@@ -46,6 +46,14 @@ class Request
         return $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST[$param]);
     }
 
+    public function getParameters()
+    {
+        return $_GET;
+    }
+    public function postParameters()
+    {
+        return $_POST;
+    }
     public function getParameter($parameter)
     {
         return $this->isGet($parameter) ? $_GET[$parameter] : null;

@@ -2,9 +2,12 @@
 
 namespace PhpYourAdimn\App\Controllers;
 
+use PhpYourAdimn\Core\Request;
 use PhpYourAdimn\App\File\File;
+use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\Core\Database\Connection;
 use PhpYourAdimn\App\Controllers\Controller;
+use PhpYourAdimn\App\Requests\ImportRequest;
 
 class ImportController extends Controller
 {
@@ -12,16 +15,21 @@ class ImportController extends Controller
     {
         return $this->view('database/import');
     }
-    public function import($request,$fileRequest)
+    public function import(Request $request)
     {
-        Connection::getInstance()->connectDb($request['db']);
+        Connection::getInstance()->connectDb($request->postParameter('db'));
 
-        // $importRequest = new ImportRequest($fileRequest['database']);
+        $importRequest = new ImportRequest($request->file('database'));
 
-        // $importRequest->validate();
+        $importRequest->validate();
 
-        $sql = File::getFile(($_FILES['database']['tmp_name']));
+        $sql = File::getFile($request->file('database')['tmp_name']);
 
-        $this->query->userQuery($sql);
+        try {
+            $this->query->userQuery($sql);
+            Route::redirectHome(['success', 'Succesfuly imported database']);
+        } catch (\Exception $e) {
+            $this->message = $e->getMessage();
+        }
     }
 }

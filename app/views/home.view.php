@@ -19,7 +19,7 @@ require 'app/views/parcels/head.php'; ?>
 
             <div class="row">
                 <div class="col-12 mb-2">
-                <a href="<?=Route::path('database/import',[['db',Request::getParameter('db')]])?>" class='btn btn-secondary'>Import</a>
+                <a href="<?=Route::path('database/import',[['db',$request->getParameter('db')]])?>" class='btn btn-secondary'>Import</a>
                 <a href="" class='btn btn-secondary'>Export</a>
                 </div>
                 <div class="col-12 border-top pt-3">
@@ -28,11 +28,11 @@ require 'app/views/parcels/head.php'; ?>
                     <?php } ?>
 
                     <form action="<?= Route::path('database/query') ?>" method='GET'>
-                        <input type="text" hidden name='db' value="<?= Request::getParameter('db') ?>">
-                        <input type="text" hidden name='table' value="<?= Request::getParameter('table') ?>">
+                        <input type="text" hidden name='db' value="<?= $request->getParameter('db') ?>">
+                        <input type="text" hidden name='table' value="<?=$request->getParameter('table') ?>">
                         <div class="form-group">
                             <label for="exampleFormControlTextarea1">Enter your query:</label>
-                            <textarea class="form-control" name='sql' id="exampleFormControlTextarea1" rows="3"><?= Request::getParameter('sql') ? Request::getParameter('sql') : "SELECT * FROM " . Request::getParameter('table') ?></textarea>
+                            <textarea class="form-control" name='sql' id="exampleFormControlTextarea1" rows="3"><?=$request->getParameter('sql') ? $request->getParameter('sql') : "SELECT * FROM " . $request->getParameter('table') ?></textarea>
 
                         </div>
                         <button type="submit" class="btn btn-primary">Go</button>

@@ -7,7 +7,7 @@ use PhpYourAdimn\App\File\UserFile;
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\App\Helpers\Cookie;
 use PhpYourAdimn\App\Requests\LoginRequest;
-
+use PhpYourAdimn\Core\Request;
 
 class LoginController extends Controller
 {
@@ -21,9 +21,9 @@ class LoginController extends Controller
      * 
      * @param array $request
      */
-    public function login($request)
+    public function login(Request $request)
     {
-        $loginRequest = new LoginRequest($request);
+        $loginRequest = new LoginRequest($request->postParameters());
 
         $request = $loginRequest->validate();
 
@@ -33,6 +33,6 @@ class LoginController extends Controller
 
         Cookie::set('user', time());
 
-        Route::redirectHome();
+        Route::redirect('database/dashboard');
     }
 }

@@ -3,7 +3,7 @@
 namespace PhpYourAdimn\App\Controllers;
 
 use Exception;
-use PDOException;
+use PhpYourAdimn\Core\Request;
 use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\App\Requests\DatabaseRequest;
@@ -27,15 +27,15 @@ class DatabaseController extends Controller
     return $this->view('home');
   }
 
-  public function showTable($request)
+  public function showTable(Request $request)
   {
 
-    $tableData = $this->query->selectAll($request['table']);
+    $tableData = $this->query->selectAll($request->getParameter('table'));
 
     if (!empty($tableData)) {
       $columns = array_keys($tableData[0]);
     } else {
-      $columns = $this->query->getTableColumns($request['table']);
+      $columns = $this->query->getTableColumns($request->getParameter('table'));
     }
     return $this->view('home', compact('tableData', 'columns'));
   }
@@ -47,11 +47,11 @@ class DatabaseController extends Controller
     $columns = [];
 
     try {
-      $tableData = $this->query->userQuery($request['sql']);
+      $tableData = $this->query->userQuery($request->getParameter('sql'));
       if (!empty($tableData)) {
         $columns = array_keys($tableData[0]);
       } else {
-        $columns = $this->query->getTableColumns($request['table']);
+        $columns = $this->query->getTableColumns($request->getParameter('table'));
       }
     } catch (Exception $e) {
       $message = $e->getMessage();
