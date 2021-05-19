@@ -24,12 +24,14 @@ class ImportController extends Controller
         $importRequest->validate();
 
         $sql = File::getFile($request->file('database')['tmp_name']);
+       
 
         try {
             $this->query->userQuery($sql);
             Route::redirectHome(['success', 'Succesfuly imported database']);
         } catch (\Exception $e) {
-            $this->message = $e->getMessage();
+            $message = $e->getMessage();
+            return $this->view('database/import', compact('message'));
         }
     }
 }

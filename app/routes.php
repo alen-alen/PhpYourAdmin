@@ -7,6 +7,8 @@ $router->get('database/query', 'DatabaseController@userQuery');
 $router->get('database/import', 'ImportController@importForm');
 $router->post('database/import', 'ImportController@import');
 
+$router->get('database/export', 'ExportController@export');
+
 $router->get('database/create', 'DatabaseController@create');
 $router->post('database/store', 'DatabaseController@store');
 

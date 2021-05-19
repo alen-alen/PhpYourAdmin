@@ -20,7 +20,7 @@ require 'app/views/parcels/head.php'; ?>
             <div class="row">
                 <div class="col-12 mb-2">
                 <a href="<?=Route::path('database/import',[['db',$request->getParameter('db')]])?>" class='btn btn-secondary'>Import</a>
-                <a href="" class='btn btn-secondary'>Export</a>
+                <a href="<?=Route::path('database/export',[['db',$request->getParameter('db')]])?>" class='btn btn-secondary'>Export</a>
                 </div>
                 <div class="col-12 border-top pt-3">
                     <?php if (!empty($message)) { ?>

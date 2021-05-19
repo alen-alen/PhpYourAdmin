@@ -167,15 +167,10 @@ class Query
      */
     public function userQuery($query)
     {
-       
         $statement = $this->pdo->prepare($query);
-       
    
         if (!$statement->execute()) {
-         
-            die(var_dump($statement->errorInfo()[2]));
             throw new \Exception($statement->errorInfo()[2]);
-
         }
         if (explode(' ', $query)[0] == 'SELECT') {
             $data = $statement->fetchAll(\PDO::FETCH_ASSOC);

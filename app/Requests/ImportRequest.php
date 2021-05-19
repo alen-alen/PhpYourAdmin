@@ -44,7 +44,7 @@ class ImportRequest
             $this->error = true;
         }
         if ($this->error) {
-            Route::redirect('database/import', ['error', $this->messages]);
+            Route::redirect('database/import', ['error', $this->messages['file']]);
         }
         return $this->data;
     }
