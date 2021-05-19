@@ -2,8 +2,15 @@
 
 namespace PhpYourAdimn\Core;
 
+use PhpYourAdimn\App\Helpers\Route;
+use PhpYourAdimn\App\Helpers\Cookie;
+use PhpYourAdimn\Core\Database\Query;
+use PhpYourAdimn\Core\Database\Connection;
+
 class Router
 {
+
+    const HOME_ROUTE = 'database/dashboard';
     /**
      * Array of GET and POST routes
      *@var array $routes 
@@ -13,6 +20,7 @@ class Router
 
         'POST' => [],
     ];
+
     /**
      * Loads routes from the routes file path
      * 
@@ -59,11 +67,11 @@ class Router
     public function direct(string $uri, string $requestType)
     {
         if (array_key_exists($uri, $this->routes[$requestType])) {
-
             return  $this->callAction(...explode('@', $this->routes[$requestType][$uri]));
         }
         throw new \Exception('No routes defined');
     }
+
     /**
      * Create a controller instance and call the appropriate method-action
      * 
@@ -74,7 +82,11 @@ class Router
     {
         $controller = "PhpYourAdimn\\App\\Controllers\\{$controller}";
 
-        $controller =  new $controller();
+        $pdo = null;
+        if (Cookie::has('user')) {
+            $pdo = Connection::getInstance()->getConnection();
+        }
+        $controller = new $controller(new Query($pdo));
 
         if (!method_exists($controller, $action)) {
             throw new \Exception("{$controller} does not respond to the {$action} action.");

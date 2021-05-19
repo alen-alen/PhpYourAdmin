@@ -5,14 +5,14 @@ namespace PhpYourAdimn\App\Helpers;
 class Hash
 {
     /**
-     *  Algorithm for performing encryption and decryption
+     * Algorithm for performing encryption and decryption
      * 
      * @var string CIPHERING
      */
     private const CIPHERING = "AES-128-CTR";
 
     /**
-     *   Random number that guarantees the encrypted text is unique
+     * Random number that guarantees the encrypted text is unique
      * 
      * @var string ENCRYPTION_IV
      */

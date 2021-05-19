@@ -2,8 +2,20 @@
 
 namespace PhpYourAdimn\App\Controllers;
 
+use PhpYourAdimn\Core\Database\Query;
+
 class Controller
 {
+    public $query;
+
+    /**
+     * @param Query $query
+     */
+    public function __construct(Query $query=null)
+    {
+        $this->query = $query;
+    }
+
     /**
      * Get the evaluated view contents for the given view.
      * 

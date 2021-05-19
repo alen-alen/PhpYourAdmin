@@ -10,7 +10,6 @@ class Request
      */
     public static function uri(): string
     {
-        trim($_SERVER['REQUEST_URI'], '/');
         return  trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
     }
 
@@ -31,22 +30,28 @@ class Request
      */
     public static function requestData(): array
     {
-        if (self::isPost()) {
+        if (self::method() === "POST") {
             return $_POST;
         }
         return $_GET;
     }
 
-    /**
-     * Check if the request method is POST
-     * 
-     * @return bool;
-     */
-    public static function isPost(): bool
+    public static function isGet()
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            return true;
+        return $_SERVER['REQUEST_METHOD'] === 'GET';
+    }
+    public static function isPost()
+    {
+        return $_SERVER['REQUEST_METHOD'] === 'POST';
+    }
+
+    /**
+     * @return string database name
+     */
+    public static function getDatabaseName()
+    {
+        if (isset(self::requestData()['db'])) {
+            return self::requestData()['db'];
         }
-        return false;
     }
 }

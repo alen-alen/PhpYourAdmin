@@ -41,9 +41,9 @@ class Session
      * @param string $key
      * @param string $secondKey if session value is an array
      * 
-     * @return string session item value
+     * @return mixed session item value
      */
-    public static function get(string $key, $secondKey = false): string
+    public static function get(string $key, $secondKey = false)
     {
         if ($secondKey === true) {
             if (isset($_SESSION[$key][$secondKey])) {
@@ -55,6 +55,17 @@ class Session
         }
 
         return false;
+    }
+
+    /**
+     * Check if a session item is set
+     * 
+     * @param string $key
+     * @return bool
+     */
+    public static function has($key)
+    {
+        return isset($_SESSION[$key]);
     }
     /**
      * Destroy the active session

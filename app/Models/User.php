@@ -2,9 +2,6 @@
 
 namespace PhpYourAdimn\App\Models;
 
-use PhpYourAdimn\Core\Database\Connection;
-
-
 class User
 {
     /**

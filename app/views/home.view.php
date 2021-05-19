@@ -1,13 +1,42 @@
-<?php require 'app/views/parcels/head.php'; ?>
+<?php
 
-<div class="container">
-    <div class="row my-5">
-        <div class="col-8 offset-2">
-            <div class=' border shadow p-5'>
-                <h1 class='mb-5 text-center'>HOME</h1>
+use PhpYourAdimn\App\Helpers\Session;
 
-                <a href="logout" class='btn btn-primary'>logout</a>
+require 'app/views/parcels/head.php'; ?>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2 border">
+            <div class='dashboard'>
+                <?php require 'parcels/dashboard.php' ?>
+            </div>
+        </div>
+        <div class="col-9 border mt-5 ">
+            <?php if (Session::get('success')) { ?>
+                <div class='alert alert-success'><?= Session::get('success') ?></div>
+            <?php } ?>
 
+            <div class='table'>
+                <?php if (isset($columns)) { ?>
+
+                    <table id='databaseDataTable' class=''>
+                        <thead class='table-dark'>
+                            <tr>
+                                <?php foreach ($columns as $key => $columns) {
+                                    echo "<th>{$columns['Field']}</th>";
+                                } ?>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($data as $row) { ?>
+                                <tr class='h-25'>
+                                    <?php foreach ($row as $column => $value) { ?>
+                                        <td><?= $value === null ? 'NULL' : $value ?></td>
+                                    <?php } ?>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                <?php } ?>
             </div>
         </div>
     </div>

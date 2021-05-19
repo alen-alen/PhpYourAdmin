@@ -52,7 +52,7 @@ class Cookie
      * @param string $key
      * @return bool
      */
-    public static function exist($key)
+    public static function has($key)
     {
         return isset($_COOKIE[$key]);
     }

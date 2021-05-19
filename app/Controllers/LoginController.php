@@ -2,9 +2,9 @@
 
 namespace PhpYourAdimn\App\Controllers;
 
-use PhpYourAdimn\Core\App;
 use PhpYourAdimn\App\Models\User;
 use PhpYourAdimn\App\File\UserFile;
+use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\App\Helpers\Cookie;
 use PhpYourAdimn\App\Requests\LoginRequest;
 
@@ -15,7 +15,6 @@ class LoginController extends Controller
     {
         return $this->view('login');
     }
-
 
     /**
      * Saves the user in a txt file and creates a connection with mysql
@@ -34,6 +33,6 @@ class LoginController extends Controller
 
         Cookie::set('user', time());
 
-        App::redirect('');
+        Route::redirectHome();
     }
 }

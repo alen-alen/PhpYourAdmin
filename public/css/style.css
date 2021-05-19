@@ -1,0 +1,17 @@
+    th,
+    td {
+        width: 70px;
+    }
+    
+    div.dataTables_wrapper {
+        margin: 2px auto;
+    }
+    
+    tr {
+        max-height: 50px;
+    }
+    
+    .dashboard {
+        resize: line;
+        overflow: auto;
+    }
