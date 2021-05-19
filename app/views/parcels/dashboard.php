@@ -1,6 +1,6 @@
 <?php
-
 use PhpYourAdimn\App\Helpers\Route; ?>
+
 <div class=''>
     <h3>PhpYourAdmin</h3>
     <a href="<?= Route::path('logout') ?>"><i class="fa fa-sign-out"></i></a>
@@ -11,8 +11,6 @@ use PhpYourAdimn\App\Helpers\Route; ?>
         <div class="input-group">
             <select class="custom-select" name='db' id="databaseSelect" aria-label="Example select with button addon">
                 <option hidden>Database..</option>
-     
-
             </select>
 
             <div class="input-group-append">

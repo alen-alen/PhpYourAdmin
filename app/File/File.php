@@ -6,6 +6,13 @@ use PhpYourAdimn\App\Helpers\Hash;
 
 class File
 {
+
+
+
+    public static function getFile($filename)
+    {
+        return file_get_contents($filename);
+    }
     /**
      * Returns the decrypted txt file as a string
      * 

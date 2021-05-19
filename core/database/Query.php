@@ -2,6 +2,8 @@
 
 namespace PhpYourAdimn\Core\Database;
 
+use PDOException;
+
 class Query
 {
     /**
@@ -18,8 +20,6 @@ class Query
     public function __construct($pdo = null)
     {
         $this->pdo = $pdo;
-
-  
     }
 
     /**
@@ -97,15 +97,16 @@ class Query
      */
     public function getTableColumns(string $table): array
     {
-        // $table = $this->tableExists($table);
-
         $sql = "SHOW COLUMNS FROM $table";
 
         $statement = $this->pdo->prepare($sql);
 
         $statement->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        while ($columns = $statement->fetch(\PDO::FETCH_ASSOC)) {
+            $thisColumns[] = $columns['Field'];
+        }
+        return $thisColumns;
     }
 
     /**
@@ -148,8 +149,6 @@ class Query
      */
     public function selectAll(string $table): array
     {
-        // $table = $this->tableExists($table);
-
         $sql = "SELECT * FROM $table";
 
         $statement = $this->pdo->prepare($sql);
@@ -158,12 +157,26 @@ class Query
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+    /**
+     * Executes the users query
+     * 
+     * @param string $query user input query
+     * 
+     * @return  $data|PDO exception
+     */
     public function userQuery($query)
     {
+       
         $statement = $this->pdo->prepare($query);
-        
-        $statement->execute();
+       
+   
+        if (!$statement->execute()) {
+         
+            die(var_dump($statement->errorInfo()[2]));
+            throw new \Exception($statement->errorInfo()[2]);
 
+        }
         if (explode(' ', $query)[0] == 'SELECT') {
             $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
             return $data;

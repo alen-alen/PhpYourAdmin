@@ -92,6 +92,6 @@ class Router
         if (!method_exists($controller, $action)) {
             throw new \Exception("{$controller} does not respond to the {$action} action.");
         }
-        return $controller->$action(Request::requestData());
+        return $controller->$action(Request::requestData(),$_FILES);
     }
 }

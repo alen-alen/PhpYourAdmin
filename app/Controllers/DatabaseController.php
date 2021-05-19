@@ -2,6 +2,8 @@
 
 namespace PhpYourAdimn\App\Controllers;
 
+use Exception;
+use PDOException;
 use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\App\Requests\DatabaseRequest;
@@ -27,20 +29,34 @@ class DatabaseController extends Controller
 
   public function showTable($request)
   {
-    $tableData =  $this->query->selectAll($request['table']);
-    $columns = array_keys($tableData[0]);
 
+    $tableData = $this->query->selectAll($request['table']);
 
-    return $this->view('database/table', compact('tableData', 'columns'));
+    if (!empty($tableData)) {
+      $columns = array_keys($tableData[0]);
+    } else {
+      $columns = $this->query->getTableColumns($request['table']);
+    }
+    return $this->view('home', compact('tableData', 'columns'));
   }
 
   public function userQuery($request)
   {
-  
-    $tableData = $this->query->userQuery($request['sql']);
-    $columns = array_keys($tableData[0]);
+    $message = '';
+    $tableData = [];
+    $columns = [];
 
-    return $this->view('database/table', compact('tableData', 'columns'));
+    try {
+      $tableData = $this->query->userQuery($request['sql']);
+      if (!empty($tableData)) {
+        $columns = array_keys($tableData[0]);
+      } else {
+        $columns = $this->query->getTableColumns($request['table']);
+      }
+    } catch (Exception $e) {
+      $message = $e->getMessage();
+    }
+    return $this->view('home', compact('tableData', 'columns', 'message'));
   }
   /**
    * Create database form

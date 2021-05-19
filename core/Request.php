@@ -4,6 +4,7 @@ namespace PhpYourAdimn\Core;
 
 class Request
 {
+
     /**
      * Return the current uri
      * @return string
@@ -36,13 +37,29 @@ class Request
         return $_GET;
     }
 
-    public static function isGet()
+    public function isGet($param)
     {
-        return $_SERVER['REQUEST_METHOD'] === 'GET';
+        return $_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET[$param]);
     }
-    public static function isPost()
+    public function isPost($param)
     {
-        return $_SERVER['REQUEST_METHOD'] === 'POST';
+        return $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST[$param]);
+    }
+
+    public function getParameter($parameter)
+    {
+        return $this->isGet($parameter) ? $_GET[$parameter] : null;
+    }
+
+    public function postParameter($parameter)
+    {
+        return $this->isPost($parameter) ? $_POST[$parameter] : null;
+    }
+    public  function file($name)
+    {
+        if (isset($_FILES[$name])) {
+            return $_FILES[$name];
+        }
     }
 
     /**

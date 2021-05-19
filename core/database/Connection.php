@@ -57,7 +57,7 @@ class Connection
      * @param string $dbName
      * @return void
      */
-    private function connectDb(string $dbName): void
+    public function connectDb(string $dbName): void
     {
         try {
             self::$pdo = new \PDO("mysql:host={$this->config['host']};dbname={$dbName}", $this->config['username'], $this->config['password']);

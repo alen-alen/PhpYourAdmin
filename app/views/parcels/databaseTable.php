@@ -1,6 +1,5 @@
 <div class='table'>
-    <?php if (isset($columns)) { ?>
-
+    <?php if (isset($_GET['table'])) { ?>
         <table id='databaseDataTable' class=''>
             <thead class='table-dark'>
                 <tr>
