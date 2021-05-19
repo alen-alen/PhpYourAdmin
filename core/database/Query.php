@@ -18,6 +18,8 @@ class Query
     public function __construct($pdo = null)
     {
         $this->pdo = $pdo;
+
+  
     }
 
     /**
@@ -54,6 +56,19 @@ class Query
 
         $statement->execute();
     }
+    /**
+     * Query for showing all tables from the selected database
+     * 
+     * @return array
+     */
+    public function allTables(): array
+    {
+        $statement = $this->pdo->query('SELECT * FROM information_schema.tables;');
+
+        $tables = $statement->fetchAll(\PDO::FETCH_OBJ);
+
+        return $tables;
+    }
 
     /**
      * Query for showing all tables from the selected database
@@ -71,7 +86,6 @@ class Query
             return array_pop($table);
         }, $tables);
 
-        $this->tables = $tables;
         return $tables;
     }
 
@@ -83,7 +97,7 @@ class Query
      */
     public function getTableColumns(string $table): array
     {
-        $table = $this->tableExists($table);
+        // $table = $this->tableExists($table);
 
         $sql = "SHOW COLUMNS FROM $table";
 
@@ -134,7 +148,7 @@ class Query
      */
     public function selectAll(string $table): array
     {
-        $table = $this->tableExists($table);
+        // $table = $this->tableExists($table);
 
         $sql = "SELECT * FROM $table";
 
@@ -144,18 +158,15 @@ class Query
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
-
-    /**
-     * Check if the table exists in the database
-     * 
-     * @param string $tableName
-     * @return $tablename
-     */
-    private function tableExists(string $tableName)
+    public function userQuery($query)
     {
-        $table = array_values(array_filter($this->tables, function ($tbl) use ($tableName) {
-            return $tableName === $tbl ? $tbl : null;
-        }));
-        return !empty($table[0]) ? $table[0] : die('Table does not exist');
+        $statement = $this->pdo->prepare($query);
+        
+        $statement->execute();
+
+        if (explode(' ', $query)[0] == 'SELECT') {
+            $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+            return $data;
+        }
     }
 }

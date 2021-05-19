@@ -20,26 +20,28 @@ class DatabaseController extends Controller
    * 
    * @param $request
    */
-  public function dashboard($request)
+  public function dashboard()
   {
-    $databases = $this->query->getDatabases();
-
-    $tables = [];
-    $columns = [];
-    $data = [];
-
-    if (!empty($request)) {
-      $tables = $this->query->getTables();
-      if (isset($request['table'])) {
-
-        $columns =  $this->query->getTableColumns($request['table']);
-
-        $data =  $this->query->selectAll($request['table']);
-      }
-    }
-    return $this->view('home', compact('databases', 'tables', 'columns', 'data'));
+    return $this->view('home');
   }
 
+  public function showTable($request)
+  {
+    $tableData =  $this->query->selectAll($request['table']);
+    $columns = array_keys($tableData[0]);
+
+
+    return $this->view('database/table', compact('tableData', 'columns'));
+  }
+
+  public function userQuery($request)
+  {
+  
+    $tableData = $this->query->userQuery($request['sql']);
+    $columns = array_keys($tableData[0]);
+
+    return $this->view('database/table', compact('tableData', 'columns'));
+  }
   /**
    * Create database form
    */
@@ -51,6 +53,7 @@ class DatabaseController extends Controller
 
     return $this->view('database/create', compact('collations'));
   }
+
   /**
    * Save a new database
    * 
