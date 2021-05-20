@@ -1,12 +1,12 @@
 $(document).ready(function() {
-
     let urlParams = new URLSearchParams(window.location.search);
 
     $.ajax({
         type: 'GET',
-        url: '/api/dashboard',
+        url: '/api/databases',
         dataType: 'json',
         success: function(data) {
+            console.log(data);
             printDatabaseOptions(data, urlParams.get('db'))
 
             if (urlParams.get('db')) {
@@ -24,21 +24,21 @@ $(document).ready(function() {
 
 });
 
-function printAvailableTables(data, dbName, tableName) {
+function printAvailableTables(data, urlDbName, urlTableName) {
     data.forEach(table => {
-        if (tableName === table) {
+        if (urlTableName === table) {
             $('#tableList').append(`
-            <a href="/database/table?db=${dbName}&table=${table}" class="list-group-item list-group-item-action active">${table}</a>`)
+            <a href="/database/table?db=${urlDbName}&table=${table}" class="list-group-item list-group-item-action active">${table}</a>`)
         } else {
             $('#tableList').append(`
-            <a href="/database/table?db=${dbName}&table=${table}" class="list-group-item list-group-item-action ">${table}</a>`)
+            <a href="/database/table?db=${urlDbName}&table=${table}" class="list-group-item list-group-item-action ">${table}</a>`)
         }
     });
 }
 
-function printDatabaseOptions(data, dbName) {
+function printDatabaseOptions(data, urlDbName) {
     data.forEach(database => {
-        if (dbName === database) {
+        if (urlDbName === database) {
             $('#databaseSelect').append(`<option selected  value='${database}'>${database}</option>`);
         } else {
             $('#databaseSelect').append(`<option  value='${database}'>${database}</option>`);

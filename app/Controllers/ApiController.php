@@ -2,18 +2,33 @@
 
 namespace PhpYourAdimn\App\Controllers;
 
+use PhpYourAdimn\Core\Request;
+
 class ApiController extends Controller
 {
-    public function dashboard()
+
+    /**
+     * Api route for databases
+     * 
+     * @return array $data 
+     */
+    public function databases()
     {
         $databases = $this->query->getDatabases();
         $data = json_encode($databases);
-        print_r($data);
+        return print_r($data);
     }
-    public function getTables($request)
+
+    /**
+     * Api route for database tables
+     * 
+     * @param Request $request
+     * @return array $data 
+     */
+    public function getTables(Request $request)
     {
-        $tables = $this->query->getTables($request->getParameter('db'));
+        $tables = $this->query->getDatabaseTables($request->getParameter('db'));
         $data = json_encode($tables);
-        print_r($data);
+        return print_r($data);
     }
 }

@@ -27,9 +27,13 @@ class DatabaseController extends Controller
     return $this->view('home');
   }
 
+  /**
+   * Returns all tables 
+   * 
+   * @param Request $request
+   */
   public function showTable(Request $request)
   {
-
     $tableData = $this->query->selectAll($request->getParameter('table'));
 
     if (!empty($tableData)) {
@@ -47,7 +51,7 @@ class DatabaseController extends Controller
     $columns = [];
 
     try {
-      $tableData = $this->query->userQuery($request->getParameter('sql'));
+      $tableData = $this->query->rawSql($request->getParameter('sql'));
       if (!empty($tableData)) {
         $columns = array_keys($tableData[0]);
       } else {
@@ -76,9 +80,9 @@ class DatabaseController extends Controller
    * @param array $request
    * @return void
    */
-  public function store(array $request): void
+  public function store(Request $request): void
   {
-    $databaseRequest = new DatabaseRequest($request);
+    $databaseRequest = new DatabaseRequest($request->postParameters());
 
     $request = $databaseRequest->validate($this->query->getDatabases());
 

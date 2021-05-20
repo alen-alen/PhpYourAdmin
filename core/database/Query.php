@@ -57,7 +57,7 @@ class Query
         $statement->execute();
     }
     /**
-     * Query for showing all tables from the selected database
+     * Query for showing all tables
      * 
      * @return array
      */
@@ -75,7 +75,7 @@ class Query
      * 
      * @return array
      */
-    public function getTables(): array
+    public function getDatabaseTables(): array
     {
         $statement = $this->pdo->query('SHOW TABLES');
 
@@ -125,6 +125,7 @@ class Query
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
+
     /**
      * Returns the table columns
      * 
@@ -159,16 +160,16 @@ class Query
     }
 
     /**
-     * Executes the users query
+     * Executes the raw sql query
      * 
      * @param string $query user input query
      * 
      * @return  $data|PDO exception
      */
-    public function userQuery($query)
+    public function rawSql($query)
     {
         $statement = $this->pdo->prepare($query);
-   
+
         if (!$statement->execute()) {
             throw new \Exception($statement->errorInfo()[2]);
         }

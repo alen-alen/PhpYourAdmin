@@ -5,8 +5,90 @@ namespace PhpYourAdimn\Core;
 class Request
 {
 
+
+
+    /**
+     * Check if the request method is GET and if the requested parameter is set
+     * 
+     * @param string $key 
+     * @return bool
+     */
+    public function isGet($key)
+    {
+        return $_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET[$key]);
+    }
+    /**
+     * Check if the request method is POST and if the requested parameter is set
+     * 
+     * @param string $key 
+     * @return bool
+     */
+    public function isPost($key)
+    {
+        return $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST[$key]);
+    }
+
+    /**
+     * Return the all GET parameters
+     * 
+     * @return $_GET
+     */
+    public function getParameters()
+    {
+        return $_GET;
+    }
+
+    /**
+     * Return the all POST parameters
+     * 
+     * @return $_POST
+     */
+    public function postParameters()
+    {
+        return $_POST;
+    }
+
+    /**
+     * Check if the GET parameter $key is set and return its value
+     * 
+     * @param string $key
+     * 
+     * @return string|array|null depending on the $_GET[$key] value
+     */
+    public function getParameter($key)
+    {
+        return $this->isGet($key) ? $_GET[$key] : null;
+    }
+
+    /**
+     * Check if the POST parameter $key is set and return its value
+     * 
+     * @param string $key
+     * 
+     * @return string|array|null depending on the $_POST[$key] value
+     */
+    public function postParameter($parameter)
+    {
+        return $this->isPost($parameter) ? $_POST[$parameter] : null;
+    }
+
+    /**
+     * Check if the FILES parameter $key is set and return its value
+     * 
+     * @param string $key
+     * 
+     * @return array  $_FILES[$key] 
+     */
+    public  function file($name)
+    {
+        if (isset($_FILES[$name])) {
+            return $_FILES[$name];
+        }
+    }
+
     /**
      * Return the current uri
+     * 
      * @return string
      */
     public static function uri(): string
@@ -37,41 +119,8 @@ class Request
         return $_GET;
     }
 
-    public function isGet($param)
-    {
-        return $_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET[$param]);
-    }
-    public function isPost($param)
-    {
-        return $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST[$param]);
-    }
-
-    public function getParameters()
-    {
-        return $_GET;
-    }
-    public function postParameters()
-    {
-        return $_POST;
-    }
-    public function getParameter($parameter)
-    {
-        return $this->isGet($parameter) ? $_GET[$parameter] : null;
-    }
-
-    public function postParameter($parameter)
-    {
-        return $this->isPost($parameter) ? $_POST[$parameter] : null;
-    }
-    public  function file($name)
-    {
-        if (isset($_FILES[$name])) {
-            return $_FILES[$name];
-        }
-    }
-
     /**
-     * @return string database name
+     * @return string $_GET['db'] database name
      */
     public static function getDatabaseName()
     {

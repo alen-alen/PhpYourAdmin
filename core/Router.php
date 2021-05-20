@@ -9,7 +9,6 @@ use PhpYourAdimn\Core\Database\Connection;
 
 class Router
 {
-
     const HOME_ROUTE = 'database/dashboard';
     /**
      * Array of GET and POST routes

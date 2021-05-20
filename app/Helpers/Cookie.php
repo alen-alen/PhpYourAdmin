@@ -4,7 +4,6 @@ namespace PhpYourAdimn\App\Helpers;
 
 class Cookie
 {
-
     /**
      * Returns the value of the Cookie,
      * $key is the index of the Cookie.

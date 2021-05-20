@@ -18,7 +18,7 @@ class Controller
     }
 
     /**
-     * Get the evaluated view contents for the given view.
+     * Get the evaluated view contents for the given view,always extract Request instance
      * 
      * @param string $name file path in the view directory
      * @param array $data data that is sent to the view

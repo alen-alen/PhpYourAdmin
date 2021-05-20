@@ -1,8 +1,8 @@
 <?php
 use PhpYourAdimn\App\Helpers\Route; ?>
 
-<div class=''>
-    <h3>PhpYourAdmin</h3>
+<div>
+    <h3><a href="<?=Route::path(Route::HOME_ROUTE)?>"class='text-dark'>PhpYourAdmin</a> </h3>
     <a href="<?= Route::path('logout') ?>"><i class="fa fa-sign-out"></i></a>
     <a href="<?= Route::path('database/create') ?>"><i class="fa fa-plus">Database</i></a>
 </div>
@@ -24,7 +24,6 @@ use PhpYourAdimn\App\Helpers\Route; ?>
         <h5>Available tables: </h5>
         <div class="list-group">
             <a href="<?= Route::path('table/create') ?>" class='list-group-item list-group-item-action'>Create table<i class="fa fa-plus ml-2"></i></a>
-          
         </div>
     </div>
 

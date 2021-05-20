@@ -3,8 +3,8 @@ require 'app/views/parcels/head.php';
 
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\App\Helpers\Session;
-
 ?>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-6 offset-3">

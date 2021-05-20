@@ -16,5 +16,5 @@ $router->get('login', 'LoginController@index');
 $router->post('login', 'LoginController@login');
 $router->get('logout', 'LogoutController@logout');
 
-$router->get('api/dashboard', 'ApiController@dashboard');
+$router->get('api/databases', 'ApiController@databases');
 $router->get('api/getTables', 'ApiController@getTables');
