@@ -6,7 +6,6 @@ $(document).ready(function() {
         url: '/api/databases',
         dataType: 'json',
         success: function(data) {
-            console.log(data);
             printDatabaseOptions(data, urlParams.get('db'))
 
             if (urlParams.get('db')) {

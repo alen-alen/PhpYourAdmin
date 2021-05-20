@@ -16,7 +16,7 @@ class ApiController extends Controller
     {
         $databases = $this->query->getDatabases();
         $data = json_encode($databases);
-        return print_r($data);
+        echo $data;
     }
 
     /**
@@ -29,6 +29,6 @@ class ApiController extends Controller
     {
         $tables = $this->query->getDatabaseTables($request->getParameter('db'));
         $data = json_encode($tables);
-        return print_r($data);
+        echo $data;
     }
 }

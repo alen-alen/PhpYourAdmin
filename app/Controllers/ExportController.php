@@ -32,9 +32,8 @@ class ExportController extends Controller
         $password = $userCredentials['password'];
         $hostname = $userCredentials['host'];
         $dbname   =  $request->getParameter('db');
-
         $dumpFileName = $dbname . ".sql";
-        $command = "C:\\xampp\\mysql\\bin\\mysqldump.exe  --host $hostname --user $username ";
+        $command = getenv('MYSQLDUMP')."--host $hostname --user $username ";
         if (!empty($password)) {
             $command .= "--password $password";
         }
