@@ -6,11 +6,12 @@ use Exception;
 use PhpYourAdimn\Core\Request;
 use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\App\Helpers\Route;
+use PhpYourAdimn\Core\Database\Query;
 use PhpYourAdimn\App\Requests\DatabaseRequest;
 
 class DatabaseController extends Controller
 {
-  public function __construct($query)
+  public function __construct(Query $query)
   {
     parent::__construct($query);
 

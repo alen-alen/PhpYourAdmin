@@ -4,9 +4,6 @@ namespace PhpYourAdimn\Core;
 
 class Request
 {
-
-
-
     /**
      * Check if the request method is GET and if the requested parameter is set
      * 
