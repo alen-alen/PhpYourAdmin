@@ -4,9 +4,6 @@ namespace PhpYourAdimn\Core;
 
 class Request
 {
-
-
-
     /**
      * Check if the request method is GET and if the requested parameter is set
      * 
@@ -17,6 +14,7 @@ class Request
     {
         return $_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET[$key]);
     }
+
     /**
      * Check if the request method is POST and if the requested parameter is set
      * 
