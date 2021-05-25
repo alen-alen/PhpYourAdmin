@@ -7,22 +7,23 @@ require 'app/views/parcels/head.php'; ?>
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-2 border">
+        <div class="col-2 ">
             <div class='dashboard'>
                 <?php require 'app/views/parcels/dashboard.php' ?>
             </div>
         </div>
-        <div class="col-9 border pt-3 ">
+        <div class="col-9  pt-3 ">
             <?php if (Session::has('success')) { ?>
                 <div class='alert alert-success'><?= Session::get('success') ?></div>
             <?php } ?>
             <?php if (Session::has('error')) {
-                foreach(Session::get('error') as $error) {?>
-                <div class='alert alert-danger'><?=$error ?></div>
-            <?php } }?>
+                foreach (Session::get('error') as $error) { ?>
+                    <div class='alert alert-danger'><?= $error ?></div>
+            <?php }
+            } ?>
             <div class="row">
-                <div class="col-12">
-                    <a href=""> Create user <i class="fa fa-plus"></i> </a>
+                <div class="col-12 ">
+                    <h4>Create a new Mysql user</h4>
                 </div>
             </div>
             <div class="row">
@@ -55,9 +56,13 @@ require 'app/views/parcels/head.php'; ?>
                             </select>
                         </div>
                         <div class="form-group row">
-                            <div class="col-sm-12 d-flex justify-content-end  border">
+                            <div class="col-sm-6 d-flex justify-content-end  ">
                                 <button type="submit" class="btn btn-primary ">Create</button>
                             </div>
+                            <div class="col-sm-6 d-flex justify-content-end  ">
+                                <a href="<?= Route::path('database/users') ?>"> Go Back </a>
+                            </div>
+
                         </div>
                     </form>
                 </div>

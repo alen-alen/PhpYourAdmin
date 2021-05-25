@@ -2,7 +2,6 @@
 
 namespace PhpYourAdimn\Core\Database;
 
-use PDOException;
 use PhpYourAdimn\App\Models\MysqlUser;
 
 class Query

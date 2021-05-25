@@ -17,6 +17,10 @@ class UserController extends Controller
 
         UserAuth::autorize();
     }
+
+    /**
+     * Show all available users
+     */
     public function index()
     {
         $users = $this->query->getMysqlUsers();
@@ -24,13 +28,25 @@ class UserController extends Controller
         return $this->view('user/index', compact('users'));
     }
 
+    /**
+     * Show the create user form
+     */
     public function create()
     {
+        UserAuth::isAdmin();
+
         return $this->view('user/create');
     }
 
-    public function store($request)
+    /**
+     * Create the new Mysql user
+     * 
+     * @param Request $request
+     */
+    public function store(Request $request)
     {
+        UserAuth::isAdmin();
+
         $MysqlUserRequest = new MysqlUserRequest($request->postParameters(), $this->query->getMysqlUsers());
 
         $inputs = $MysqlUserRequest->validate();
@@ -43,8 +59,15 @@ class UserController extends Controller
         Route::redirect('database/users');
     }
 
+    /**
+     * Delete the selected user
+     * 
+     * @param Request $request
+     */
     public function delete(Request $request)
     {
+        UserAuth::isAdmin();
+
         $users = $this->query->getMysqlUsers();
 
         if (key_exists($request->getParameter('id'), $users)) {

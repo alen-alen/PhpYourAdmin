@@ -36,11 +36,11 @@ class Request
     }
 
     /**
-     * Return the all POST parameters
+     * Return all POST parameters
      * 
-     * @return $_POST
+     * @return array $_POST
      */
-    public function postParameters()
+    public function postParameters():array
     {
         return $_POST;
     }

@@ -45,7 +45,10 @@ class DatabaseController extends Controller
     return $this->view('home', compact('tableData', 'columns'));
   }
 
-  public function userQuery($request)
+  /**
+   *  @param Request $request
+   */
+  public function userQuery(Request $request)
   {
     $message = '';
     $tableData = [];
@@ -63,8 +66,9 @@ class DatabaseController extends Controller
     }
     return $this->view('home', compact('tableData', 'columns', 'message'));
   }
+
   /**
-   * Create database form
+   * Show the database create form 
    */
   public function create()
   {

@@ -4,7 +4,6 @@ namespace PhpYourAdimn\App\Models;
 
 class MysqlUser
 {
-
     /**
      * User username
      * 
@@ -34,6 +33,13 @@ class MysqlUser
     public string $type;
 
     /**
+     * User GRANT OPTION
+     * 
+     * @var string $grantOption
+     */
+    public string $grantOption;
+
+    /**
      * User privileges
      * 
      * @var array $priviliges
@@ -60,6 +66,7 @@ class MysqlUser
 
         $this->setPriviliges();
     }
+
     /**
      * Sets the privilege propery based on the user type
      * @return void
