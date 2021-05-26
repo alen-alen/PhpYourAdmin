@@ -7,6 +7,18 @@ use PhpYourAdimn\App\Helpers\Hash;
 class File
 {
     /**
+     * Returns the file contents of specified path as a string if it exists
+     * 
+     * @param string $filePath
+     * 
+     * @return string on success
+     * @return false if the file dosent exist
+     */
+    public static function getFile($filePath): mixed
+    {
+        return file_exists($filePath) ? file_get_contents($filePath) : false;
+    }
+    /**
      * Returns the decrypted txt file as a string
      * 
      * @param string $filePath

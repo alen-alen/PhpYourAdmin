@@ -36,6 +36,7 @@ class Session
     {
         $_SESSION[$key] = $value;
     }
+
     /**
      * Get a session item by it's key
      * @param string $key
@@ -67,6 +68,7 @@ class Session
     {
         return isset($_SESSION[$key]);
     }
+
     /**
      * Destroy the active session
      * 

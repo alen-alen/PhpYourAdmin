@@ -1,2 +1,3 @@
 ENCRYPTION_KEY=key
 FILE_PATH=users.txt
+MSQL_DUMP=

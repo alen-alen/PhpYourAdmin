@@ -2,6 +2,8 @@
 
 namespace PhpYourAdimn\Core\Database;
 
+use PDOException;
+
 class Query
 {
     /**
@@ -54,13 +56,26 @@ class Query
 
         $statement->execute();
     }
+    /**
+     * Query for showing all tables
+     * 
+     * @return array
+     */
+    public function allTables(): array
+    {
+        $statement = $this->pdo->query('SELECT * FROM information_schema.tables;');
+
+        $tables = $statement->fetchAll(\PDO::FETCH_OBJ);
+
+        return $tables;
+    }
 
     /**
      * Query for showing all tables from the selected database
      * 
      * @return array
      */
-    public function getTables(): array
+    public function getDatabaseTables(): array
     {
         $statement = $this->pdo->query('SHOW TABLES');
 
@@ -71,7 +86,6 @@ class Query
             return array_pop($table);
         }, $tables);
 
-        $this->tables = $tables;
         return $tables;
     }
 
@@ -83,15 +97,16 @@ class Query
      */
     public function getTableColumns(string $table): array
     {
-        $table = $this->tableExists($table);
-
         $sql = "SHOW COLUMNS FROM $table";
 
         $statement = $this->pdo->prepare($sql);
 
         $statement->execute();
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        while ($columns = $statement->fetch(\PDO::FETCH_ASSOC)) {
+            $thisColumns[] = $columns['Field'];
+        }
+        return $thisColumns;
     }
 
     /**
@@ -110,6 +125,7 @@ class Query
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
+
     /**
      * Returns the table columns
      * 
@@ -134,8 +150,6 @@ class Query
      */
     public function selectAll(string $table): array
     {
-        $table = $this->tableExists($table);
-
         $sql = "SELECT * FROM $table";
 
         $statement = $this->pdo->prepare($sql);
@@ -146,16 +160,22 @@ class Query
     }
 
     /**
-     * Check if the table exists in the database
+     * Executes the raw sql query
      * 
-     * @param string $tableName
-     * @return $tablename
+     * @param string $query user input query
+     * 
+     * @return  $data|PDO exception
      */
-    private function tableExists(string $tableName)
+    public function rawSql($query)
     {
-        $table = array_values(array_filter($this->tables, function ($tbl) use ($tableName) {
-            return $tableName === $tbl ? $tbl : null;
-        }));
-        return !empty($table[0]) ? $table[0] : die('Table does not exist');
+        $statement = $this->pdo->prepare($query);
+
+        if (!$statement->execute()) {
+            throw new \Exception($statement->errorInfo()[2]);
+        }
+        if (explode(' ', $query)[0] == 'SELECT') {
+            $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+            return $data;
+        }
     }
 }

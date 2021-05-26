@@ -9,7 +9,6 @@ use PhpYourAdimn\Core\Database\Connection;
 
 class Router
 {
-
     const HOME_ROUTE = 'database/dashboard';
     /**
      * Array of GET and POST routes
@@ -69,6 +68,7 @@ class Router
         if (array_key_exists($uri, $this->routes[$requestType])) {
             return  $this->callAction(...explode('@', $this->routes[$requestType][$uri]));
         }
+       
         throw new \Exception('No routes defined');
     }
 
@@ -91,6 +91,6 @@ class Router
         if (!method_exists($controller, $action)) {
             throw new \Exception("{$controller} does not respond to the {$action} action.");
         }
-        return $controller->$action(Request::requestData());
+        return $controller->$action(new Request());
     }
 }
