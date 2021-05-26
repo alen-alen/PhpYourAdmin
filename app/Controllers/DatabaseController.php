@@ -37,16 +37,17 @@ class DatabaseController extends Controller
   {
     $tableData = $this->query->selectAll($request->getParameter('table'));
 
-    if (!empty($tableData)) {
-      $columns = array_keys($tableData[0]);
-    } else {
-      $columns = $this->query->getTableColumns($request->getParameter('table'));
-    }
+    $columns = !empty($tableData) ?
+      array_keys($tableData[0]) :
+      $this->query->getTableColumns($request->getParameter('table'));
+
     return $this->view('home', compact('tableData', 'columns'));
   }
 
   /**
-   *  @param Request $request
+   * Returns the home view with the correct data
+   * 
+   * @param Request $request
    */
   public function userQuery(Request $request)
   {
@@ -56,11 +57,9 @@ class DatabaseController extends Controller
 
     try {
       $tableData = $this->query->rawSql($request->getParameter('sql'));
-      if (!empty($tableData)) {
-        $columns = array_keys($tableData[0]);
-      } else {
-        $columns = $this->query->getTableColumns($request->getParameter('table'));
-      }
+      $columns = !empty($tableData) ?
+        array_keys($tableData[0]) :
+        $this->query->getTableColumns($request->getParameter('table'));
     } catch (Exception $e) {
       $message = $e->getMessage();
     }
