@@ -2,7 +2,7 @@
 
 namespace PhpYourAdimn\Core\Database;
 
-use PDOException;
+use PhpYourAdimn\App\Models\MysqlUser;
 
 class Query
 {
@@ -29,7 +29,9 @@ class Query
      */
     public function getDatabases(): array
     {
-        $statement = $this->pdo->query('SHOW DATABASES');
+        $statement = $this->pdo->prepare('SHOW DATABASES');
+
+        $statement->execute();
 
         $databases = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -39,6 +41,87 @@ class Query
         }, $databases);
 
         return $databases;
+    }
+
+    /**
+     * Return all Mysql users
+     * 
+     * @return array
+     */
+    public function getMysqlUsers()
+    {
+        $sql = 'SELECT user,host,password,grant_priv FROM mysql.user';
+
+        $statement = $this->pdo->prepare($sql);
+
+        $statement->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Create a new MySql user
+     * 
+     * @param MysqlUser $user
+     * @return $errorMessage on failure
+     */
+    public function createSqlUser(MysqlUser $user)
+    {
+        $sql = "CREATE USER :username@:host identified by :password";
+
+        $statement = $this->pdo->prepare($sql);
+
+        if (!$statement->execute([':username' => $user->username, ':host' => $user->host, ':password' => $user->password])) {
+            die(var_dump($statement->errorInfo()[2]));
+        };
+    }
+
+    public function checkPrivileges()
+    {
+        $sql='SHOW GRANTS';
+
+        $statement = $this->pdo->prepare($sql);
+
+        $statement->execute();
+
+       return $statement->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Sets Privileges for selected $user
+     * 
+     * @param MysqlUser $user
+     * @return void
+     */
+    public function setUserPrivileges(MysqlUser $user)
+    {
+        $sql = "GRANT";
+
+        foreach ($user->privileges as $privilige) {
+            $sql .= " $privilige ";
+        }
+        $sql .= "ON *.* TO :username@:host";
+
+        if ($user->grantOption) {
+            $sql .= " $user->grantOption";
+        }
+        $statement = $this->pdo->prepare($sql);
+
+        $statement->execute([':username' => $user->username, ':host' => $user->host]);
+    }
+
+    /**
+     * Delete a user form Mysql Server
+     * 
+     * @param string $username
+     * @param string $host
+     * @return void
+     */
+    public function deleteSqlUser($username, $host)
+    {
+        $sql = "DROP USER :username@:host";
+        $statement = $this->pdo->prepare($sql);
+        $statement->execute([':username' => $username, ':host' => $host]);
     }
 
     /**

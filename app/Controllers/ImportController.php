@@ -16,6 +16,7 @@ class ImportController extends Controller
     {
         UserAuth::autorize();
     }
+    
     /**
      * Return the import form view
      */

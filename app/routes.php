@@ -4,6 +4,11 @@ $router->get('database/dashboard', 'DatabaseController@dashboard');
 $router->get('database/table', 'DatabaseController@showTable');
 $router->get('database/query', 'DatabaseController@userQuery');
 
+$router->get('database/users', 'UserController@index');
+$router->get('database/users/create', 'UserController@create');
+$router->post('database/users/store', 'UserController@store');
+$router->get('database/users/delete', 'UserController@delete');
+
 $router->get('database/import', 'ImportController@importForm');
 $router->post('database/import', 'ImportController@import');
 
