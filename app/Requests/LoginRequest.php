@@ -7,6 +7,7 @@ use PhpYourAdimn\Core\Database\Connection;
 
 class LoginRequest
 {
+
     /**
      * Data from the form request 
      * 
@@ -28,8 +29,9 @@ class LoginRequest
     /**
      * @param array $userInputs
      */
-    public function __construct(array $userInputs)
+    public function __construct(Connection $connection ,array $userInputs)
     {
+        $this->connection=$connection;
         $this->data = $userInputs;
     }
     /**
@@ -51,7 +53,7 @@ class LoginRequest
         }
 
         if (!$this->error) {
-            if (Connection::validate($this->data['host'], $this->data['username'], $this->data['password'])) {
+            if ($this->connection->validate($this->data['host'], $this->data['username'], $this->data['password'])) {
                 return $this->data;
             }
             Route::redirect('login', ['error', 'Invalid Credentials']);

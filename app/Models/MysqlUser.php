@@ -37,7 +37,7 @@ class MysqlUser
      * 
      * @var string $grantOption
      */
-    public string $grantOption;
+    public string $grantOption=null;
 
     /**
      * User privileges

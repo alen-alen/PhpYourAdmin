@@ -33,7 +33,8 @@ class ExportController extends Controller
         $hostname = $userCredentials['host'];
         $dbname   =  $request->getParameter('db');
         $dumpFileName = $dbname . ".sql";
-        $command = getenv('MYSQLDUMP')."--host $hostname --user $username ";
+        $command = getenv('MYSQL_DUMP') . " --host $hostname --user $username ";
+        
         if (!empty($password)) {
             $command .= "--password $password";
         }
@@ -42,7 +43,7 @@ class ExportController extends Controller
         header("Content-Type: application/octet-stream");
         header("Content-Disposition: attachment; filename=$dumpFileName");
 
-        passthru("$command");
+        passthru($command);
 
         exit();
     }

@@ -25,6 +25,7 @@ class DatabaseController extends Controller
    */
   public function dashboard()
   {
+  
     return $this->view('home');
   }
 

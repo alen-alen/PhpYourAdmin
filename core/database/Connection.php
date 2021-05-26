@@ -11,7 +11,7 @@ class Connection
     /**
      * @var PDO $connection
      */
-    public static $pdo = NULL;
+    public $pdo = NULL;
 
     /**
      * Instance of this class
@@ -27,14 +27,15 @@ class Connection
      */
     private array $config = [];
 
-    private function __construct($dbName = NULL)
+    private function __construct($dbName = null)
     {
-        $this->config = UserFile::getUserById(Cookie::get('user'));
-
-        if ($dbName) {
-            return $this->connectDb($dbName);
+        if (UserFile::getUserById(Cookie::get('user'))) {
+            $this->config = UserFile::getUserById(Cookie::get('user'));
+            if ($dbName) {
+                return $this->connectDb($dbName);
+            }
+            return  $this->createConnection();
         }
-        return  $this->createConnection();
     }
 
     /**
@@ -45,7 +46,7 @@ class Connection
     private function createConnection(): void
     {
         try {
-            self::$pdo = new \PDO("mysql:host={$this->config['host']}", $this->config['username'], $this->config['password']);
+            $this->pdo = new \PDO("mysql:host={$this->config['host']}", $this->config['username'], $this->config['password']);
         } catch (\PDOException $e) {
             die($e->getMessage());
         }
@@ -60,7 +61,7 @@ class Connection
     public function connectDb(string $dbName): void
     {
         try {
-            self::$pdo = new \PDO("mysql:host={$this->config['host']};dbname={$dbName}", $this->config['username'], $this->config['password']);
+            $this->pdo = new \PDO("mysql:host={$this->config['host']};dbname={$dbName}", $this->config['username'], $this->config['password']);
         } catch (\PDOException $e) {
             die($e->getMessage());
         }
@@ -76,6 +77,7 @@ class Connection
         if (!self::$instance) {
             self::$instance = new Connection(Request::getDatabaseName());
         }
+
         return self::$instance;
     }
     /**
@@ -85,7 +87,7 @@ class Connection
      */
     public function getConnection()
     {
-        return self::$pdo;
+        return $this->pdo;
     }
 
     /**
@@ -98,9 +100,9 @@ class Connection
      * @return true -on success
      * @return false -on failure
      */
-    public static function validate(string $host, string $username, string $password): bool
+    public function validate(string $host, string $username, string $password): bool
     {
-        if (!self::$pdo) {
+        if (!$this->pdo) {
             try {
                 new \PDO("mysql:host=$host", $username, $password);
                 return true;
@@ -115,10 +117,10 @@ class Connection
      * 
      * @return void
      */
-    public static function close(): void
+    public function close(): void
     {
-        if (!self::$pdo) {
-            self::$pdo = null;
+        if ($this->pdo) {
+            $this->pdo = null;
         }
     }
 }

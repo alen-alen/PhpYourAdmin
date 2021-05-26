@@ -33,7 +33,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        UserAuth::isAdmin();
+        // UserAuth::isAdmin();
 
         return $this->view('user/create');
     }
@@ -45,7 +45,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        UserAuth::isAdmin();
+        // UserAuth::isAdmin();
 
         $MysqlUserRequest = new MysqlUserRequest($request->postParameters(), $this->query->getMysqlUsers());
 
@@ -66,7 +66,7 @@ class UserController extends Controller
      */
     public function delete(Request $request)
     {
-        UserAuth::isAdmin();
+        // UserAuth::isAdmin();
 
         $users = $this->query->getMysqlUsers();
 

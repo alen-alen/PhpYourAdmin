@@ -2,11 +2,15 @@
 
 namespace PhpYourAdimn\App\Controllers;
 
+use PhpYourAdimn\Core\Database\Query;
 use PhpYourAdimn\Core\Request;
 
 class ApiController extends Controller
 {
-
+    public function __construct(Query $query)
+    {
+        parent::__construct($query);
+    }
     /**
      * Api route for databases
      * 

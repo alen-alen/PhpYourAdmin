@@ -2,15 +2,21 @@
 
 namespace PhpYourAdimn\App\Controllers;
 
+use PhpYourAdimn\Core\Request;
 use PhpYourAdimn\App\Models\User;
 use PhpYourAdimn\App\File\UserFile;
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\App\Helpers\Cookie;
+use PhpYourAdimn\Core\Database\Connection;
 use PhpYourAdimn\App\Requests\LoginRequest;
-use PhpYourAdimn\Core\Request;
 
 class LoginController extends Controller
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
     public function index()
     {
         return $this->view('login');
@@ -23,7 +29,7 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
-        $loginRequest = new LoginRequest($request->postParameters());
+        $loginRequest = new LoginRequest(Connection::getInstance(), $request->postParameters());
 
         $request = $loginRequest->validate();
 

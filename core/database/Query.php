@@ -17,9 +17,10 @@ class Query
      */
     public array $tables;
 
-    public function __construct($pdo = null)
+    public function __construct(Connection $connection)
     {
-        $this->pdo = $pdo;
+      
+        $this->pdo = $connection->getConnection();
     }
 
     /**
@@ -78,13 +79,13 @@ class Query
 
     public function checkPrivileges()
     {
-        $sql='SHOW GRANTS';
+        $sql = 'SHOW GRANTS';
 
         $statement = $this->pdo->prepare($sql);
 
         $statement->execute();
 
-       return $statement->fetch(\PDO::FETCH_ASSOC);
+        return $statement->fetch(\PDO::FETCH_ASSOC);
     }
 
     /**
