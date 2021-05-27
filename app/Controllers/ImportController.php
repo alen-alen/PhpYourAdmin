@@ -15,8 +15,10 @@ class ImportController extends Controller
     public function __construct(
         Query $query,
         Request $request,
-        Route $route
+        Route $route,
+        File $file
     ) {
+        $this->file = $file;
         UserAuth::autorize();
         parent::__construct($query, $request, $route);
     }
@@ -35,10 +37,10 @@ class ImportController extends Controller
     public function import()
     {
         $importRequest = new ImportRequest($this->request->file('database'), $this->route);
-       
+
         $importRequest->validate();
 
-        $query = File::getFile($this->request->file('database')['tmp_name']);
+        $query = $this->file->getFile($this->request->file('database')['tmp_name']);
 
         try {
             $this->query->rawSql($query);

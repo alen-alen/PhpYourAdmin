@@ -14,9 +14,10 @@ use PhpYourAdimn\Core\Database\Query;
 class LoginController extends Controller
 {
 
-    public function __construct(Query $query, Request $request,Route $route)
+    public function __construct(Query $query, Request $request, Route $route, UserFile $userFile)
     {
-        parent::__construct($query, $request,$route);
+        $this->userFile = $userFile;
+        parent::__construct($query, $request, $route);
     }
     public function index()
     {
@@ -28,13 +29,13 @@ class LoginController extends Controller
      */
     public function login()
     {
-        $loginRequest = new LoginRequest($this->query, $this->request->postParameters(),$this->route);
+        $loginRequest = new LoginRequest($this->query, $this->request->postParameters(), $this->route);
 
         $request = $loginRequest->validate();
 
         $user = new User();
 
-        UserFile::saveUser($request['host'], $request['username'], $request['password'], $user->getId());
+        $this->userFile->saveUser($request['host'], $request['username'], $request['password'], $user->getId());
 
         $this->request->cookie->set('user', time());
 

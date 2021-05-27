@@ -26,7 +26,7 @@ class LogoutController extends Controller
      */
     public function logout(): void
     {
-        $this->userFile::deleteUser($this->request->cookie->get('user'));
+        $this->userFile->deleteUser($this->request->cookie->get('user'));
 
         $this->request->cookie->destroy('user');
 

@@ -46,7 +46,7 @@ class UserController extends Controller
     {
         // UserAuth::isAdmin();
 
-        $MysqlUserRequest = new MysqlUserRequest($this->request->postParameters(), $this->query->getMysqlUsers(),$this->route);
+        $MysqlUserRequest = new MysqlUserRequest($this->request->postParameters(), $this->query->getMysqlUsers(), $this->route);
 
         $inputs = $MysqlUserRequest->validate();
 

@@ -12,7 +12,7 @@ class UserFile extends File
      * @param string $filePath
      * @return void
      */
-    public static function createFile(string $filePath): void
+    public function createFile(string $filePath): void
     {
         if (!file_exists($filePath)) {
             fopen($filePath, 'w');
@@ -25,10 +25,10 @@ class UserFile extends File
      * @param string $userId
      * @return array|false
      */
-    public static function getUserById(string $userId)
+    public function getUserById(string $userId)
     {
        
-        $users = self::convertToArray(self::getDecryptedData(getenv('FILE_PATH')));
+        $users = $this->convertToArray($this->getDecryptedData(getenv('FILE_PATH')));
 
         $user = array_filter($users, function ($user) use ($userId) {
             return $user['id'] == $userId;
@@ -44,9 +44,9 @@ class UserFile extends File
      * @param string $username
      * @return array|false
      */
-    public static function getUserByName(string $username)
+    public function getUserByName(string $username)
     {
-        $users = self::convertToArray(self::getDecryptedData(getenv('FILE_PATH')));
+        $users = $this->convertToArray($this->getDecryptedData(getenv('FILE_PATH')));
 
         $user = array_filter($users, function ($user) use ($username) {
             return $user['username'] == $username;
@@ -60,18 +60,18 @@ class UserFile extends File
      * 
      * @return void|false
      */
-    public static function saveUser(string $userHost, string $username, string $password, string $id)
+    public function saveUser(string $userHost, string $username, string $password, string $id)
     {
-        if (self::getUserByName($username)) {
+        if ($this->getUserByName($username)) {
             return false;
         }
-        $decryptedData = self::getDecryptedData(getenv('FILE_PATH'));
+        $decryptedData = $this->getDecryptedData(getenv('FILE_PATH'));
 
         $newUser = "username:$username,password:$password,host:$userHost,id:{$id}|";
 
         $decryptedData .= $newUser;
 
-        self::save($decryptedData, getenv('FILE_PATH'));
+        $this->save($decryptedData, getenv('FILE_PATH'));
     }
 
     /**
@@ -80,18 +80,18 @@ class UserFile extends File
      * @param int $userId
      * @return void
      */
-    public static function deleteUser(string $userId)
+    public function deleteUser(string $userId)
     {
-        $decryptedData = self::getDecryptedData(getenv('FILE_PATH'));
+        $decryptedData = $this->getDecryptedData(getenv('FILE_PATH'));
 
-        $arrayOfUsers = self::convertToArray($decryptedData);
+        $arrayOfUsers = $this->convertToArray($decryptedData);
 
         $user = array_search($userId, $arrayOfUsers);
 
         unset($arrayOfUsers[$user]);
 
-        $newString = self::convertToString($arrayOfUsers);
+        $newString = $this->convertToString($arrayOfUsers);
 
-        self::save($newString, getenv('FILE_PATH'));
+        $this->save($newString, getenv('FILE_PATH'));
     }
 }

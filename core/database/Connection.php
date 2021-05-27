@@ -76,21 +76,6 @@ class Connection
             null;
     }
 
-    // /**
-    //  * Update the connection with the selected database
-    //  * 
-    //  * @param string $dbName
-    //  * @return void
-    //  */
-    // public function connectDb(string $dbName): void
-    // {
-    //     try {
-    //         $this->pdo = new \PDO("mysql:host={$this->config['host']};dbname={$dbName}", $this->config['username'], $this->config['password']);
-    //     } catch (\PDOException $e) {
-    //         die($e->getMessage());
-    //     }
-    // }
-
     /**
      * Create an instance of this class and return it
      * 

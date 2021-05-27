@@ -14,7 +14,7 @@ class File
      * @return string on success
      * @return false if the file dosent exist
      */
-    public static function getFile($filePath)
+    public function getFile($filePath)
     {
         return file_exists($filePath) ? file_get_contents($filePath) : false;
     }
@@ -24,7 +24,7 @@ class File
      * @param string $filePath
      * @return string
      */
-    protected static function getDecryptedData(string $filePath): string
+   protected function getDecryptedData(string $filePath): string
     {
         return Hash::decrypt(file_get_contents($filePath));
     }
@@ -36,7 +36,7 @@ class File
      * @param array $array
      * @return string
      */
-    protected static function convertToString(array $array): string
+   protected function convertToString(array $array): string
     {
         $string = '';
 
@@ -52,7 +52,7 @@ class File
      * @param string $string
      * @return array
      */
-    protected static function convertToArray(string $data): array
+   protected function convertToArray(string $data): array
     {
         $fileUsers = explode('|', $data);
 
@@ -79,7 +79,7 @@ class File
      * @param string $filePath 
      * @return void
      */
-    protected static function save(string $data, $filePath)
+   protected function save(string $data, $filePath)
     {
         $encryptNewStrig = Hash::encrypt($data);
 

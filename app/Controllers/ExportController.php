@@ -10,8 +10,9 @@ use PhpYourAdimn\Core\Database\Query;
 
 class ExportController extends Controller
 {
-    public function __construct(Query $query, Request $request, Route $route)
+    public function __construct(Query $query, Request $request, Route $route, UserFile $userFile)
     {
+        $this->userFile = $userFile;
         parent::__construct($query, $request, $route);
         UserAuth::autorize();
     }
@@ -27,7 +28,7 @@ class ExportController extends Controller
             $this->route->redirectHome(['error', 'Please select a database!']);
         }
 
-        $userCredentials = UserFile::getUserById($this->request->cookie->get('user'));
+        $userCredentials = $this->userFile->getUserById($this->request->cookie->get('user'));
 
         $username = $userCredentials['username'];
         $password = $userCredentials['password'];
