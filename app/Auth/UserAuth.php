@@ -2,6 +2,7 @@
 
 namespace PhpYourAdimn\App\Auth;
 
+use PhpYourAdimn\Core\Request;
 use PhpYourAdimn\App\File\UserFile;
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\App\Helpers\Cookie;
@@ -12,6 +13,7 @@ class UserAuth
 {
     public function __construct(Cookie $cookie, Route $route)
     {
+
         $this->cookie = $cookie;
         $this->route = $route;
     }
@@ -20,8 +22,8 @@ class UserAuth
      */
     public function autorize()
     {
-        if ($this->cookie->has('user')) {
-            $this->route0->redirect('login');
+        if ($this->request->cookie->has('user')) {
+            $this->route->redirect('login');
         }
     }
 

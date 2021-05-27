@@ -3,17 +3,18 @@
 namespace PhpYourAdimn\App\Controllers;
 
 use PhpYourAdimn\Core\Request;
+use PhpYourAdimn\Core\Traits\Auth;
 use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\App\Helpers\Route;
-use PhpYourAdimn\App\Models\MysqlUser;
 use PhpYourAdimn\Core\Database\Query;
+use PhpYourAdimn\App\Models\MysqlUser;
 use PhpYourAdimn\App\Requests\MysqlUserRequest;
 
 class UserController extends Controller
 {
     public function __construct(Query $query, Request $request, Route $route)
     {
-        (new UserAuth($this->request->cookie, $this->route))->autorize();
+        $this->autorize();
         
         parent::__construct($query, $request, $route);
     }

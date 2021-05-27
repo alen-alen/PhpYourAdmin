@@ -3,7 +3,7 @@
 namespace PhpYourAdimn\App\Controllers;
 
 use PhpYourAdimn\Core\Request;
-use PhpYourAdimn\App\Auth\UserAuth;
+use PhpYourAdimn\Core\Traits\Auth;
 use PhpYourAdimn\App\File\UserFile;
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\Core\Database\Query;
@@ -12,8 +12,8 @@ class ExportController extends Controller
 {
     public function __construct(Query $query, Request $request, Route $route, UserFile $userFile)
     {
-        (new UserAuth($this->request->cookie, $this->route))->autorize();
-
+        $this->autorize();
+        
         $this->userFile = $userFile;
 
         parent::__construct($query, $request, $route);

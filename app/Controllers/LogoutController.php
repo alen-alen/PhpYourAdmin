@@ -3,22 +3,22 @@
 namespace PhpYourAdimn\App\Controllers;
 
 use PhpYourAdimn\Core\Request;
-use PhpYourAdimn\App\Auth\UserAuth;
+use PhpYourAdimn\Core\Traits\Auth;
+
 use PhpYourAdimn\App\File\UserFile;
 use PhpYourAdimn\App\Helpers\Route;
-use PhpYourAdimn\App\Helpers\Cookie;
+
 use PhpYourAdimn\Core\Database\Query;
 
 class LogoutController extends Controller
 {
     public UserFile $userFile;
 
-    public function __construct(Query $query, Request $request, Route $route,UserFile $userFile)
+    public function __construct(Query $query, Request $request, Route $route, UserFile $userFile)
     {
-        (new UserAuth($this->request->cookie, $this->route))->autorize();
+        $this->autorize();
         $this->userFile = $userFile;
-        parent::__construct($query, $request,$route);
-       
+        parent::__construct($query, $request, $route);
     }
     /**
      * Delete the user from the txt file and

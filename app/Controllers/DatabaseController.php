@@ -4,14 +4,14 @@ namespace PhpYourAdimn\App\Controllers;
 
 use Exception;
 use PhpYourAdimn\Core\Request;
-use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\Core\Database\Query;
 use PhpYourAdimn\App\Requests\DatabaseRequest;
+use PhpYourAdimn\Core\Traits\Auth;
 
 class DatabaseController extends Controller
 {
-
+ 
   /**
    * @param Route $query
    * @param Query $query
@@ -19,9 +19,8 @@ class DatabaseController extends Controller
    */
   public function __construct(Query $query, Request $request, Route $route)
   {
+    $this->autorize();
     parent::__construct($query, $request, $route);
-
-    (new UserAuth($this->request->cookie, $this->route))->autorize();
   }
 
   /**

@@ -3,11 +3,14 @@
 namespace PhpYourAdimn\App\Controllers;
 
 use PhpYourAdimn\Core\Request;
+use PhpYourAdimn\Core\Traits\Auth;
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\Core\Database\Query;
 
 class Controller
 {
+    use Auth;
+
     public $query;
 
     public $request;

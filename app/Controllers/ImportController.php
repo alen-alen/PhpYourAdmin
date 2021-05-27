@@ -4,11 +4,12 @@ namespace PhpYourAdimn\App\Controllers;
 
 use PhpYourAdimn\Core\Request;
 use PhpYourAdimn\App\File\File;
+use PhpYourAdimn\Core\Traits\Auth;
 use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\App\Helpers\Route;
+use PhpYourAdimn\Core\Database\Query;
 use PhpYourAdimn\App\Controllers\Controller;
 use PhpYourAdimn\App\Requests\ImportRequest;
-use PhpYourAdimn\Core\Database\Query;
 
 class ImportController extends Controller
 {
@@ -18,8 +19,8 @@ class ImportController extends Controller
         Route $route,
         File $file
     ) {
+        $this->autorize();
         $this->file = $file;
-        (new UserAuth($this->request->cookie, $this->route))->autorize();
         parent::__construct($query, $request, $route);
     }
 
