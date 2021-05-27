@@ -21,7 +21,7 @@ class DatabaseController extends Controller
   {
     parent::__construct($query, $request, $route);
 
-    UserAuth::autorize();
+    (new UserAuth($this->request->cookie, $this->route))->autorize();
   }
 
   /**

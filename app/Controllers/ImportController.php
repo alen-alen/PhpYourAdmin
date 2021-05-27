@@ -19,7 +19,7 @@ class ImportController extends Controller
         File $file
     ) {
         $this->file = $file;
-        UserAuth::autorize();
+        (new UserAuth($this->request->cookie, $this->route))->autorize();
         parent::__construct($query, $request, $route);
     }
 

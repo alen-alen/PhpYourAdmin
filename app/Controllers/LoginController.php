@@ -4,12 +4,12 @@ namespace PhpYourAdimn\App\Controllers;
 
 use PhpYourAdimn\Core\Request;
 use PhpYourAdimn\App\Models\User;
+use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\App\File\UserFile;
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\App\Helpers\Cookie;
-use PhpYourAdimn\Core\Database\Connection;
-use PhpYourAdimn\App\Requests\LoginRequest;
 use PhpYourAdimn\Core\Database\Query;
+use PhpYourAdimn\App\Requests\LoginRequest;
 
 class LoginController extends Controller
 {

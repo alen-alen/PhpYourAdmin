@@ -13,9 +13,9 @@ class UserController extends Controller
 {
     public function __construct(Query $query, Request $request, Route $route)
     {
+        (new UserAuth($this->request->cookie, $this->route))->autorize();
+        
         parent::__construct($query, $request, $route);
-
-        UserAuth::autorize();
     }
 
     /**

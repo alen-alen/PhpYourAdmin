@@ -12,9 +12,11 @@ class ExportController extends Controller
 {
     public function __construct(Query $query, Request $request, Route $route, UserFile $userFile)
     {
+        (new UserAuth($this->request->cookie, $this->route))->autorize();
+
         $this->userFile = $userFile;
+
         parent::__construct($query, $request, $route);
-        UserAuth::autorize();
     }
 
     /**

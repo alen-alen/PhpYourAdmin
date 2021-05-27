@@ -10,16 +10,18 @@ use PhpYourAdimn\Core\Database\Connection;
 
 class UserAuth
 {
-    public function __construct()
+    public function __construct(Cookie $cookie, Route $route)
     {
+        $this->cookie = $cookie;
+        $this->route = $route;
     }
     /**
      * Check if there is a user loged in if not redirects to login page
      */
-    public static function autorize()
+    public function autorize()
     {
-        if (!Cookie::has('user')) {
-            Route::redirect('login');
+        if ($this->cookie->has('user')) {
+            $this->route0->redirect('login');
         }
     }
 
