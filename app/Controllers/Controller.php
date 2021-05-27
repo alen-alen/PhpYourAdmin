@@ -9,12 +9,16 @@ class Controller
 {
     public $query;
 
+    public $request;
+
     /**
      * @param Query $query
      */
-    public function __construct(Query $query = null)
+    public function __construct(?Query $query = null,Request $request)
     {
         $this->query = $query;
+
+        $this->request=$request;
     }
 
     /**
@@ -25,7 +29,7 @@ class Controller
      */
     public function view($name, array $data = [])
     {
-        $request = new Request();
+        $request = $this->request;
         extract($data);
         extract(['request' => $request]);
 

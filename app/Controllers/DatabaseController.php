@@ -11,9 +11,9 @@ use PhpYourAdimn\App\Requests\DatabaseRequest;
 
 class DatabaseController extends Controller
 {
-  public function __construct(Query $query)
+  public function __construct(Query $query, Request $request)
   {
-    parent::__construct($query);
+    parent::__construct($query, $request);
 
     UserAuth::autorize();
   }
@@ -25,7 +25,7 @@ class DatabaseController extends Controller
    */
   public function dashboard()
   {
-  
+
     return $this->view('home');
   }
 
@@ -34,13 +34,13 @@ class DatabaseController extends Controller
    * 
    * @param Request $request
    */
-  public function showTable(Request $request)
+  public function showTable()
   {
-    $tableData = $this->query->selectAll($request->getParameter('table'));
+    $tableData = $this->query->selectAll($this->request->getParameter('table'));
 
     $columns = !empty($tableData) ?
       array_keys($tableData[0]) :
-      $this->query->getTableColumns($request->getParameter('table'));
+      $this->query->getTableColumns($this->request->getParameter('table'));
 
     return $this->view('home', compact('tableData', 'columns'));
   }
@@ -50,17 +50,17 @@ class DatabaseController extends Controller
    * 
    * @param Request $request
    */
-  public function userQuery(Request $request)
+  public function userQuery()
   {
     $message = '';
     $tableData = [];
     $columns = [];
 
     try {
-      $tableData = $this->query->rawSql($request->getParameter('sql'));
+      $tableData = $this->query->rawSql($this->request->getParameter('sql'));
       $columns = !empty($tableData) ?
         array_keys($tableData[0]) :
-        $this->query->getTableColumns($request->getParameter('table'));
+        $this->query->getTableColumns($this->request->getParameter('table'));
     } catch (Exception $e) {
       $message = $e->getMessage();
     }
@@ -85,9 +85,9 @@ class DatabaseController extends Controller
    * @param array $request
    * @return void
    */
-  public function store(Request $request): void
+  public function store(): void
   {
-    $databaseRequest = new DatabaseRequest($request->postParameters());
+    $databaseRequest = new DatabaseRequest($this->request->postParameters());
 
     $request = $databaseRequest->validate($this->query->getDatabases());
 

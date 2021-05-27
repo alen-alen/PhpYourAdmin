@@ -7,11 +7,13 @@ use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\App\File\UserFile;
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\App\Helpers\Cookie;
+use PhpYourAdimn\Core\Database\Query;
 
 class ExportController extends Controller
 {
-    public function __construct()
+    public function __construct(Query $query, Request $request)
     {
+        parent::__construct($query, $request);
         UserAuth::autorize();
     }
 
@@ -34,7 +36,7 @@ class ExportController extends Controller
         $dbname   =  $request->getParameter('db');
         $dumpFileName = $dbname . ".sql";
         $command = getenv('MYSQL_DUMP') . " --host $hostname --user $username ";
-        
+
         if (!empty($password)) {
             $command .= "--password $password";
         }

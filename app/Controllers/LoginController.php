@@ -9,13 +9,14 @@ use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\App\Helpers\Cookie;
 use PhpYourAdimn\Core\Database\Connection;
 use PhpYourAdimn\App\Requests\LoginRequest;
+use PhpYourAdimn\Core\Database\Query;
 
 class LoginController extends Controller
 {
 
-    public function __construct()
+    public function __construct(Query $query, Request $request)
     {
-        parent::__construct();
+        parent::__construct($query, $request);
     }
     public function index()
     {
@@ -27,9 +28,9 @@ class LoginController extends Controller
      * 
      * @param array $request
      */
-    public function login(Request $request)
+    public function login()
     {
-        $loginRequest = new LoginRequest(Connection::getInstance(), $request->postParameters());
+        $loginRequest = new LoginRequest(Connection::getInstance(), $this->request->postParameters());
 
         $request = $loginRequest->validate();
 

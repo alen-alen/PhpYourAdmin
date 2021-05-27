@@ -13,11 +13,11 @@ require 'app/views/parcels/head.php'; ?>
             </div>
         </div>
         <div class="col-9 border pt-3 ">
-            <?php if (Session::has('success')) { ?>
-                <div class='alert alert-success'><?= Session::get('success') ?></div>
+            <?php if ($request->session->has('success')) { ?>
+                <div class='alert alert-success'><?= $request->session->get('success') ?></div>
             <?php } ?>
-            <?php if (Session::has('error')) { ?>
-                <div class='alert alert-danger'><?= Session::get('error') ?></div>
+            <?php if ($request->session->has('error')) { ?>
+                <div class='alert alert-danger'><?= $request->session->get('error') ?></div>
             <?php } ?>
 
             <div class="row">

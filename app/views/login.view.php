@@ -21,9 +21,9 @@ require 'app/views/parcels/head.php';
                 <div class=' border shadow p-5'>
                     <h1 class='mb-5 text-center'>Login</h1>
 
-                    <?php if (Session::get('error')) { ?>
+                    <?php if ($request->session->get('error')) { ?>
 
-                        <div class='alert alert-danger text-center'><?= Session::get('error') ?></div>
+                        <div class='alert alert-danger text-center'><?= $request->session->get('error') ?></div>
                     <?php } ?>
 
                     <form action='login' method="POST">

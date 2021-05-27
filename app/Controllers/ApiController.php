@@ -7,9 +7,9 @@ use PhpYourAdimn\Core\Request;
 
 class ApiController extends Controller
 {
-    public function __construct(Query $query)
+    public function __construct(Query $query,Request $request)
     {
-        parent::__construct($query);
+        parent::__construct($query,$request);
     }
     /**
      * Api route for databases
@@ -28,9 +28,9 @@ class ApiController extends Controller
      * @param Request $request
      * @return array $data 
      */
-    public function getTables(Request $request)
+    public function getTables()
     {
-        $tables = $this->query->getDatabaseTables($request->getParameter('db'));
+        $tables = $this->query->getDatabaseTables($this->request->getParameter('db'));
         echo json_encode($tables);
     }
 }

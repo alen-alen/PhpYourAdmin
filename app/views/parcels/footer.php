@@ -8,4 +8,4 @@
 </body>
 
 </html>
-<?php \PhpYourAdimn\App\Helpers\Session::destroy() ?>
+<?php $request->session->destroy() ?>

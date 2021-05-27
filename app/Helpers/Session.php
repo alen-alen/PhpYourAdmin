@@ -9,18 +9,18 @@ class Session
      * 
      * @var bool $active 
      */
-    private static $active = false;
+    private $active = false;
 
     /**
      * Start a session
      * 
      * @return void
      */
-    public static function start()
+    public function start()
     {
-        if (self::$active === false) {
+        if ($this->active === false) {
             session_start();
-            self::$active = true;
+            $this->active = true;
         }
     }
 
@@ -32,7 +32,7 @@ class Session
      * 
      * @return void
      */
-    public static function set(string $key, $value): void
+    public function set(string $key, $value): void
     {
         $_SESSION[$key] = $value;
     }
@@ -44,7 +44,7 @@ class Session
      * 
      * @return mixed session item value
      */
-    public static function get(string $key, $secondKey = false)
+    public function get(string $key, $secondKey = false)
     {
         if ($secondKey === true) {
             if (isset($_SESSION[$key][$secondKey])) {
@@ -64,7 +64,7 @@ class Session
      * @param string $key
      * @return bool
      */
-    public static function has($key)
+    public function has($key)
     {
         return isset($_SESSION[$key]);
     }
@@ -74,11 +74,11 @@ class Session
      * 
      * @return void
      */
-    public static function destroy(): void
+    public function destroy(): void
     {
-        if (self::$active === true) {
+        if ($this->active === true) {
             session_destroy();
-            self::$active = false;
+            $this->active = false;
         }
     }
 }

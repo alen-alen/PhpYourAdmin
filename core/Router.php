@@ -2,12 +2,21 @@
 
 namespace PhpYourAdimn\Core;
 
+use DI\Container;
 use DI\ContainerBuilder;
 use PhpYourAdimn\Core\Database\Connection;
 
 class Router
 {
     const HOME_ROUTE = 'database/dashboard';
+
+    public $container;
+
+    public function __construct(Container $container)
+    {
+    
+        $this->container=$container;
+    }
 
     /**
      * Array of GET and POST routes
@@ -27,7 +36,7 @@ class Router
      */
     public function load(string $file)
     {
-        $router = new $this;
+        $router = new $this($this->container);
 
         require $file;
 
@@ -84,13 +93,8 @@ class Router
             throw new \Exception("{$controller} does not respond to the {$action} action.");
         }
 
-        $builder = new ContainerBuilder();
+        $controller = $this->container->get($controller);
 
-        $builder->addDefinitions(__DIR__ . './config.php');
-        $container = $builder->build();
-
-        $controller = $container->get($controller);
-
-        return $controller->$action(new Request());
+        return $controller->$action();
     }
 }

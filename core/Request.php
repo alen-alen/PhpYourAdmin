@@ -2,8 +2,17 @@
 
 namespace PhpYourAdimn\Core;
 
+use PhpYourAdimn\App\Helpers\Session;
+
 class Request
 {
+    public Session $session;
+
+    public function __construct(Session $session)
+    {
+        $this->session=$session;
+    }
+    
     /**
      * Check if the request method is GET and if the requested parameter is set
      * 

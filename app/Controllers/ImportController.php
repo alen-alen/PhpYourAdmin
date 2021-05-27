@@ -9,14 +9,16 @@ use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\Core\Database\Connection;
 use PhpYourAdimn\App\Controllers\Controller;
 use PhpYourAdimn\App\Requests\ImportRequest;
+use PhpYourAdimn\Core\Database\Query;
 
 class ImportController extends Controller
 {
-    public function __construct()
+    public function __construct(Query $query, Request $request)
     {
         UserAuth::autorize();
+        parent::__construct($query, $request);
     }
-    
+
     /**
      * Return the import form view
      */
@@ -30,15 +32,15 @@ class ImportController extends Controller
      * 
      *@param Request $request 
      */
-    public function import(Request $request)
+    public function import()
     {
-        Connection::getInstance()->connectDb($request->postParameter('db'));
+        Connection::getInstance()->connectDb($this->request->postParameter('db'));
 
-        $importRequest = new ImportRequest($request->file('database'));
+        $importRequest = new ImportRequest($this->request->file('database'));
 
         $importRequest->validate();
 
-        $query = File::getFile($request->file('database')['tmp_name']);
+        $query = File::getFile($this->request->file('database')['tmp_name']);
 
         try {
             $this->query->rawSql($query);

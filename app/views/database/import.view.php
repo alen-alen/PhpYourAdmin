@@ -12,8 +12,8 @@ use PhpYourAdimn\App\Helpers\Session;
             <?php if (!empty($message)) { ?>
                 <div class='alert alert-danger'><?= $message ?></div>
             <?php } ?>
-            <?php if (Session::has('error')) { ?>
-                <div class='alert alert-danger'><?= Session::get('error') ?></div>
+            <?php if ($request->session->has('error')) { ?>
+                <div class='alert alert-danger'><?= $request->session->get('error') ?></div>
             <?php } ?>
             <form action="<?= Route::path('database/import') ?>" method="POST" enctype="multipart/form-data">
                 <input type="text" hidden name='db' value="<?= $request->getParameter('db') ?>">

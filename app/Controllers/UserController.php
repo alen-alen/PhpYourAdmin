@@ -11,9 +11,9 @@ use PhpYourAdimn\App\Requests\MysqlUserRequest;
 
 class UserController extends Controller
 {
-    public function __construct(Query $query)
+    public function __construct(Query $query, Request $request)
     {
-        parent::__construct($query);
+        parent::__construct($query, $request);
 
         UserAuth::autorize();
     }
@@ -70,8 +70,8 @@ class UserController extends Controller
 
         $users = $this->query->getMysqlUsers();
 
-        if (key_exists($request->getParameter('id'), $users)) {
-            $user = $users[$request->getParameter('id')];
+        if (key_exists($this->request->getParameter('id'), $users)) {
+            $user = $users[$this->request->getParameter('id')];
             $this->query->deleteSqlUser($user['User'], $user['Host']);
         }
         Route::redirect('database/users', ['success', "sucessfuly deleted user {$user['User']}@{$user['Host']}"]);
