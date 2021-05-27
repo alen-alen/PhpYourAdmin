@@ -12,7 +12,7 @@ class Cookie
      * 
      * @return string|array
      */
-    public static function get(string $key)
+    public function get(string $key)
     {
         $cookie = explode('--', $_COOKIE[$key]);
         $value = $cookie[0];
@@ -28,7 +28,7 @@ class Cookie
      * @param int $expireIn seconds until expiration date
      * @return void
      */
-    public static function set(string $key, string $value, int $expireIn = 86400): void
+    public function set(string $key, string $value, int $expireIn = 86400): void
     {
         $time = time() + $expireIn;
         setcookie($key, $value . '--' . $time, $time);
@@ -39,7 +39,7 @@ class Cookie
      * 
      * @param string $key
      */
-    public static function destroy(string $key): void
+    public function destroy(string $key): void
     {
         setcookie($key, ' ', time() - 64000);
         unset($_COOKIE['user']);
@@ -51,7 +51,7 @@ class Cookie
      * @param string $key
      * @return bool
      */
-    public static function has($key)
+    public function has($key)
     {
         return isset($_COOKIE[$key]);
     }
@@ -62,7 +62,7 @@ class Cookie
      * @param string $key
      * @return bool
      */
-    public static function isExpired(string $key): bool
+    public function isExpired(string $key): bool
     {
         $cookie = explode('--', $_COOKIE[$key]);
         $cookieEndDate = $cookie[1];

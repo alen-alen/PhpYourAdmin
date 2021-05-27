@@ -3,11 +3,11 @@
 namespace PhpYourAdimn\App\Requests;
 
 use PhpYourAdimn\App\Helpers\Route;
+use PhpYourAdimn\Core\Database\Query;
 use PhpYourAdimn\Core\Database\Connection;
 
 class LoginRequest
 {
-
     /**
      * Data from the form request 
      * 
@@ -26,12 +26,14 @@ class LoginRequest
      */
     private $error = false;
 
+    private Query $query;
+
     /**
      * @param array $userInputs
      */
-    public function __construct(Connection $connection ,array $userInputs)
+    public function __construct(Query $query, array $userInputs,Route $route)
     {
-        $this->connection=$connection;
+        $this->query = $query;
         $this->data = $userInputs;
     }
     /**
@@ -53,11 +55,11 @@ class LoginRequest
         }
 
         if (!$this->error) {
-            if ($this->connection->validate($this->data['host'], $this->data['username'], $this->data['password'])) {
+            if ($this->query->validateConnection($this->data['host'], $this->data['username'], $this->data['password'])) {
                 return $this->data;
             }
-            Route::redirect('login', ['error', 'Invalid Credentials']);
+            $this->route->redirect('login', ['error', 'Invalid Credentials']);
         }
-        Route::redirect('login', ['error', 'Inputs cannot be empty']);
+        $this->route->redirect('login', ['error', 'Inputs cannot be empty']);
     }
 }

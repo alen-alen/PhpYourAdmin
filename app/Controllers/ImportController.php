@@ -6,17 +6,19 @@ use PhpYourAdimn\Core\Request;
 use PhpYourAdimn\App\File\File;
 use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\App\Helpers\Route;
-use PhpYourAdimn\Core\Database\Connection;
 use PhpYourAdimn\App\Controllers\Controller;
 use PhpYourAdimn\App\Requests\ImportRequest;
 use PhpYourAdimn\Core\Database\Query;
 
 class ImportController extends Controller
 {
-    public function __construct(Query $query, Request $request)
-    {
+    public function __construct(
+        Query $query,
+        Request $request,
+        Route $route
+    ) {
         UserAuth::autorize();
-        parent::__construct($query, $request);
+        parent::__construct($query, $request, $route);
     }
 
     /**
@@ -29,24 +31,22 @@ class ImportController extends Controller
 
     /**
      * Imports the selected file in the selected database
-     * 
-     *@param Request $request 
      */
     public function import()
     {
-        Connection::getInstance()->connectDb($this->request->postParameter('db'));
-
-        $importRequest = new ImportRequest($this->request->file('database'));
-
+        $importRequest = new ImportRequest($this->request->file('database'), $this->route);
+       
         $importRequest->validate();
 
         $query = File::getFile($this->request->file('database')['tmp_name']);
 
         try {
             $this->query->rawSql($query);
-            Route::redirectHome(['success', 'Succesfuly imported database']);
+            $this->route->redirectHome(['success', 'Succesfuly imported database']);
         } catch (\Exception $e) {
+
             $message = $e->getMessage();
+
             return $this->view('database/import', compact('message'));
         }
     }

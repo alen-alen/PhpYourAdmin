@@ -2,17 +2,24 @@
 
 namespace PhpYourAdimn\Core;
 
+use PhpYourAdimn\App\Helpers\Cookie;
 use PhpYourAdimn\App\Helpers\Session;
 
 class Request
 {
     public Session $session;
+    public Cookie $cookie;
 
-    public function __construct(Session $session)
+    public $data = [];
+
+    public function __construct(Session $session, Cookie $cookie)
     {
-        $this->session=$session;
+        $this->session = $session;
+        $this->cookie = $cookie;
+
+        $this->setData();
     }
-    
+
     /**
      * Check if the request method is GET and if the requested parameter is set
      * 
@@ -22,6 +29,10 @@ class Request
     public function isGet($key)
     {
         return $_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET[$key]);
+    }
+    public function setData()
+    {
+        $this->data=self::method()==='POST'? $_POST: $_GET;
     }
 
     /**
@@ -50,7 +61,7 @@ class Request
      * 
      * @return array $_POST
      */
-    public function postParameters():array
+    public function postParameters(): array
     {
         return $_POST;
     }
@@ -118,21 +129,22 @@ class Request
      * 
      * @return array
      */
-    public static function requestData(): array
+    public function requestData(): array
     {
+       
         if (self::method() === "POST") {
             return $_POST;
         }
         return $_GET;
     }
 
-    /**
-     * @return string $_GET['db'] database name
-     */
-    public static function getDatabaseName()
-    {
-        if (isset(self::requestData()['db'])) {
-            return self::requestData()['db'];
-        }
-    }
+    // /**
+    //  * @return string $_GET['db'] database name
+    //  */
+    // public static function getParameterbaseName()
+    // {
+    //     if (isset(self::requestData()['db'])) {
+    //         return self::requestData()['db'];
+    //     }
+    // }
 }

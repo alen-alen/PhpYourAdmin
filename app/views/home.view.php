@@ -1,8 +1,7 @@
 <?php
 
-use PhpYourAdimn\Core\Request;
 use PhpYourAdimn\App\Helpers\Route;
-use PhpYourAdimn\App\Helpers\Session;
+
 
 require 'app/views/parcels/head.php'; ?>
 <div class="container-fluid">

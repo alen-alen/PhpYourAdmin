@@ -6,8 +6,6 @@ use PhpYourAdimn\App\File\File;
 
 class UserFile extends File
 {
-    const FILE_PATH = 'users.txt';
-
     /**
      * Check if the file exists and create a new file
      * 
@@ -29,6 +27,7 @@ class UserFile extends File
      */
     public static function getUserById(string $userId)
     {
+       
         $users = self::convertToArray(self::getDecryptedData(getenv('FILE_PATH')));
 
         $user = array_filter($users, function ($user) use ($userId) {

@@ -4,7 +4,7 @@ namespace PhpYourAdimn\Core\Database;
 
 use PhpYourAdimn\App\Models\MysqlUser;
 
-class Query
+class Query extends Connection
 {
     /**
      * @var PDO $pdo 
@@ -19,8 +19,30 @@ class Query
 
     public function __construct(Connection $connection)
     {
-      
+
         $this->pdo = $connection->getConnection();
+    }
+
+    /**
+     * Try to establish a connection to  mysql 
+     * 
+     * @param string $host
+     * @param string $username
+     * @param string $password
+     * 
+     * @return true -on success
+     * @return false -on failure
+     */
+    public function validateConnection(string $host, string $username, string $password): bool
+    {
+        if (!$this->pdo) {
+            try {
+                new \PDO("mysql:host=$host", $username, $password);
+                return true;
+            } catch (\PDOException $e) {
+                return false;
+            }
+        }
     }
 
     /**
@@ -28,7 +50,7 @@ class Query
      * 
      * @return array
      */
-    public function getDatabases(): array
+    public function getParameterbases(): array
     {
         $statement = $this->pdo->prepare('SHOW DATABASES');
 
@@ -159,7 +181,7 @@ class Query
      * 
      * @return array
      */
-    public function getDatabaseTables(): array
+    public function getParameterbaseTables(): array
     {
         $statement = $this->pdo->query('SHOW TABLES');
 
@@ -255,9 +277,11 @@ class Query
         $statement = $this->pdo->prepare($query);
 
         if (!$statement->execute()) {
+            die(var_dump($statement->errorInfo()[2]));
             throw new \Exception($statement->errorInfo()[2]);
         }
         if (explode(' ', $query)[0] == 'SELECT') {
+
             $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
             return $data;
         }

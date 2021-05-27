@@ -4,7 +4,6 @@ namespace PhpYourAdimn\Core\Database;
 
 use PhpYourAdimn\Core\Request;
 use PhpYourAdimn\App\File\UserFile;
-use PhpYourAdimn\App\Helpers\Cookie;
 
 class Connection
 {
@@ -23,17 +22,22 @@ class Connection
     /**
      * Connection configuration data
      * 
-     * @var array $config
+     * @var array|null $config
      */
-    private array $config = [];
+    private $config = null;
 
-    private function __construct($dbName = null)
+    public Request $request;
+
+    public UserFile $userFile;
+
+    private function __construct(Request $request, UserFile $userFile)
     {
-        if (UserFile::getUserById(Cookie::get('user'))) {
-            $this->config = UserFile::getUserById(Cookie::get('user'));
-            if ($dbName) {
-                return $this->connectDb($dbName);
-            }
+        $this->userFile = $userFile;
+        $this->request = $request;
+
+        $this->setConfig();
+
+        if ($this->config) {
             return  $this->createConnection();
         }
     }
@@ -45,41 +49,61 @@ class Connection
      */
     private function createConnection(): void
     {
+
+        $dns = $this->request->isGet('db') || $this->request->isPost('db') ?
+            "mysql:host={$this->config['host']};dbname={$this->request->requestData()['db']}" :
+            "mysql:host={$this->config['host']}";
+    
         try {
-            $this->pdo = new \PDO("mysql:host={$this->config['host']}", $this->config['username'], $this->config['password']);
+            $this->pdo = new \PDO($dns, $this->config['username'], $this->config['password']);
+         
         } catch (\PDOException $e) {
             die($e->getMessage());
         }
     }
 
     /**
-     * Update the connection with the selected database
-     * 
-     * @param string $dbName
-     * @return void
+     * Set the connection configuration data
      */
-    public function connectDb(string $dbName): void
+    private function setConfig()
     {
-        try {
-            $this->pdo = new \PDO("mysql:host={$this->config['host']};dbname={$dbName}", $this->config['username'], $this->config['password']);
-        } catch (\PDOException $e) {
-            die($e->getMessage());
-        }
+        $userId = $this->request->cookie->has('user') ?
+            $this->request->cookie->get('user') :
+            false;
+
+        $this->config = $this->userFile->getUserById($userId) ?
+            $this->userFile->getUserById($userId) :
+            null;
     }
+
+    // /**
+    //  * Update the connection with the selected database
+    //  * 
+    //  * @param string $dbName
+    //  * @return void
+    //  */
+    // public function connectDb(string $dbName): void
+    // {
+    //     try {
+    //         $this->pdo = new \PDO("mysql:host={$this->config['host']};dbname={$dbName}", $this->config['username'], $this->config['password']);
+    //     } catch (\PDOException $e) {
+    //         die($e->getMessage());
+    //     }
+    // }
 
     /**
      * Create an instance of this class and return it
      * 
      * @return Connection
      */
-    public static function getInstance(): Connection
+    public static function getInstance(Request $request, UserFile $userFile): Connection
     {
         if (!self::$instance) {
-            self::$instance = new Connection(Request::getDatabaseName());
+            self::$instance = new Connection($request, $userFile);
         }
-
         return self::$instance;
     }
+
     /**
      * Return the PDO connection
      * 
@@ -88,28 +112,6 @@ class Connection
     public function getConnection()
     {
         return $this->pdo;
-    }
-
-    /**
-     * Try to establish a connection to  mysql 
-     * 
-     * @param string $host
-     * @param string $username
-     * @param string $password
-     * 
-     * @return true -on success
-     * @return false -on failure
-     */
-    public function validate(string $host, string $username, string $password): bool
-    {
-        if (!$this->pdo) {
-            try {
-                new \PDO("mysql:host=$host", $username, $password);
-                return true;
-            } catch (\PDOException $e) {
-                return false;
-            }
-        }
     }
 
     /**

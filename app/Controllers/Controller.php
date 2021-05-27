@@ -2,8 +2,9 @@
 
 namespace PhpYourAdimn\App\Controllers;
 
-use PhpYourAdimn\Core\Database\Query;
 use PhpYourAdimn\Core\Request;
+use PhpYourAdimn\App\Helpers\Route;
+use PhpYourAdimn\Core\Database\Query;
 
 class Controller
 {
@@ -11,14 +12,17 @@ class Controller
 
     public $request;
 
+    public $route;
+
     /**
      * @param Query $query
+     * @param Request $request
      */
-    public function __construct(?Query $query = null,Request $request)
+    public function __construct(Query $query = null, Request $request, Route $route)
     {
         $this->query = $query;
-
-        $this->request=$request;
+        $this->route = $route;
+        $this->request = $request;
     }
 
     /**
@@ -32,7 +36,6 @@ class Controller
         $request = $this->request;
         extract($data);
         extract(['request' => $request]);
-
         return require "app/views/${name}.view.php";
     }
 }

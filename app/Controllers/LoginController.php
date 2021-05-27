@@ -14,9 +14,9 @@ use PhpYourAdimn\Core\Database\Query;
 class LoginController extends Controller
 {
 
-    public function __construct(Query $query, Request $request)
+    public function __construct(Query $query, Request $request,Route $route)
     {
-        parent::__construct($query, $request);
+        parent::__construct($query, $request,$route);
     }
     public function index()
     {
@@ -25,12 +25,10 @@ class LoginController extends Controller
 
     /**
      * Saves the user in a txt file and creates a connection with mysql
-     * 
-     * @param array $request
      */
     public function login()
     {
-        $loginRequest = new LoginRequest(Connection::getInstance(), $this->request->postParameters());
+        $loginRequest = new LoginRequest($this->query, $this->request->postParameters(),$this->route);
 
         $request = $loginRequest->validate();
 
@@ -38,8 +36,8 @@ class LoginController extends Controller
 
         UserFile::saveUser($request['host'], $request['username'], $request['password'], $user->getId());
 
-        Cookie::set('user', time());
+        $this->request->cookie->set('user', time());
 
-        Route::redirect('database/dashboard');
+        $this->route->redirect('database/dashboard');
     }
 }

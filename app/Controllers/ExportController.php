@@ -6,34 +6,33 @@ use PhpYourAdimn\Core\Request;
 use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\App\File\UserFile;
 use PhpYourAdimn\App\Helpers\Route;
-use PhpYourAdimn\App\Helpers\Cookie;
 use PhpYourAdimn\Core\Database\Query;
 
 class ExportController extends Controller
 {
-    public function __construct(Query $query, Request $request)
+    public function __construct(Query $query, Request $request, Route $route)
     {
-        parent::__construct($query, $request);
+        parent::__construct($query, $request, $route);
         UserAuth::autorize();
     }
 
     /**
      * Exports and downloads the selected database
-     * 
-     * @param Request $request
      * @return void
      */
-    public function export(Request $request)
+    public function export()
     {
-        if (empty($request->getParameter('db'))) {
-            Route::redirectHome(['error', 'Please select a database!']);
+        if (empty($this->request->getParameter('db'))) {
+
+            $this->route->redirectHome(['error', 'Please select a database!']);
         }
-        $userCredentials = UserFile::getUserById(Cookie::get('user'));
+
+        $userCredentials = UserFile::getUserById($this->request->cookie->get('user'));
 
         $username = $userCredentials['username'];
         $password = $userCredentials['password'];
         $hostname = $userCredentials['host'];
-        $dbname   =  $request->getParameter('db');
+        $dbname   =  $this->request->getParameter('db');
         $dumpFileName = $dbname . ".sql";
         $command = getenv('MYSQL_DUMP') . " --host $hostname --user $username ";
 

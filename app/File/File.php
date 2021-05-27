@@ -14,7 +14,7 @@ class File
      * @return string on success
      * @return false if the file dosent exist
      */
-    public static function getFile($filePath): mixed
+    public static function getFile($filePath)
     {
         return file_exists($filePath) ? file_get_contents($filePath) : false;
     }

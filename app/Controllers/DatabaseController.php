@@ -11,9 +11,15 @@ use PhpYourAdimn\App\Requests\DatabaseRequest;
 
 class DatabaseController extends Controller
 {
-  public function __construct(Query $query, Request $request)
+
+  /**
+   * @param Route $query
+   * @param Query $query
+   * @param Request $request
+   */
+  public function __construct(Query $query, Request $request, Route $route)
   {
-    parent::__construct($query, $request);
+    parent::__construct($query, $request, $route);
 
     UserAuth::autorize();
   }
@@ -31,8 +37,6 @@ class DatabaseController extends Controller
 
   /**
    * Returns all tables 
-   * 
-   * @param Request $request
    */
   public function showTable()
   {
@@ -47,8 +51,6 @@ class DatabaseController extends Controller
 
   /**
    * Returns the home view with the correct data
-   * 
-   * @param Request $request
    */
   public function userQuery()
   {
@@ -87,14 +89,14 @@ class DatabaseController extends Controller
    */
   public function store(): void
   {
-    $databaseRequest = new DatabaseRequest($this->request->postParameters());
+    $databaseRequest = new DatabaseRequest($this->request->requestData(), $this->route);
 
-    $request = $databaseRequest->validate($this->query->getDatabases());
+    $request = $databaseRequest->validate($this->query->getParameterbases());
 
     $dbOptions = $this->query->getCollationById($request['collationId']);
 
     $this->query->createDatabase($request['dbName'], $dbOptions['Charset'], $dbOptions['Collation']);
 
-    Route::redirectHome(['success', 'Database Created!']);
+    $this->route->redirectHome(['success', 'Database Created!']);
   }
 }

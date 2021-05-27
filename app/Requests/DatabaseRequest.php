@@ -27,9 +27,9 @@ class DatabaseRequest
     /**
      * @param array $userInputs
      */
-    public function __construct(array $userInputs)
+    public function __construct(array $userInputs, Route $route)
     {
-
+        $this->route = $route;
         $this->data = $userInputs;
     }
     /**
@@ -57,7 +57,7 @@ class DatabaseRequest
         }
 
         if ($this->error) {
-            Route::redirect('database/create', ['error', $this->messages]);
+            $this->route->redirect('database/create', ['error', $this->messages]);
         }
         return $this->data;
     }

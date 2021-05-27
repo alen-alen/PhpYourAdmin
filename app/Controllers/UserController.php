@@ -11,9 +11,9 @@ use PhpYourAdimn\App\Requests\MysqlUserRequest;
 
 class UserController extends Controller
 {
-    public function __construct(Query $query, Request $request)
+    public function __construct(Query $query, Request $request, Route $route)
     {
-        parent::__construct($query, $request);
+        parent::__construct($query, $request, $route);
 
         UserAuth::autorize();
     }
@@ -41,13 +41,12 @@ class UserController extends Controller
     /**
      * Create the new Mysql user
      * 
-     * @param Request $request
      */
-    public function store(Request $request)
+    public function store()
     {
         // UserAuth::isAdmin();
 
-        $MysqlUserRequest = new MysqlUserRequest($request->postParameters(), $this->query->getMysqlUsers());
+        $MysqlUserRequest = new MysqlUserRequest($this->request->postParameters(), $this->query->getMysqlUsers(),$this->route);
 
         $inputs = $MysqlUserRequest->validate();
 
@@ -56,15 +55,14 @@ class UserController extends Controller
         $this->query->createSqlUser($user);
         $this->query->setUserPrivileges($user);
 
-        Route::redirect('database/users');
+        $this->route->redirect('database/users');
     }
 
     /**
      * Delete the selected user
      * 
-     * @param Request $request
      */
-    public function delete(Request $request)
+    public function delete()
     {
         // UserAuth::isAdmin();
 
@@ -74,6 +72,6 @@ class UserController extends Controller
             $user = $users[$this->request->getParameter('id')];
             $this->query->deleteSqlUser($user['User'], $user['Host']);
         }
-        Route::redirect('database/users', ['success', "sucessfuly deleted user {$user['User']}@{$user['Host']}"]);
+        $this->route->redirect('database/users', ['success', "sucessfuly deleted user {$user['User']}@{$user['Host']}"]);
     }
 }

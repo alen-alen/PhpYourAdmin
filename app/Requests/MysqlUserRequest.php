@@ -36,7 +36,7 @@ class MysqlUserRequest
      * @param array $userInputs
      * @param array $existingUser
      */
-    public function __construct(array $userInputs, array $existingUsers)
+    public function __construct(array $userInputs, array $existingUsers,Route $route)
     {
         $this->existingUsers = $existingUsers;
         $this->data = array_map(function ($input) {
@@ -68,7 +68,7 @@ class MysqlUserRequest
             $this->error = true;
         }
         if ($this->error) {
-            Route::redirect('database/users/create', ['error', $this->messages]);
+            $this->route->redirect('database/users/create', ['error', $this->messages]);
         }
         return $this->data;
     }
