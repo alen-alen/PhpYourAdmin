@@ -17,7 +17,7 @@ class App
     {
         $this->router = $router;
     }
-    
+
     /**
      * Start The Application
      */

@@ -32,18 +32,12 @@ class Query extends Connection
      * @param string $username
      * @param string $password
      * 
-     * @return true -on success
-     * @return false -on failure
+     * @return PDOException  on failure 
      */
-    public function validateConnection(string $host, string $username, string $password): bool
+    public function validateConnection(string $host, string $username, string $password)
     {
         if (!$this->pdo) {
-            try {
-                new \PDO("mysql:host=$host", $username, $password);
-                return true;
-            } catch (\PDOException $e) {
-                return false;
-            }
+            new \PDO("mysql:host=$host", $username, $password);
         }
     }
 
@@ -97,7 +91,7 @@ class Query extends Connection
         $statement = $this->pdo->prepare($sql);
 
         if (!$statement->execute([':username' => $user->username, ':host' => $user->host, ':password' => $user->password])) {
-            die(var_dump($statement->errorInfo()[2]));
+            // die(var_dump($statement->errorInfo()[2]));
         };
     }
 
@@ -153,6 +147,7 @@ class Query extends Connection
 
         $statement->execute();
     }
+
     /**
      * Query for showing all tables
      * 
@@ -268,11 +263,9 @@ class Query extends Connection
         $statement = $this->pdo->prepare($query);
 
         if (!$statement->execute()) {
-            die(var_dump($statement->errorInfo()[2]));
             throw new \Exception($statement->errorInfo()[2]);
         }
         if (explode(' ', $query)[0] == 'SELECT') {
-
             $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
             return $data;
         }

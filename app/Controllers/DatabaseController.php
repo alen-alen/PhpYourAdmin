@@ -13,6 +13,7 @@ use PhpYourAdimn\App\Requests\DatabaseRequest;
 class DatabaseController extends Controller
 {
   /**
+   * Translate constructor.
    * @param Route $route
    * @param Query $query
    * @param UserAuth $userAuth
@@ -31,19 +32,19 @@ class DatabaseController extends Controller
 
   /**
    * Database dashboard
-   * 
-   * @param $request
+   * @return void
    */
-  public function dashboard()
+  public function dashboard(): void
   {
     $this->query->getDatabases();
-    return $this->view('home');
+    $this->view('home');
   }
 
   /**
-   * Returns all tables 
+   * Returns home view with all database tables 
+   * @return void
    */
-  public function showTable()
+  public function showTable(): void
   {
     $tableData = $this->query->selectAll($this->request->parameter('table'));
 
@@ -51,13 +52,14 @@ class DatabaseController extends Controller
       array_keys($tableData[0]) :
       $this->query->getTableColumns($this->request->parameter('table'));
 
-    return $this->view('home', compact('tableData', 'columns'));
+    $this->view('home', compact('tableData', 'columns'));
   }
 
   /**
    * Returns the home view with the correct data
+   * @return void
    */
-  public function userQuery()
+  public function userQuery(): void
   {
     $message = '';
     $tableData = [];
@@ -71,19 +73,21 @@ class DatabaseController extends Controller
     } catch (Exception $e) {
       $message = $e->getMessage();
     }
-    return $this->view('home', compact('tableData', 'columns', 'message'));
+    $this->view('home', compact('tableData', 'columns', 'message'));
   }
 
   /**
    * Show the database create form 
+   * 
+   * @return void
    */
-  public function create()
+  public function create(): void
   {
     $collations = $this->query->showCollations();
 
     sort($collations);
 
-    return $this->view('database/create', compact('collations'));
+    $this->view('database/create', compact('collations'));
   }
 
   /**

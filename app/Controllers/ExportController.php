@@ -11,9 +11,13 @@ use PhpYourAdimn\Core\Database\Query;
 
 class ExportController extends Controller
 {
+    /**
+     * @var UserFile $userFile
+     */
     public UserFile $userFile;
 
     /**
+     * Translate constructor.
      * @param Route $route
      * @param Query $query
      * @param UserAuth $userAuth

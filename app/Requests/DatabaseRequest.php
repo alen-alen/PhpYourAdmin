@@ -12,6 +12,7 @@ class DatabaseRequest
      * @var array $data
      */
     private $data;
+
     /**
      * @var array $messages
      */
@@ -35,6 +36,7 @@ class DatabaseRequest
         $this->route = $route;
         $this->data = $userInputs;
     }
+
     /**
      * On error redirect back with error messages,
      * else return the request.

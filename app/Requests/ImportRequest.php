@@ -12,6 +12,7 @@ class ImportRequest
      * @var array $data
      */
     private $data;
+
     /**
      * @var array $messages
      */
@@ -24,17 +25,26 @@ class ImportRequest
      */
     private $error = false;
 
+    /**
+     * @var Route $route
+     */
     public Route $route;
+
+    /**
+     * @var array $userInputs
+     */
+    public array $userInputs;
 
     /**
      * @param Route $route
      * @param array $userInputs
      */
-    public function __construct(array $userInputs,Route $route)
+    public function __construct(array $userInputs, Route $route)
     {
         $this->data = $userInputs;
-        $this->route=$route;
+        $this->route = $route;
     }
+
     /**
      * On error redirect back with error messages,
      * else return the request.

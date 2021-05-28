@@ -10,6 +10,14 @@ use PhpYourAdimn\Core\Database\Query;
 
 class ApiController extends Controller
 {
+    /**
+     * Translate constructor.
+     * 
+     * @param Query $query
+     * @param Request $request
+     * @param Route $route
+     * @param UserAuth $userAuth
+     */
     public function __construct(
         Query $query,
         Request $request,
@@ -18,10 +26,11 @@ class ApiController extends Controller
     ) {
         parent::__construct($query, $request, $route, $userAuth);
     }
+
     /**
      * Api route for databases
      * 
-     * @return array $data 
+     * @return void  
      */
     public function databases()
     {
@@ -32,7 +41,7 @@ class ApiController extends Controller
     /**
      * Api route for database tables
      * 
-     * @return array $data 
+     * @return void  
      */
     public function getTables()
     {

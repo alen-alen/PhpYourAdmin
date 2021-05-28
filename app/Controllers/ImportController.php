@@ -13,6 +13,12 @@ use PhpYourAdimn\App\Requests\ImportRequest;
 class ImportController extends Controller
 {
     /**
+     * @var File $file
+     */
+
+    public File $file;
+    /**
+     * Translate constructor.
      * @param Route $route
      * @param Query $query
      * @param UserAuth $userAuth

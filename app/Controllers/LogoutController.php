@@ -10,9 +10,13 @@ use PhpYourAdimn\Core\Database\Query;
 
 class LogoutController extends Controller
 {
+    /**
+     * @var UserFile $userFile
+     */
     public UserFile $userFile;
 
     /**
+     * Translate constructor.
      * @param Route $route
      * @param Query $query
      * @param UserAuth $userAuth

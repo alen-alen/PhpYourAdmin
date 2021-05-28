@@ -9,17 +9,33 @@ use PhpYourAdimn\Core\Database\Query;
 
 class Controller
 {
+    /**
+     * @var Query $query
+     */
     public Query $query;
 
+    /**
+     * @var Request $request
+     */
     public Request $request;
 
+    /**
+     * @var Route $route
+     */
     public Route $route;
 
+    /**
+     * @var UserAuth $userAuth
+     */
     public UserAuth $userAuth;
 
     /**
+     * Translate constructor.
+     * 
      * @param Query $query
      * @param Request $request
+     * @param Route $route
+     * @param UserAuth $userAuth
      */
     public function __construct(
         Query $query = null,

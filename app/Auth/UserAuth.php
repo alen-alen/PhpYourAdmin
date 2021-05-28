@@ -9,11 +9,33 @@ use PhpYourAdimn\Core\Database\Query;
 
 class UserAuth
 {
+    /**
+     * @var Cookie $cookie
+     */
     public Cookie $cookie;
+
+    /**
+     * @var Route $route
+     */
     public Route $route;
+
+    /**
+     * @var UserFile $userFile
+     */
     public UserFile $userFile;
+
+    /**
+     * @var Query $query
+     */
     public Query $query;
 
+    /**
+     * Translate constructor.
+     * @param Cookie $cookie
+     * @param Route $route
+     * @param UserFile $userFile
+     * @param Query $query
+     */
     public function __construct(
         Cookie $cookie,
         Route $route,
@@ -25,6 +47,7 @@ class UserAuth
         $this->userFile = $userFile;
         $this->query = $query;
     }
+    
     /**
      * Check if there is a user loged in if not redirects to login page
      */

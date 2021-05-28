@@ -1,6 +1,5 @@
 <?php
 
-use PhpYourAdimn\App\Helpers\Cookie;
 use PhpYourAdimn\App\Helpers\Route;
 
 require 'app/views/parcels/head.php';
@@ -8,7 +7,7 @@ require 'app/views/parcels/head.php';
 
 <div class="container">
     <div class="row my-5">
-        <?php if ($this->request->has('user')) { ?>
+        <?php if ($this->request->cookie->has('user')) { ?>
             <div class="col-8 offset-2">
                 <div class=' border shadow p-5'>
                     <div class="alert alert-success">You are already logged in!</div>
@@ -19,11 +18,11 @@ require 'app/views/parcels/head.php';
             <div class="col-8 offset-2">
                 <div class=' border shadow p-5'>
                     <h1 class='mb-5 text-center'>Login</h1>
-
-                    <?php if ($request->session->get('error')) { ?>
-
-                        <div class='alert alert-danger text-center'><?= $request->session->get('error') ?></div>
-                    <?php } ?>
+                    <?php if ($request->session->has('error')) {
+                        foreach ($request->session->get('error') as $error) { ?>
+                            <div class='alert alert-danger text-center'><?= $error ?></div>
+                    <?php }
+                    } ?>
 
                     <form action='login' method="POST">
                         <div class="form-group row">

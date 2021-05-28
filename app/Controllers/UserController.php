@@ -13,6 +13,7 @@ use PhpYourAdimn\App\Requests\MysqlUserRequest;
 class UserController extends Controller
 {
     /**
+     * Translate contructor.
      * @param Route $route
      * @param Query $query
      * @param UserAuth $userAuth

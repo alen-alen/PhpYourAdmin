@@ -7,7 +7,5 @@ use PhpYourAdimn\App\Helpers\Session;
 use PhpYourAdimn\Core\Database\Connection;
 
 return [
-    'PhpYourAdimn\\Core\\Database\\Connection' => function () {
-        return Connection::getInstance(new Request(new Session(), new Cookie()),new UserFile());
-    }
+    'PhpYourAdimn\\Core\\Database\\Connection' => Connection::getInstance(new Request(new Session(), new Cookie()), new UserFile())
 ];

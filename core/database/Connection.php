@@ -38,7 +38,7 @@ class Connection
         $this->setConfig();
 
         if ($this->config) {
-            return  $this->createConnection();
+            return $this->createConnection();
         }
     }
 
@@ -49,9 +49,8 @@ class Connection
      */
     private function createConnection(): void
     {
-        $dns = $this->request->has('db') ?
-            "mysql:host={$this->config['host']};dbname={$this->request->parameter('db')}" :
-            "mysql:host={$this->config['host']};";
+        $dns = "mysql:host={$this->config['host']};";
+        $dns .= $this->request->has('db') ? "dbname={$this->request->parameter('db')}" : "";
 
         try {
             $this->pdo = new \PDO($dns, $this->config['username'], $this->config['password']);

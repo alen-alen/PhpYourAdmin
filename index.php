@@ -1,9 +1,11 @@
 <?php
 
+use Monolog\Logger;
 use DI\ContainerBuilder;
 use PhpYourAdimn\Core\App;
 use PhpYourAdimn\Core\Router;
 use PhpYourAdimn\Core\Env\DotEnv;
+use Monolog\Handler\StreamHandler;
 
 require __DIR__ . '/vendor/autoload.php';
 

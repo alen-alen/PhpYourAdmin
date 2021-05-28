@@ -2,8 +2,11 @@
 
 namespace PhpYourAdimn\App\Requests;
 
+use Exception;
+use PDOException;
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\Core\Database\Query;
+use PhpYourAdimn\Core\Exceptions\ServerException;
 
 class LoginRequest
 {
@@ -13,6 +16,7 @@ class LoginRequest
      * @var array $data
      */
     private $data;
+    
     /**
      * @var array $messages
      */
@@ -25,8 +29,14 @@ class LoginRequest
      */
     private $error = false;
 
+    /**
+     * Query $query
+     */
     private Query $query;
 
+    /**
+     * Route $route
+     */
     private Route $route;
 
     /**
@@ -34,12 +44,13 @@ class LoginRequest
      * @param Route $route
      * @param Query $query
      */
-    public function __construct(Query $query, array $userInputs,Route $route)
+    public function __construct(Query $query, array $userInputs, Route $route)
     {
         $this->query = $query;
         $this->data = $userInputs;
-        $this->route=$route;
+        $this->route = $route;
     }
+
     /**
      * On error redirect back with error messages,
      * else return the request.
@@ -59,11 +70,14 @@ class LoginRequest
         }
 
         if (!$this->error) {
-            if ($this->query->validateConnection($this->data['host'], $this->data['username'], $this->data['password'])) {
+            try {
+                $this->query->validateConnection($this->data['host'], $this->data['username'], $this->data['password']);
                 return $this->data;
+            } catch (PDOException $e) {
+                $this->messages['connection'] = $e->getMessage();
+                $this->route->redirect('login', ['error', $this->messages]);
             }
-            $this->route->redirect('login', ['error', 'Invalid Credentials']);
         }
-        $this->route->redirect('login', ['error', 'Inputs cannot be empty']);
+        $this->route->redirect('login', ['error', $this->messages]);
     }
 }

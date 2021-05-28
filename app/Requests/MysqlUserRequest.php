@@ -47,6 +47,7 @@ class MysqlUserRequest
             return trim($input);
         }, $userInputs);
     }
+
     /**
      * On error redirect back with error messages,
      * else return the request.
@@ -76,6 +77,7 @@ class MysqlUserRequest
         }
         return $this->data;
     }
+
     /**
      * Check if the user already exists
      * @return bool

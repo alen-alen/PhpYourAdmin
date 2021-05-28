@@ -12,6 +12,9 @@ use PhpYourAdimn\App\Requests\LoginRequest;
 
 class LoginController extends Controller
 {
+    /**
+     * @var UserFile $userFile
+     */
     public UserFile $userFile;
 
     /**
@@ -32,6 +35,7 @@ class LoginController extends Controller
 
         $this->userFile = $userFile;
     }
+    
     /**
      * Show the login form
      */
@@ -45,10 +49,11 @@ class LoginController extends Controller
      */
     public function login()
     {
+      
         $loginRequest = new LoginRequest($this->query, $this->request->requestData(), $this->route);
-
+      
         $request = $loginRequest->validate();
-
+        
         $user = new User();
 
         $this->userFile->saveUser($request['host'], $request['username'], $request['password'], $user->getId());
