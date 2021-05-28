@@ -2,18 +2,17 @@
 
 use PhpYourAdimn\App\Helpers\Cookie;
 use PhpYourAdimn\App\Helpers\Route;
-use PhpYourAdimn\App\Helpers\Session;
 
 require 'app/views/parcels/head.php';
 ?>
 
 <div class="container">
     <div class="row my-5">
-        <?php if (Cookie::has('user')) { ?>
+        <?php if ($this->request->has('user')) { ?>
             <div class="col-8 offset-2">
                 <div class=' border shadow p-5'>
                     <div class="alert alert-success">You are already logged in!</div>
-                    <a href="<?=Route::path('database/dashboard')?>">Go back</a>
+                    <a href="<?= Route::path('database/dashboard') ?>">Go back</a>
                 </div>
             </div>
         <?php } else { ?>

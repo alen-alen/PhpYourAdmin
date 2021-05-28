@@ -4,7 +4,6 @@ namespace PhpYourAdimn\App\Requests;
 
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\Core\Database\Query;
-use PhpYourAdimn\Core\Database\Connection;
 
 class LoginRequest
 {
@@ -28,13 +27,18 @@ class LoginRequest
 
     private Query $query;
 
+    private Route $route;
+
     /**
      * @param array $userInputs
+     * @param Route $route
+     * @param Query $query
      */
     public function __construct(Query $query, array $userInputs,Route $route)
     {
         $this->query = $query;
         $this->data = $userInputs;
+        $this->route=$route;
     }
     /**
      * On error redirect back with error messages,

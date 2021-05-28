@@ -3,10 +3,7 @@
 namespace PhpYourAdimn\Core;
 
 use Exception;
-use DI\ContainerBuilder;
 use PhpYourAdimn\Core\Request;
-use PhpYourAdimn\App\Helpers\Route;
-use PhpYourAdimn\Core\Database\Connection;
 
 class App
 {
@@ -20,6 +17,7 @@ class App
     {
         $this->router = $router;
     }
+    
     /**
      * Start The Application
      */
@@ -30,12 +28,11 @@ class App
                 ->direct(Request::uri(), Request::method());
         } catch (Exception $e) {
             die($e->getMessage());
-            // Route::redirect('database/dashboard');
         }
     }
 
     public function __destruct()
     {
-        // Connection::close();
+        $this->router->container->get('PhpYourAdimn\\Core\\Database\\Connection')->close();
     }
 }

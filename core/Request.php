@@ -16,78 +16,37 @@ class Request
     {
         $this->session = $session;
         $this->cookie = $cookie;
-
-        $this->setData();
     }
 
     /**
-     * Check if the request method is GET and if the requested parameter is set
+     * Check if the request has $key parameter
      * 
-     * @param string $key 
-     * @return bool
+     * @param string $key
      */
-    public function isGet($key)
+    public function has($key)
     {
-        return $_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET[$key]);
+        return isset($_POST[$key]) || isset($_GET[$key]);
     }
-    public function setData()
-    {
-        $this->data=self::method()==='POST'? $_POST: $_GET;
-    }
-
     /**
-     * Check if the request method is POST and if the requested parameter is set
+     * Return The data from the request 
      * 
-     * @param string $key 
-     * @return bool
+     * @return array
      */
-    public function isPost($key)
+    public function requestData(): array
     {
-        return $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST[$key]);
+        return self::method() === "POST" ? $_POST : $_GET;
     }
 
     /**
-     * Return the all GET parameters
-     * 
-     * @return $_GET
-     */
-    public function getParameters()
-    {
-        return $_GET;
-    }
-
-    /**
-     * Return all POST parameters
-     * 
-     * @return array $_POST
-     */
-    public function postParameters(): array
-    {
-        return $_POST;
-    }
-
-    /**
-     * Check if the GET parameter $key is set and return its value
+     * Return The data from the request with $key
      * 
      * @param string $key
      * 
-     * @return string|array|null depending on the $_GET[$key] value
+     * @return string|null depending on the $key 
      */
-    public function getParameter($key)
+    public function parameter($key)
     {
-        return $this->isGet($key) ? $_GET[$key] : null;
-    }
-
-    /**
-     * Check if the POST parameter $key is set and return its value
-     * 
-     * @param string $key
-     * 
-     * @return string|array|null depending on the $_POST[$key] value
-     */
-    public function postParameter($parameter)
-    {
-        return $this->isPost($parameter) ? $_POST[$parameter] : null;
+        return self::method() === "POST" ? $_POST[$key] : $_GET[$key];
     }
 
     /**
@@ -123,28 +82,4 @@ class Request
     {
         return $_SERVER['REQUEST_METHOD'];
     }
-
-    /**
-     * Return The data from the request 
-     * 
-     * @return array
-     */
-    public function requestData(): array
-    {
-       
-        if (self::method() === "POST") {
-            return $_POST;
-        }
-        return $_GET;
-    }
-
-    // /**
-    //  * @return string $_GET['db'] database name
-    //  */
-    // public static function getParameterbaseName()
-    // {
-    //     if (isset(self::requestData()['db'])) {
-    //         return self::requestData()['db'];
-    //     }
-    // }
 }

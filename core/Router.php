@@ -3,8 +3,6 @@
 namespace PhpYourAdimn\Core;
 
 use DI\Container;
-use DI\ContainerBuilder;
-use PhpYourAdimn\Core\Database\Connection;
 
 class Router
 {
@@ -12,6 +10,9 @@ class Router
 
     public $container;
 
+    /**
+     * @param DI\Container $container
+     */
     public function __construct(Container $container)
     {
         $this->container = $container;

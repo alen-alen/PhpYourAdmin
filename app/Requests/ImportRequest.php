@@ -24,7 +24,10 @@ class ImportRequest
      */
     private $error = false;
 
+    public Route $route;
+
     /**
+     * @param Route $route
      * @param array $userInputs
      */
     public function __construct(array $userInputs,Route $route)

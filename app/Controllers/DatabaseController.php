@@ -3,24 +3,30 @@
 namespace PhpYourAdimn\App\Controllers;
 
 use Exception;
+use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\Core\Request;
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\Core\Database\Query;
 use PhpYourAdimn\App\Requests\DatabaseRequest;
-use PhpYourAdimn\Core\Traits\Auth;
+
 
 class DatabaseController extends Controller
 {
- 
   /**
-   * @param Route $query
+   * @param Route $route
    * @param Query $query
+   * @param UserAuth $userAuth
    * @param Request $request
    */
-  public function __construct(Query $query, Request $request, Route $route)
-  {
-    $this->autorize();
-    parent::__construct($query, $request, $route);
+  public function __construct(
+    Query $query,
+    Request $request,
+    Route $route,
+    UserAuth $userAuth
+  ) {
+    parent::__construct($query, $request, $route, $userAuth);
+
+    $this->userAuth->autorize();
   }
 
   /**
@@ -30,7 +36,7 @@ class DatabaseController extends Controller
    */
   public function dashboard()
   {
-
+    $this->query->getDatabases();
     return $this->view('home');
   }
 
@@ -39,11 +45,11 @@ class DatabaseController extends Controller
    */
   public function showTable()
   {
-    $tableData = $this->query->selectAll($this->request->getParameter('table'));
+    $tableData = $this->query->selectAll($this->request->parameter('table'));
 
     $columns = !empty($tableData) ?
       array_keys($tableData[0]) :
-      $this->query->getTableColumns($this->request->getParameter('table'));
+      $this->query->getTableColumns($this->request->parameter('table'));
 
     return $this->view('home', compact('tableData', 'columns'));
   }
@@ -58,10 +64,10 @@ class DatabaseController extends Controller
     $columns = [];
 
     try {
-      $tableData = $this->query->rawSql($this->request->getParameter('sql'));
+      $tableData = $this->query->rawSql($this->request->parameter('sql'));
       $columns = !empty($tableData) ?
         array_keys($tableData[0]) :
-        $this->query->getTableColumns($this->request->getParameter('table'));
+        $this->query->getTableColumns($this->request->parameter('table'));
     } catch (Exception $e) {
       $message = $e->getMessage();
     }
@@ -90,7 +96,7 @@ class DatabaseController extends Controller
   {
     $databaseRequest = new DatabaseRequest($this->request->requestData(), $this->route);
 
-    $request = $databaseRequest->validate($this->query->getParameterbases());
+    $request = $databaseRequest->validate($this->query->getDatabases());
 
     $dbOptions = $this->query->getCollationById($request['collationId']);
 

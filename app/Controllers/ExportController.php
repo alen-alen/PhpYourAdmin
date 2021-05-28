@@ -2,6 +2,7 @@
 
 namespace PhpYourAdimn\App\Controllers;
 
+use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\Core\Request;
 use PhpYourAdimn\Core\Traits\Auth;
 use PhpYourAdimn\App\File\UserFile;
@@ -10,13 +11,26 @@ use PhpYourAdimn\Core\Database\Query;
 
 class ExportController extends Controller
 {
-    public function __construct(Query $query, Request $request, Route $route, UserFile $userFile)
-    {
-        $this->autorize();
-        
-        $this->userFile = $userFile;
+    public UserFile $userFile;
 
-        parent::__construct($query, $request, $route);
+    /**
+     * @param Route $route
+     * @param Query $query
+     * @param UserAuth $userAuth
+     * @param Request $request
+     * @param UserFile $userFile
+     */
+    public function __construct(
+        Query $query,
+        Request $request,
+        Route $route,
+        UserFile $userFile,
+        UserAuth $userAuth
+    ) {
+        parent::__construct($query, $request, $route, $userAuth);
+
+        $this->userAuth->autorize();
+        $this->userFile = $userFile;
     }
 
     /**
@@ -25,7 +39,7 @@ class ExportController extends Controller
      */
     public function export()
     {
-        if (empty($this->request->getParameter('db'))) {
+        if (empty($this->request->parameter('db'))) {
 
             $this->route->redirectHome(['error', 'Please select a database!']);
         }
@@ -35,7 +49,7 @@ class ExportController extends Controller
         $username = $userCredentials['username'];
         $password = $userCredentials['password'];
         $hostname = $userCredentials['host'];
-        $dbname   =  $this->request->getParameter('db');
+        $dbname   =  $this->request->parameter('db');
         $dumpFileName = $dbname . ".sql";
         $command = getenv('MYSQL_DUMP') . " --host $hostname --user $username ";
 

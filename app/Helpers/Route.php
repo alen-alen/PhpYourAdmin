@@ -53,7 +53,7 @@ class Route
      * @param string $path
      * @return string
      */
-    public function path($path = null, $params = []): string
+    public static function path($path = null, $params = []): string
     {
         if (!$path) {
             $path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');

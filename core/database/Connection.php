@@ -49,14 +49,12 @@ class Connection
      */
     private function createConnection(): void
     {
+        $dns = $this->request->has('db') ?
+            "mysql:host={$this->config['host']};dbname={$this->request->parameter('db')}" :
+            "mysql:host={$this->config['host']};";
 
-        $dns = $this->request->isGet('db') || $this->request->isPost('db') ?
-            "mysql:host={$this->config['host']};dbname={$this->request->requestData()['db']}" :
-            "mysql:host={$this->config['host']}";
-    
         try {
             $this->pdo = new \PDO($dns, $this->config['username'], $this->config['password']);
-         
         } catch (\PDOException $e) {
             die($e->getMessage());
         }

@@ -4,7 +4,6 @@ namespace PhpYourAdimn\App\Controllers;
 
 use PhpYourAdimn\Core\Request;
 use PhpYourAdimn\App\File\File;
-use PhpYourAdimn\Core\Traits\Auth;
 use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\Core\Database\Query;
@@ -13,15 +12,22 @@ use PhpYourAdimn\App\Requests\ImportRequest;
 
 class ImportController extends Controller
 {
+    /**
+     * @param Route $route
+     * @param Query $query
+     * @param UserAuth $userAuth
+     * @param Request $request
+     */
     public function __construct(
         Query $query,
         Request $request,
         Route $route,
-        File $file
+        File $file,
+        UserAuth $userAuth
     ) {
-        $this->autorize();
+        parent::__construct($query, $request, $route, $userAuth);
+        $this->userAuth->autorize();
         $this->file = $file;
-        parent::__construct($query, $request, $route);
     }
 
     /**

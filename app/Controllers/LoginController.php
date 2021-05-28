@@ -7,18 +7,34 @@ use PhpYourAdimn\App\Models\User;
 use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\App\File\UserFile;
 use PhpYourAdimn\App\Helpers\Route;
-use PhpYourAdimn\App\Helpers\Cookie;
 use PhpYourAdimn\Core\Database\Query;
 use PhpYourAdimn\App\Requests\LoginRequest;
 
 class LoginController extends Controller
 {
+    public UserFile $userFile;
 
-    public function __construct(Query $query, Request $request, Route $route, UserFile $userFile)
-    {
+    /**
+     * @param Route $route
+     * @param Query $query
+     * @param UserAuth $userAuth
+     * @param Request $request
+     * @param UserFile $userFile
+     */
+    public function __construct(
+        Query $query,
+        Request $request,
+        Route $route,
+        UserFile $userFile,
+        UserAuth $userAuth
+    ) {
+        parent::__construct($query, $request, $route, $userAuth);
+
         $this->userFile = $userFile;
-        parent::__construct($query, $request, $route);
     }
+    /**
+     * Show the login form
+     */
     public function index()
     {
         return $this->view('login');
@@ -29,7 +45,7 @@ class LoginController extends Controller
      */
     public function login()
     {
-        $loginRequest = new LoginRequest($this->query, $this->request->postParameters(), $this->route);
+        $loginRequest = new LoginRequest($this->query, $this->request->requestData(), $this->route);
 
         $request = $loginRequest->validate();
 

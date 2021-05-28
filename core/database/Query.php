@@ -17,9 +17,11 @@ class Query extends Connection
      */
     public array $tables;
 
+    /**
+     * @param Connection $connection
+     */
     public function __construct(Connection $connection)
     {
-
         $this->pdo = $connection->getConnection();
     }
 
@@ -50,7 +52,7 @@ class Query extends Connection
      * 
      * @return array
      */
-    public function getParameterbases(): array
+    public function getDatabases(): array
     {
         $statement = $this->pdo->prepare('SHOW DATABASES');
 
@@ -97,17 +99,6 @@ class Query extends Connection
         if (!$statement->execute([':username' => $user->username, ':host' => $user->host, ':password' => $user->password])) {
             die(var_dump($statement->errorInfo()[2]));
         };
-    }
-
-    public function checkPrivileges()
-    {
-        $sql = 'SHOW GRANTS';
-
-        $statement = $this->pdo->prepare($sql);
-
-        $statement->execute();
-
-        return $statement->fetch(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -181,7 +172,7 @@ class Query extends Connection
      * 
      * @return array
      */
-    public function getParameterbaseTables(): array
+    public function getDatabaseTables(): array
     {
         $statement = $this->pdo->query('SHOW TABLES');
 

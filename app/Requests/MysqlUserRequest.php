@@ -32,13 +32,17 @@ class MysqlUserRequest
      */
     private $error = false;
 
+    private Route $route;
+
     /**
      * @param array $userInputs
      * @param array $existingUser
      */
-    public function __construct(array $userInputs, array $existingUsers,Route $route)
+    public function __construct(array $userInputs, array $existingUsers, Route $route)
     {
+        $this->route = $route;
         $this->existingUsers = $existingUsers;
+
         $this->data = array_map(function ($input) {
             return trim($input);
         }, $userInputs);
@@ -72,8 +76,11 @@ class MysqlUserRequest
         }
         return $this->data;
     }
-
-    public function userExists()
+    /**
+     * Check if the user already exists
+     * @return bool
+     */
+    public function userExists(): bool
     {
         $username = $this->data['username'];
         $host = $this->data['host'];

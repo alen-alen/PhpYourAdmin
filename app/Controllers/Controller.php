@@ -2,27 +2,32 @@
 
 namespace PhpYourAdimn\App\Controllers;
 
+use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\Core\Request;
-use PhpYourAdimn\Core\Traits\Auth;
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\Core\Database\Query;
 
 class Controller
 {
-    use Auth;
+    public Query $query;
 
-    public $query;
+    public Request $request;
 
-    public $request;
+    public Route $route;
 
-    public $route;
+    public UserAuth $userAuth;
 
     /**
      * @param Query $query
      * @param Request $request
      */
-    public function __construct(Query $query = null, Request $request, Route $route)
-    {
+    public function __construct(
+        Query $query = null,
+        Request $request,
+        Route $route,
+        UserAuth $userAuth
+    ) {
+        $this->userAuth = $userAuth;
         $this->query = $query;
         $this->route = $route;
         $this->request = $request;

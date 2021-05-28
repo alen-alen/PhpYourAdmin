@@ -8,14 +8,19 @@ use PhpYourAdimn\Core\Env\DotEnv;
 require __DIR__ . '/vendor/autoload.php';
 
 (new DotEnv(__DIR__ . '/.env'))->load();
-session_start();
+
 $builder = new ContainerBuilder();
 
 $builder->addDefinitions(__DIR__ . './core/config.php');
 
 $container = $builder->build();
 
+$session = $container->get('PhpYourAdimn\App\Helpers\Session');
+
+$session->start();
+
 $app = new App(new Router($container));
 
 $app->run();
-session_destroy();
+
+$session->destroy();

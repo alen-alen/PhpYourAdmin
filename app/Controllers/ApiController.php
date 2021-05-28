@@ -2,15 +2,21 @@
 
 namespace PhpYourAdimn\App\Controllers;
 
+use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\Core\Request;
+
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\Core\Database\Query;
 
 class ApiController extends Controller
 {
-    public function __construct(Query $query,Request $request,Route $route)
-    {
-        parent::__construct($query,$request,$route);
+    public function __construct(
+        Query $query,
+        Request $request,
+        Route $route,
+        UserAuth $userAuth
+    ) {
+        parent::__construct($query, $request, $route, $userAuth);
     }
     /**
      * Api route for databases
@@ -19,7 +25,7 @@ class ApiController extends Controller
      */
     public function databases()
     {
-        $databases = $this->query->getParameterbases();
+        $databases = $this->query->getDatabases();
         echo json_encode($databases);
     }
 
@@ -30,7 +36,7 @@ class ApiController extends Controller
      */
     public function getTables()
     {
-        $tables = $this->query->getParameterbaseTables($this->request->getParameter('db'));
+        $tables = $this->query->getDatabaseTables($this->request->parameter('db'));
         echo json_encode($tables);
     }
 }
