@@ -28,12 +28,12 @@ class ImportRequest
     /**
      * @var Route $route
      */
-    public Route $route;
+    private Route $route;
 
     /**
      * @var array $userInputs
      */
-    public array $userInputs;
+    private array $userInputs;
 
     /**
      * @param Route $route

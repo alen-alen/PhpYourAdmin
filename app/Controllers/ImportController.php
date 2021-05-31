@@ -7,6 +7,7 @@ use PhpYourAdimn\App\File\File;
 use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\Core\Database\Query;
+use PhpYourAdimn\Core\Log\FileLogger;
 use PhpYourAdimn\App\Controllers\Controller;
 use PhpYourAdimn\App\Requests\ImportRequest;
 
@@ -29,9 +30,10 @@ class ImportController extends Controller
         Request $request,
         Route $route,
         File $file,
-        UserAuth $userAuth
+        UserAuth $userAuth,
+        FileLogger $logger
     ) {
-        parent::__construct($query, $request, $route, $userAuth);
+        parent::__construct($query, $request, $route, $userAuth, $logger);
         $this->userAuth->autorize();
         $this->file = $file;
     }
@@ -59,9 +61,8 @@ class ImportController extends Controller
             $this->query->rawSql($query);
             $this->route->redirectHome(['success', 'Succesfuly imported database']);
         } catch (\Exception $e) {
-
             $message = $e->getMessage();
-
+            $this->logger->error($message);
             return $this->view('database/import', compact('message'));
         }
     }

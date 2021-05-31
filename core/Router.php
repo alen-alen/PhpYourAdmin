@@ -3,6 +3,7 @@
 namespace PhpYourAdimn\Core;
 
 use DI\Container;
+use Exception;
 
 class Router
 {
@@ -37,11 +38,14 @@ class Router
     public function load(string $file)
     {
         $router = new $this($this->container);
-
+        if (!file_exists($file)) {
+            throw new Exception('The routes filepath dosent exist');
+        }
         require $file;
 
         return $router;
     }
+
     /**
      * Set a get route in the routes property array
      * 
@@ -53,6 +57,7 @@ class Router
     {
         $this->routes['GET'][$uri] = $controller;
     }
+
     /**
      * Set a post route in the routes property array
      * 

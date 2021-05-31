@@ -3,10 +3,10 @@
 namespace PhpYourAdimn\App\Controllers;
 
 use PhpYourAdimn\Core\Request;
-use PhpYourAdimn\Core\Traits\Auth;
 use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\Core\Database\Query;
+use PhpYourAdimn\Core\Log\FileLogger;
 use PhpYourAdimn\App\Models\MysqlUser;
 use PhpYourAdimn\App\Requests\MysqlUserRequest;
 
@@ -23,9 +23,10 @@ class UserController extends Controller
         Query $query,
         Request $request,
         Route $route,
-        UserAuth $userAuth
+        UserAuth $userAuth,
+        FileLogger $logger
     ) {
-        parent::__construct($query, $request, $route, $userAuth);
+        parent::__construct($query, $request, $route, $userAuth, $logger);
 
         $this->userAuth->autorize();
     }

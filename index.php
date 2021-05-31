@@ -9,6 +9,7 @@ use Monolog\Handler\StreamHandler;
 
 require __DIR__ . '/vendor/autoload.php';
 
+die(var_dump(phpinfo()));
 (new DotEnv(__DIR__ . '/.env'))->load();
 
 $builder = new ContainerBuilder();
@@ -21,7 +22,7 @@ $session = $container->get('PhpYourAdimn\App\Helpers\Session');
 
 $session->start();
 
-$app = new App(new Router($container));
+$app = $container->get('PhpYourAdimn\Core\App');
 
 $app->run();
 

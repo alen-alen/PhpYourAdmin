@@ -6,6 +6,7 @@ use Exception;
 use PDOException;
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\Core\Database\Query;
+use PhpYourAdimn\Core\Log\FileLogger;
 use PhpYourAdimn\Core\Exceptions\ServerException;
 
 class LoginRequest
@@ -16,7 +17,7 @@ class LoginRequest
      * @var array $data
      */
     private $data;
-    
+
     /**
      * @var array $messages
      */
@@ -39,16 +40,19 @@ class LoginRequest
      */
     private Route $route;
 
+    private FileLogger $logger;
+
     /**
      * @param array $userInputs
      * @param Route $route
      * @param Query $query
      */
-    public function __construct(Query $query, array $userInputs, Route $route)
+    public function __construct(Query $query, array $userInputs, Route $route, FileLogger $logger)
     {
         $this->query = $query;
         $this->data = $userInputs;
         $this->route = $route;
+        $this->logger = $logger;
     }
 
     /**
@@ -74,6 +78,7 @@ class LoginRequest
                 $this->query->validateConnection($this->data['host'], $this->data['username'], $this->data['password']);
                 return $this->data;
             } catch (PDOException $e) {
+                $this->logger->error($e->getMessage());
                 $this->messages['connection'] = $e->getMessage();
                 $this->route->redirect('login', ['error', $this->messages]);
             }

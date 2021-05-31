@@ -2,12 +2,12 @@
 
 namespace PhpYourAdimn\App\Controllers;
 
-use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\Core\Request;
-use PhpYourAdimn\Core\Traits\Auth;
+use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\App\File\UserFile;
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\Core\Database\Query;
+use PhpYourAdimn\Core\Log\FileLogger;
 
 class ExportController extends Controller
 {
@@ -23,16 +23,17 @@ class ExportController extends Controller
      * @param UserAuth $userAuth
      * @param Request $request
      * @param UserFile $userFile
+     * @param FileLogger $logger
      */
     public function __construct(
         Query $query,
         Request $request,
         Route $route,
         UserFile $userFile,
-        UserAuth $userAuth
+        UserAuth $userAuth,
+        FileLogger $logger
     ) {
-        parent::__construct($query, $request, $route, $userAuth);
-
+        parent::__construct($query, $request, $route, $userAuth, $logger);
         $this->userAuth->autorize();
         $this->userFile = $userFile;
     }

@@ -8,7 +8,9 @@ use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\App\File\UserFile;
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\Core\Database\Query;
+use PhpYourAdimn\Core\Log\FileLogger;
 use PhpYourAdimn\App\Requests\LoginRequest;
+use PhpYourAdimn\App\Controllers\Controller;
 
 class LoginController extends Controller
 {
@@ -29,13 +31,13 @@ class LoginController extends Controller
         Request $request,
         Route $route,
         UserFile $userFile,
-        UserAuth $userAuth
+        UserAuth $userAuth,
+        FileLogger $logger
     ) {
-        parent::__construct($query, $request, $route, $userAuth);
-
+        parent::__construct($query, $request, $route, $userAuth, $logger);
         $this->userFile = $userFile;
     }
-    
+
     /**
      * Show the login form
      */
@@ -49,11 +51,10 @@ class LoginController extends Controller
      */
     public function login()
     {
-      
-        $loginRequest = new LoginRequest($this->query, $this->request->requestData(), $this->route);
-      
+        $loginRequest = new LoginRequest($this->query, $this->request->requestData(), $this->route, $this->logger);
+
         $request = $loginRequest->validate();
-        
+
         $user = new User();
 
         $this->userFile->saveUser($request['host'], $request['username'], $request['password'], $user->getId());

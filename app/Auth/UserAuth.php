@@ -47,7 +47,7 @@ class UserAuth
         $this->userFile = $userFile;
         $this->query = $query;
     }
-    
+
     /**
      * Check if there is a user loged in if not redirects to login page
      */

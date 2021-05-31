@@ -3,12 +3,12 @@
 namespace PhpYourAdimn\App\Controllers;
 
 use Exception;
-use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\Core\Request;
+use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\Core\Database\Query;
 use PhpYourAdimn\App\Requests\DatabaseRequest;
-
+use PhpYourAdimn\Core\Log\FileLogger;
 
 class DatabaseController extends Controller
 {
@@ -23,9 +23,10 @@ class DatabaseController extends Controller
     Query $query,
     Request $request,
     Route $route,
-    UserAuth $userAuth
+    UserAuth $userAuth,
+    FileLogger $logger
   ) {
-    parent::__construct($query, $request, $route, $userAuth);
+    parent::__construct($query, $request, $route, $userAuth, $logger);
 
     $this->userAuth->autorize();
   }
@@ -71,6 +72,7 @@ class DatabaseController extends Controller
         array_keys($tableData[0]) :
         $this->query->getTableColumns($this->request->parameter('table'));
     } catch (Exception $e) {
+      $this->logger->error($e->getMessage());
       $message = $e->getMessage();
     }
     $this->view('home', compact('tableData', 'columns', 'message'));

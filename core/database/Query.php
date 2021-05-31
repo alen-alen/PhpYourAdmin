@@ -4,7 +4,7 @@ namespace PhpYourAdimn\Core\Database;
 
 use PhpYourAdimn\App\Models\MysqlUser;
 
-class Query extends Connection
+class Query
 {
     /**
      * @var PDO $pdo 
@@ -42,27 +42,6 @@ class Query extends Connection
     }
 
     /**
-     * Query for showing all databases from the connection
-     * 
-     * @return array
-     */
-    public function getDatabases(): array
-    {
-        $statement = $this->pdo->prepare('SHOW DATABASES');
-
-        $statement->execute();
-
-        $databases = $statement->fetchAll(\PDO::FETCH_ASSOC);
-
-        $databases = array_map(function ($database) {
-            array_values($database);
-            return array_pop($database);
-        }, $databases);
-
-        return $databases;
-    }
-
-    /**
      * Return all Mysql users
      * 
      * @return array
@@ -90,9 +69,7 @@ class Query extends Connection
 
         $statement = $this->pdo->prepare($sql);
 
-        if (!$statement->execute([':username' => $user->username, ':host' => $user->host, ':password' => $user->password])) {
-            // die(var_dump($statement->errorInfo()[2]));
-        };
+        $statement->execute([':username' => $user->username, ':host' => $user->host, ':password' => $user->password]);
     }
 
     /**
@@ -130,6 +107,27 @@ class Query extends Connection
         $sql = "DROP USER :username@:host";
         $statement = $this->pdo->prepare($sql);
         $statement->execute([':username' => $username, ':host' => $host]);
+    }
+
+    /**
+     * Query for showing all databases from the connection
+     * 
+     * @return array
+     */
+    public function getDatabases(): array
+    {
+        $statement = $this->pdo->prepare('SHOW DATABASES');
+
+        $statement->execute();
+
+        $databases = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        $databases = array_map(function ($database) {
+            array_values($database);
+            return array_pop($database);
+        }, $databases);
+
+        return $databases;
     }
 
     /**

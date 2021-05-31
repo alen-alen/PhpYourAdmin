@@ -4,6 +4,7 @@ namespace PhpYourAdimn\Core;
 
 use Exception;
 use PhpYourAdimn\Core\Request;
+use PhpYourAdimn\Core\Log\FileLogger;
 
 class App
 {
@@ -13,8 +14,9 @@ class App
      */
     private $router;
 
-    public function __construct(Router $router)
+    public function __construct(Router $router, FileLogger $logger)
     {
+        $this->logger = $logger;
         $this->router = $router;
     }
 
@@ -27,7 +29,8 @@ class App
             $this->router->load('app/routes.php')
                 ->direct(Request::uri(), Request::method());
         } catch (Exception $e) {
-            die($e->getMessage());
+            $this->logger->error($e->getMessage());
+            $this->router->container->get('PhpYourAdimn\\App\\Helpers\\Route')->redirectHome();
         }
     }
 
