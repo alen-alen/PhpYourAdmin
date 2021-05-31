@@ -1,4 +1,4 @@
 users.txt
 .env
 /vendor
-.logfile.log
+logfile.log
