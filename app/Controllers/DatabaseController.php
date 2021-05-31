@@ -18,6 +18,7 @@ class DatabaseController extends Controller
    * @param Query $query
    * @param UserAuth $userAuth
    * @param Request $request
+   * @param FileLogger $logger
    */
   public function __construct(
     Query $query,

@@ -2,7 +2,6 @@
 
 namespace PhpYourAdimn\App\Controllers;
 
-use Monolog\Logger;
 use PhpYourAdimn\Core\Request;
 use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\App\Helpers\Route;
