@@ -56,12 +56,12 @@ class ExportController extends Controller
         $hostname = $userCredentials['host'];
         $dbname   =  $this->request->parameter('db');
         $dumpFileName = $dbname . ".sql";
-        $command = getenv('MYSQL_DUMP') . " --host $hostname --user $username ";
+        $command = getenv('MYSQL_DUMP') . " --host $hostname --user $username";
 
         if (!empty($password)) {
-            $command .= "--password $password";
+            $command .= " --password $password";
         }
-        $command .= "--database $dbname";
+        $command .= " $dbname";
 
         header("Content-Type: application/octet-stream");
         header("Content-Disposition: attachment; filename=$dumpFileName");
