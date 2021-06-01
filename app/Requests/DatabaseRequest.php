@@ -25,6 +25,9 @@ class DatabaseRequest
      */
     private $error = false;
 
+    /**
+     * @var Route $route
+     */
     private Route $route;
 
     /**

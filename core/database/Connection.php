@@ -33,7 +33,7 @@ class Connection
     public Request $request;
 
     /**
-     * @var UserFile $userFile
+     * @var UserFile $userfile
      */
     public UserFile $userFile;
 
@@ -73,7 +73,6 @@ class Connection
         try {
             $this->pdo = new \PDO($dns, $this->config['username'], $this->config['password']);
         } catch (\PDOException $e) {
-
             $this->logger->error($e->getMessage);
             die($e->getMessage());
         }
@@ -88,7 +87,7 @@ class Connection
             $this->request->cookie->get('user') :
             false;
 
-        $this->config = $this->userFile->getUserById($userId) ?
+        $this->config = !empty($this->userFile->getUserById($userId)) ?
             $this->userFile->getUserById($userId) :
             null;
     }

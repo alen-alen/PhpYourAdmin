@@ -7,11 +7,20 @@ use PhpYourAdimn\App\Helpers\Session;
 
 class Request
 {
+    /**
+     * @var Session $session
+     */
     public Session $session;
+
+    /**
+     * @var Cookie $cookie
+     */
     public Cookie $cookie;
 
-    public $data = [];
-
+/**
+ * @param Session $session
+ * @param Cookie $cookie
+ */
     public function __construct(Session $session, Cookie $cookie)
     {
         $this->session = $session;

@@ -2,7 +2,6 @@
 
 use PhpYourAdimn\Core\Request;
 
-
 use PhpYourAdimn\App\File\UserFile;
 use PhpYourAdimn\App\Helpers\Cookie;
 use PhpYourAdimn\App\Helpers\Session;

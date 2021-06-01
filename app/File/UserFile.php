@@ -23,18 +23,18 @@ class UserFile extends File
      * or false if there is no user
      * 
      * @param string $userId
-     * @return array|false
+     * @return array
      */
     public function getUserById(string $userId)
     {
-       
+
         $users = $this->convertToArray($this->getDecryptedData(getenv('FILE_PATH')));
 
         $user = array_filter($users, function ($user) use ($userId) {
             return $user['id'] == $userId;
         });
 
-        return count($user) > 0 ? $user[0] : false;
+        return count($user) > 0 ? $user[0] : [];
     }
 
     /**

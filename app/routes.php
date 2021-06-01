@@ -1,5 +1,5 @@
 <?php
-$router->get('', 'DatabaseController@dashboard');
+$router->get('/', 'DatabaseController@dashboard');
 
 $router->get('database/dashboard', 'DatabaseController@dashboard');
 $router->get('database/table', 'DatabaseController@showTable');

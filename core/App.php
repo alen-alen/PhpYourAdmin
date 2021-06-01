@@ -14,6 +14,15 @@ class App
      */
     private $router;
 
+    /**
+     * @var Logger $logger
+     */
+    private $logger;
+
+/**
+ * @param Router $router 
+ * @param FileLogger $logger
+ */
     public function __construct(Router $router, FileLogger $logger)
     {
         $this->logger = $logger;

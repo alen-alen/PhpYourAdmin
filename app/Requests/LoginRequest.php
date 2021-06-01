@@ -2,12 +2,10 @@
 
 namespace PhpYourAdimn\App\Requests;
 
-use Exception;
 use PDOException;
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\Core\Database\Query;
 use PhpYourAdimn\Core\Log\FileLogger;
-use PhpYourAdimn\Core\Exceptions\ServerException;
 
 class LoginRequest
 {
@@ -40,12 +38,16 @@ class LoginRequest
      */
     private Route $route;
 
+    /**
+     * @var FileLogger $logger
+     */
     private FileLogger $logger;
 
     /**
      * @param array $userInputs
      * @param Route $route
      * @param Query $query
+     * @param FileLogger $logger
      */
     public function __construct(Query $query, array $userInputs, Route $route, FileLogger $logger)
     {
