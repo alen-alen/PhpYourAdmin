@@ -1,6 +1,6 @@
 <?php
 
-use PhpYourAdimn\App\Helpers\Route;
+use PhpYourAdmin\App\Helpers\Route;
 
 require 'app/views/parcels/head.php'; ?>
 <div class="container-fluid">
@@ -29,9 +29,9 @@ require 'app/views/parcels/head.php'; ?>
                         <div class='alert alert-danger'><?= $message ?></div>
                     <?php } ?>
 
-                    <form action="<?= Route::path('database/query') ?>" method='GET'>
-                        <input type="text" hidden name='db' value="<?= $request->parameter('db') ?>">
-                        <input type="text" hidden name='table' value="<?= $request->parameter('table') ?>">
+                    <form action="<?= Route::path('database/query')  ?>" method='GET'>
+                        <input type="text" hidden name='db' value="<?= $request->has('db') ? $request->parameter('db') : '' ?>">
+                        <input type="text" hidden name='table' value="<?= $request->has('table') ? $request->parameter('table') : '' ?>">
                         <div class="form-group">
                             <label for="exampleFormControlTextarea1">Enter your query:</label>
                             <textarea class="form-control" name='sql' id="exampleFormControlTextarea1" rows="3"><?= $request->has('sql') ? $request->parameter('sql') : "SELECT * FROM " ?></textarea>

@@ -1,5 +1,5 @@
 <?php
-use PhpYourAdimn\App\Helpers\Route; ?>
+use PhpYourAdmin\App\Helpers\Route; ?>
 
 <div>
     <h3><a href="<?=Route::path(Route::HOME_ROUTE)?>"class='text-dark'>PhpYourAdmin</a> </h3>

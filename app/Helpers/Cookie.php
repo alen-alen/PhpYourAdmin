@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpYourAdimn\App\Helpers;
+namespace PhpYourAdmin\App\Helpers;
 
 class Cookie
 {

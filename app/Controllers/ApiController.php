@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpYourAdimn\App\Controllers;
+namespace PhpYourAdmin\App\Controllers;
 
 class ApiController extends Controller
 {
@@ -9,7 +9,7 @@ class ApiController extends Controller
      * 
      * @return void  
      */
-    public function databases()
+    public function databases(): void
     {
         $databases = $this->query->getDatabases();
 
@@ -21,7 +21,7 @@ class ApiController extends Controller
      * 
      * @return void  
      */
-    public function getTables()
+    public function getTables(): void
     {
         $tables = $this->query->getDatabaseTables($this->request->parameter('db'));
         echo json_encode($tables);

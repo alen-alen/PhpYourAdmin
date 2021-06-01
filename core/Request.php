@@ -1,9 +1,9 @@
 <?php
 
-namespace PhpYourAdimn\Core;
+namespace PhpYourAdmin\Core;
 
-use PhpYourAdimn\App\Helpers\Cookie;
-use PhpYourAdimn\App\Helpers\Session;
+use PhpYourAdmin\App\Helpers\Cookie;
+use PhpYourAdmin\App\Helpers\Session;
 
 class Request
 {
@@ -17,10 +17,10 @@ class Request
      */
     public Cookie $cookie;
 
-/**
- * @param Session $session
- * @param Cookie $cookie
- */
+    /**
+     * @param Session $session
+     * @param Cookie $cookie
+     */
     public function __construct(Session $session, Cookie $cookie)
     {
         $this->session = $session;
@@ -31,11 +31,13 @@ class Request
      * Check if the request has $key parameter
      * 
      * @param string $key
+     * @return bool
      */
-    public function has($key)
+    public function has($key): bool
     {
         return isset($_POST[$key]) || isset($_GET[$key]);
     }
+
     /**
      * Return The data from the request 
      * 
@@ -51,9 +53,9 @@ class Request
      * 
      * @param string $key
      * 
-     * @return string|null depending on the $key 
+     * @return string
      */
-    public function parameter($key)
+    public function parameter($key): string
     {
         return self::method() === "POST" ? $_POST[$key] : $_GET[$key];
     }
@@ -65,7 +67,7 @@ class Request
      * 
      * @return array  $_FILES[$key] 
      */
-    public  function file($name)
+    public  function file($name): array
     {
         if (isset($_FILES[$name])) {
             return $_FILES[$name];

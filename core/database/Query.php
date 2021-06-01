@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpYourAdimn\Core\Database;
+namespace PhpYourAdmin\Core\Database;
 
-use PhpYourAdimn\App\Models\MysqlUser;
+use PhpYourAdmin\App\Models\MysqlUser;
 
 class Query
 {

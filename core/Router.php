@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpYourAdimn\Core;
+namespace PhpYourAdmin\Core;
 
 use DI\Container;
 use Exception;
@@ -92,7 +92,7 @@ class Router
      */
     protected function callAction(string $controller, string $action)
     {
-        $controller = "PhpYourAdimn\\App\\Controllers\\{$controller}";
+        $controller = "PhpYourAdmin\\App\\Controllers\\{$controller}";
 
         if (!method_exists($controller, $action)) {
             throw new \Exception("{$controller} does not respond to the {$action} action.");

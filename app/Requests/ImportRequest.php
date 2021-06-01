@@ -1,8 +1,9 @@
 <?php
 
-namespace PhpYourAdimn\App\Requests;
+namespace PhpYourAdmin\App\Requests;
 
-use PhpYourAdimn\App\Helpers\Route;
+use PhpYourAdmin\App\Exceptions\RequestException;
+use PhpYourAdmin\App\Helpers\Route;
 
 class ImportRequest
 {
@@ -14,51 +15,25 @@ class ImportRequest
     private $data;
 
     /**
-     * @var array $messages
-     */
-    private $messages = [];
-
-    /**
-     * flag if there are errors
-     * 
-     * @var bool $error
-     */
-    private $error = false;
-
-    /**
-     * @var Route $route
-     */
-    private Route $route;
-
-    /**
-     * @var array $userInputs
-     */
-    private array $userInputs;
-
-    /**
-     * @param Route $route
      * @param array $userInputs
      */
-    public function __construct(array $userInputs, Route $route)
+    public function __construct(array $userInputs)
     {
         $this->data = $userInputs;
-        $this->route = $route;
     }
 
     /**
-     * On error redirect back with error messages,
-     * else return the request.
+     * On error rthrow RequestException,
+     * else return the request data.
      */
     public function validate()
     {
-        $fileName = explode('.', $this->data['name']);
-
-        if (end($fileName) !== 'sql') {
-            $this->messages['file'] = 'File must be of type sql!';
-            $this->error = true;
+        if (empty($this->data['name'])) {
+            throw new RequestException('Must select a file');
         }
-        if ($this->error) {
-            $this->route->redirect('database/import', ['error', $this->messages['file']]);
+        $fileName = explode('.', $this->data['name']);
+        if (end($fileName) !== 'sql') {
+            throw new RequestException('File must be of type sql!');
         }
         return $this->data;
     }

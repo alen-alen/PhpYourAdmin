@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpYourAdimn\App\Models;
+namespace PhpYourAdmin\App\Models;
 
 class User
 {

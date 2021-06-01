@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpYourAdimn\App\File;
+namespace PhpYourAdmin\App\File;
 
-use PhpYourAdimn\App\Helpers\Hash;
+use PhpYourAdmin\App\Helpers\Hash;
 
 class File
 {
@@ -18,6 +18,7 @@ class File
     {
         return file_exists($filePath) ? file_get_contents($filePath) : false;
     }
+    
     /**
      * Returns the decrypted txt file as a string
      * 

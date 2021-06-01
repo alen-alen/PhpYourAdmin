@@ -1,13 +1,13 @@
 <?php
 
-namespace PhpYourAdimn\App\Controllers;
+namespace PhpYourAdmin\App\Controllers;
 
-use PhpYourAdimn\Core\Request;
-use PhpYourAdimn\App\Auth\UserAuth;
-use PhpYourAdimn\App\File\UserFile;
-use PhpYourAdimn\App\Helpers\Route;
-use PhpYourAdimn\Core\Database\Query;
-use PhpYourAdimn\Core\Log\FileLogger;
+use PhpYourAdmin\Core\Request;
+use PhpYourAdmin\App\Auth\UserAuth;
+use PhpYourAdmin\App\File\UserFile;
+use PhpYourAdmin\App\Helpers\Route;
+use PhpYourAdmin\Core\Database\Query;
+use PhpYourAdmin\Core\Log\FileLogger;
 
 class LogoutController extends Controller
 {

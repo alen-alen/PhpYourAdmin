@@ -1,7 +1,7 @@
 <?php
 require 'app/views/parcels/head.php';
 
-use PhpYourAdimn\App\Helpers\Route;
+use PhpYourAdmin\App\Helpers\Route;
 
 ?>
 <div class="container-fluid">

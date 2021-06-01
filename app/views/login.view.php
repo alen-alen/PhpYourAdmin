@@ -1,6 +1,6 @@
 <?php
 
-use PhpYourAdimn\App\Helpers\Route;
+use PhpYourAdmin\App\Helpers\Route;
 
 require 'app/views/parcels/head.php';
 ?>

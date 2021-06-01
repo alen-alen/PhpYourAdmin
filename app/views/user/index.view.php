@@ -1,7 +1,7 @@
 <?php
 
-use PhpYourAdimn\App\Helpers\Route;
-use PhpYourAdimn\App\Helpers\Session;
+use PhpYourAdmin\App\Helpers\Route;
+use PhpYourAdmin\App\Helpers\Session;
 
 require 'app/views/parcels/head.php'; ?>
 

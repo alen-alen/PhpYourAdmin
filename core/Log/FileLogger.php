@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpYourAdimn\Core\Log;
+namespace PhpYourAdmin\Core\Log;
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
@@ -64,5 +64,16 @@ class FileLogger
     public function notice($message, array $context = [])
     {
         $this->logger->notice($message, $context);
+    }
+
+    /**
+     * Saves a info message in the log file
+     * 
+     * @param string $message
+     * @param array $context
+     */
+    public function info($message, array $context = [])
+    {
+        $this->logger->info($message, $context);
     }
 }

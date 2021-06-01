@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpYourAdimn\Core\Database;
+namespace PhpYourAdmin\Core\Database;
 
-use PhpYourAdimn\Core\Request;
-use PhpYourAdimn\App\File\UserFile;
-use PhpYourAdimn\Core\Log\FileLogger;
+use PhpYourAdmin\Core\Request;
+use PhpYourAdmin\App\File\UserFile;
+use PhpYourAdmin\Core\Log\FileLogger;
 
 class Connection
 {
