@@ -57,7 +57,7 @@ class MysqlUser
      * 
      * @return void
      */
-    public function __construct($username, $host, $password = null, $type)
+    public function __construct($username, $host, $type, $password = null)
     {
         $this->username = $username;
         $this->host = $host;

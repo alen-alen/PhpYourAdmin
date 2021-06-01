@@ -32,11 +32,15 @@ class MysqlUserRequest
      */
     private $error = false;
 
+    /**
+     * @var Route $route
+     */
     private Route $route;
 
     /**
      * @param array $userInputs
      * @param array $existingUser
+     * @param Route $route
      */
     public function __construct(array $userInputs, array $existingUsers, Route $route)
     {

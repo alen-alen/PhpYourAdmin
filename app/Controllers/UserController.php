@@ -62,7 +62,7 @@ class UserController extends Controller
 
         $inputs = $MysqlUserRequest->validate();
 
-        $user = new MysqlUser($inputs['username'], $inputs['host'], $inputs['password'], $inputs['type']);
+        $user = new MysqlUser($inputs['username'], $inputs['host'], $inputs['type'], $inputs['password']);
 
         $this->query->createSqlUser($user);
         $this->query->setUserPrivileges($user);

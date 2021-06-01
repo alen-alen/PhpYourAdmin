@@ -90,9 +90,7 @@ class Query extends Connection
 
         $statement = $this->pdo->prepare($sql);
 
-        if (!$statement->execute([':username' => $user->username, ':host' => $user->host, ':password' => $user->password])) {
-            // die(var_dump($statement->errorInfo()[2]));
-        };
+        $statement->execute([':username' => $user->username, ':host' => $user->host, ':password' => $user->password]);
     }
 
     /**

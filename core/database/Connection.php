@@ -26,10 +26,20 @@ class Connection
      */
     private $config = null;
 
+    /**
+     * @var Request $request
+     */
     public Request $request;
 
+    /**
+     * @var UserFile $userfile
+     */
     public UserFile $userFile;
 
+    /**
+     * @param Request $request
+     * @param UserFile $userfile
+     */
     private function __construct(Request $request, UserFile $userFile)
     {
         $this->userFile = $userFile;
@@ -68,7 +78,7 @@ class Connection
             $this->request->cookie->get('user') :
             false;
 
-        $this->config = $this->userFile->getUserById($userId) ?
+        $this->config = !empty($this->userFile->getUserById($userId)) ?
             $this->userFile->getUserById($userId) :
             null;
     }

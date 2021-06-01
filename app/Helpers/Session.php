@@ -18,7 +18,7 @@ class Session
      */
     public function start()
     {
-        if ($this->active === false) {
+        if (!$this->active) {
             session_start();
             $this->active = true;
         }
@@ -46,7 +46,7 @@ class Session
      */
     public function get(string $key, $secondKey = false)
     {
-        if ($secondKey === true) {
+        if ($secondKey) {
             if (isset($_SESSION[$key][$secondKey])) {
                 return $_SESSION[$key][$secondKey];
             }
@@ -76,7 +76,7 @@ class Session
      */
     public function destroy(): void
     {
-        if ($this->active === true) {
+        if ($this->active) {
             session_destroy();
             $this->active = false;
         }
