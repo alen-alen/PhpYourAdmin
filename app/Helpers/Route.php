@@ -6,19 +6,26 @@ class Route
 {
     const HOME_ROUTE = "database/dashboard";
 
+    public Session $session;
+
+    public function __construct(Session $session)
+    {
+        $this->session = $session;
+    }
+
     /**
      * Redirect to given path with $data in session
      * 
      * @param array $data
      * @param string $path redirect route
      */
-    public static function redirect($path, array $data = null): void
+    public function redirect($path, array $data = null): void
     {
         if (!$data) {
             header("Location:/{$path}");
             exit();
         }
-        Session::set($data[0], $data[1]);
+        $this->session->set($data[0], $data[1]);
         header("Location:/{$path}");
         exit();
     }
@@ -28,13 +35,13 @@ class Route
      * 
      * @param array $data 
      */
-    public static function redirectHome($data = null)
+    public function redirectHome($data = null)
     {
         if (!$data) {
             header("Location:/" . self::HOME_ROUTE);
             exit();
         }
-        Session::set($data[0], $data[1]);
+        $this->session->set($data[0], $data[1]);
         header("Location:/" . self::HOME_ROUTE);
         exit();
     }

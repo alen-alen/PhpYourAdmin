@@ -4,5 +4,9 @@
             "PhpYourAdimn\\": "./"
         }
 
+    },
+    "require": {
+        "php-di/php-di": "^6.3",
+        "monolog/monolog": "^2.2"
     }
 }

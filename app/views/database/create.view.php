@@ -2,7 +2,7 @@
 require 'app/views/parcels/head.php';
 
 use PhpYourAdimn\App\Helpers\Route;
-use PhpYourAdimn\App\Helpers\Session;
+
 ?>
 
 <div class="container-fluid">
@@ -11,8 +11,8 @@ use PhpYourAdimn\App\Helpers\Session;
             <h1>Create Database</h1>
             <form action="<?= Route::path('database/store') ?>" method="POST">
                 <form>
-                    <?php if (Session::has('error')) {
-                        foreach (Session::get('error') as $error) { ?>
+                    <?php if ($request->session->has('error')) {
+                        foreach ($request->session->get('error') as $error) { ?>
                             <div class='alert alert-danger'><?= $error ?></div>
                     <?php }
                     } ?>

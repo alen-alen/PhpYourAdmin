@@ -1,5 +1,5 @@
 <div class='table'>
-    <?php if ($request->getParameter('table') || !empty($tableData)) { ?>
+    <?php if ($request->has('table') || !empty($tableData)) { ?>
         <table id='databaseDataTable' class=''>
             <thead class='table-dark'>
                 <tr>

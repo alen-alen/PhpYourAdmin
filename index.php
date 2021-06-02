@@ -1,17 +1,28 @@
 <?php
 
+use Monolog\Logger;
+use DI\ContainerBuilder;
 use PhpYourAdimn\Core\App;
 use PhpYourAdimn\Core\Router;
 use PhpYourAdimn\Core\Env\DotEnv;
-use PhpYourAdimn\App\Helpers\Session;
-
+use Monolog\Handler\StreamHandler;
 
 require __DIR__ . '/vendor/autoload.php';
 
-Session::start();
-
 (new DotEnv(__DIR__ . '/.env'))->load();
 
-$app = new App(new Router());
+$builder = new ContainerBuilder();
+
+$builder->addDefinitions(__DIR__ . './core/config.php');
+
+$container = $builder->build();
+
+$session = $container->get('PhpYourAdimn\App\Helpers\Session');
+
+$session->start();
+
+$app = new App(new Router($container));
 
 $app->run();
+
+$session->destroy();

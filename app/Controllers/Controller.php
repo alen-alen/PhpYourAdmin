@@ -2,19 +2,51 @@
 
 namespace PhpYourAdimn\App\Controllers;
 
-use PhpYourAdimn\Core\Database\Query;
+use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\Core\Request;
+use PhpYourAdimn\App\Helpers\Route;
+use PhpYourAdimn\Core\Database\Query;
 
 class Controller
 {
-    public $query;
+    /**
+     * @var Query $query
+     */
+    public Query $query;
 
     /**
-     * @param Query $query
+     * @var Request $request
      */
-    public function __construct(Query $query = null)
-    {
+    public Request $request;
+
+    /**
+     * @var Route $route
+     */
+    public Route $route;
+
+    /**
+     * @var UserAuth $userAuth
+     */
+    public UserAuth $userAuth;
+
+    /**
+     * Translate constructor.
+     * 
+     * @param Query $query
+     * @param Request $request
+     * @param Route $route
+     * @param UserAuth $userAuth
+     */
+    public function __construct(
+        Query $query = null,
+        Request $request,
+        Route $route,
+        UserAuth $userAuth
+    ) {
+        $this->userAuth = $userAuth;
         $this->query = $query;
+        $this->route = $route;
+        $this->request = $request;
     }
 
     /**
@@ -25,10 +57,9 @@ class Controller
      */
     public function view($name, array $data = [])
     {
-        $request = new Request();
+        $request = $this->request;
         extract($data);
         extract(['request' => $request]);
-
         return require "app/views/${name}.view.php";
     }
 }

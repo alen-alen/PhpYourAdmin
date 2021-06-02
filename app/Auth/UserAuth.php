@@ -6,37 +6,73 @@ use PhpYourAdimn\App\File\UserFile;
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\App\Helpers\Cookie;
 use PhpYourAdimn\Core\Database\Query;
-use PhpYourAdimn\Core\Database\Connection;
 
 class UserAuth
 {
     /**
+     * @var Cookie $cookie
+     */
+    public Cookie $cookie;
+
+    /**
+     * @var Route $route
+     */
+    public Route $route;
+
+    /**
+     * @var UserFile $userFile
+     */
+    public UserFile $userFile;
+
+    /**
+     * @var Query $query
+     */
+    public Query $query;
+
+    /**
+     * Translate constructor.
+     * @param Cookie $cookie
+     * @param Route $route
+     * @param UserFile $userFile
+     * @param Query $query
+     */
+    public function __construct(
+        Cookie $cookie,
+        Route $route,
+        UserFile $userFile,
+        Query $query
+    ) {
+        $this->cookie = $cookie;
+        $this->route = $route;
+        $this->userFile = $userFile;
+        $this->query = $query;
+    }
+    
+    /**
      * Check if there is a user loged in if not redirects to login page
      */
-    public static function autorize()
+    public function autorize()
     {
-        if (!Cookie::has('user')) {
-            Route::redirect('login');
+        if (!$this->cookie->has('user')) {
+            $this->route->redirect('login');
         }
     }
 
     /**
      * Check if the Mysqluser  has grant privileges
      */
-    public static function isAdmin()
+    public function isAdmin()
     {
-        $query = new Query(Connection::getInstance()->getConnection());
+        $users = $this->query->getMysqlUsers();
 
-        $users = $query->getMysqlUsers();
-
-        $logedUser = UserFile::getUserById(Cookie::get('user'));
+        $logedUser = $this->userFile->getUserById($this->cookie->get('user'));
 
         $logedUser = array_filter($users, function ($user) use ($logedUser) {
             return $logedUser['username'] === $user['User'] && $logedUser['host'] === $user['Host'];
         });
 
         if ($logedUser[0]['Grant_priv'] !== "Y") {
-            Route::redirect('database/users');
+            $this->route->redirect('database/users');
         }
     }
 }

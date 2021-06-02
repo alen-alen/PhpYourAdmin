@@ -2,7 +2,6 @@
 require 'app/views/parcels/head.php';
 
 use PhpYourAdimn\App\Helpers\Route;
-use PhpYourAdimn\App\Helpers\Session;
 
 ?>
 <div class="container-fluid">
@@ -12,11 +11,11 @@ use PhpYourAdimn\App\Helpers\Session;
             <?php if (!empty($message)) { ?>
                 <div class='alert alert-danger'><?= $message ?></div>
             <?php } ?>
-            <?php if (Session::has('error')) { ?>
-                <div class='alert alert-danger'><?= Session::get('error') ?></div>
+            <?php if ($request->session->has('error')) { ?>
+                <div class='alert alert-danger'><?= $request->session->get('error') ?></div>
             <?php } ?>
             <form action="<?= Route::path('database/import') ?>" method="POST" enctype="multipart/form-data">
-                <input type="text" hidden name='db' value="<?= $request->getParameter('db') ?>">
+                <input type="text" hidden name='db' value="<?= $request->parameter('db') ?>">
                 <div class="form-group">
                     <label for="exampleFormControlFile1">Chose your database: ('must be a sql file')</label>
                     <input type="file" name='database' class="form-control-file" id="exampleFormControlFile1">

@@ -3,19 +3,31 @@
 namespace PhpYourAdimn\App\Controllers;
 
 use PhpYourAdimn\Core\Request;
+use PhpYourAdimn\Core\Traits\Auth;
 use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\App\Helpers\Route;
-use PhpYourAdimn\App\Models\MysqlUser;
 use PhpYourAdimn\Core\Database\Query;
+use PhpYourAdimn\App\Models\MysqlUser;
 use PhpYourAdimn\App\Requests\MysqlUserRequest;
 
 class UserController extends Controller
 {
-    public function __construct(Query $query)
-    {
-        parent::__construct($query);
+    /**
+     * Translate contructor.
+     * @param Route $route
+     * @param Query $query
+     * @param UserAuth $userAuth
+     * @param Request $request
+     */
+    public function __construct(
+        Query $query,
+        Request $request,
+        Route $route,
+        UserAuth $userAuth
+    ) {
+        parent::__construct($query, $request, $route, $userAuth);
 
-        UserAuth::autorize();
+        $this->userAuth->autorize();
     }
 
     /**
@@ -33,7 +45,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        UserAuth::isAdmin();
+        $this->userAuth->isAdmin();
 
         return $this->view('user/create');
     }
@@ -41,39 +53,37 @@ class UserController extends Controller
     /**
      * Create the new Mysql user
      * 
-     * @param Request $request
      */
-    public function store(Request $request)
+    public function store()
     {
-        UserAuth::isAdmin();
+        $this->userAuth->isAdmin();
 
-        $MysqlUserRequest = new MysqlUserRequest($request->postParameters(), $this->query->getMysqlUsers());
+        $MysqlUserRequest = new MysqlUserRequest($this->request->requestData(), $this->query->getMysqlUsers(), $this->route);
 
         $inputs = $MysqlUserRequest->validate();
 
-        $user = new MysqlUser($inputs['username'], $inputs['host'], $inputs['password'], $inputs['type']);
+        $user = new MysqlUser($inputs['username'], $inputs['host'], $inputs['type'], $inputs['password']);
 
         $this->query->createSqlUser($user);
         $this->query->setUserPrivileges($user);
 
-        Route::redirect('database/users');
+        $this->route->redirect('database/users');
     }
 
     /**
      * Delete the selected user
      * 
-     * @param Request $request
      */
-    public function delete(Request $request)
+    public function delete()
     {
-        UserAuth::isAdmin();
+        $this->userAuth->isAdmin();
 
         $users = $this->query->getMysqlUsers();
 
-        if (key_exists($request->getParameter('id'), $users)) {
-            $user = $users[$request->getParameter('id')];
+        if (key_exists($this->request->parameter('id'), $users)) {
+            $user = $users[$this->request->parameter('id')];
             $this->query->deleteSqlUser($user['User'], $user['Host']);
         }
-        Route::redirect('database/users', ['success', "sucessfuly deleted user {$user['User']}@{$user['Host']}"]);
+        $this->route->redirect('database/users', ['success', "sucessfuly deleted user {$user['User']}@{$user['Host']}"]);
     }
 }

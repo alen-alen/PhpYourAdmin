@@ -37,7 +37,7 @@ class MysqlUser
      * 
      * @var string $grantOption
      */
-    public string $grantOption;
+    public $grantOption = null;
 
     /**
      * User privileges
@@ -57,7 +57,7 @@ class MysqlUser
      * 
      * @return void
      */
-    public function __construct($username, $host, $password, $type)
+    public function __construct($username, $host, $type, $password = null)
     {
         $this->username = $username;
         $this->host = $host;

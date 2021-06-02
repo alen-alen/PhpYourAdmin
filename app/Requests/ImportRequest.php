@@ -12,6 +12,7 @@ class ImportRequest
      * @var array $data
      */
     private $data;
+
     /**
      * @var array $messages
      */
@@ -25,12 +26,25 @@ class ImportRequest
     private $error = false;
 
     /**
+     * @var Route $route
+     */
+    public Route $route;
+
+    /**
+     * @var array $userInputs
+     */
+    public array $userInputs;
+
+    /**
+     * @param Route $route
      * @param array $userInputs
      */
-    public function __construct(array $userInputs)
+    public function __construct(array $userInputs, Route $route)
     {
         $this->data = $userInputs;
+        $this->route = $route;
     }
+
     /**
      * On error redirect back with error messages,
      * else return the request.
@@ -44,7 +58,7 @@ class ImportRequest
             $this->error = true;
         }
         if ($this->error) {
-            Route::redirect('database/import', ['error', $this->messages['file']]);
+            $this->route->redirect('database/import', ['error', $this->messages['file']]);
         }
         return $this->data;
     }

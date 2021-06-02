@@ -3,79 +3,91 @@
 namespace PhpYourAdimn\App\Controllers;
 
 use Exception;
-use PhpYourAdimn\Core\Request;
 use PhpYourAdimn\App\Auth\UserAuth;
+use PhpYourAdimn\Core\Request;
 use PhpYourAdimn\App\Helpers\Route;
 use PhpYourAdimn\Core\Database\Query;
 use PhpYourAdimn\App\Requests\DatabaseRequest;
 
+
 class DatabaseController extends Controller
 {
-  public function __construct(Query $query)
-  {
-    parent::__construct($query);
+  /**
+   * Translate constructor.
+   * @param Route $route
+   * @param Query $query
+   * @param UserAuth $userAuth
+   * @param Request $request
+   */
+  public function __construct(
+    Query $query,
+    Request $request,
+    Route $route,
+    UserAuth $userAuth
+  ) {
+    parent::__construct($query, $request, $route, $userAuth);
 
-    UserAuth::autorize();
+    $this->userAuth->autorize();
   }
 
   /**
    * Database dashboard
-   * 
-   * @param $request
+   * @return void
    */
-  public function dashboard()
+  public function dashboard(): void
   {
-    return $this->view('home');
+    $this->query->getDatabases();
+    $this->view('home');
   }
 
   /**
-   * Returns all tables 
-   * 
-   * @param Request $request
+   * Returns home view with all database tables 
+   * @return void
    */
-  public function showTable(Request $request)
+  public function showTable(): void
   {
-    $tableData = $this->query->selectAll($request->getParameter('table'));
+    $tableData = $this->query->selectAll($this->request->parameter('table'));
 
     $columns = !empty($tableData) ?
       array_keys($tableData[0]) :
-      $this->query->getTableColumns($request->getParameter('table'));
+      $this->query->getTableColumns($this->request->parameter('table'));
 
-    return $this->view('home', compact('tableData', 'columns'));
+    $this->view('home', compact('tableData', 'columns'));
   }
 
   /**
    * Returns the home view with the correct data
-   * 
-   * @param Request $request
+   * @return void
    */
-  public function userQuery(Request $request)
+  public function userQuery(): void
   {
     $message = '';
     $tableData = [];
     $columns = [];
 
     try {
-      $tableData = $this->query->rawSql($request->getParameter('sql'));
+      $tableData = $this->query->rawSql($this->request->parameter('sql'));
       $columns = !empty($tableData) ?
         array_keys($tableData[0]) :
-        $this->query->getTableColumns($request->getParameter('table'));
+        $this->query->getTableColumns($this->request->parameter('table'));
     } catch (Exception $e) {
       $message = $e->getMessage();
     }
-    return $this->view('home', compact('tableData', 'columns', 'message'));
+    $this->view('home', compact('tableData', 'columns', 'message'));
   }
 
   /**
    * Show the database create form 
+   * 
+   * @return void
    */
-  public function create()
+  public function create(): void
   {
     $collations = $this->query->showCollations();
 
     sort($collations);
 
-    return $this->view('database/create', compact('collations'));
+    $this->view('database/create', compact('collations'));
   }
 
   /**
@@ -84,9 +96,9 @@ class DatabaseController extends Controller
    * @param array $request
    * @return void
    */
-  public function store(Request $request): void
+  public function store(): void
   {
-    $databaseRequest = new DatabaseRequest($request->postParameters());
+    $databaseRequest = new DatabaseRequest($this->request->requestData(), $this->route);
 
     $request = $databaseRequest->validate($this->query->getDatabases());
 
@@ -94,6 +106,6 @@ class DatabaseController extends Controller
 
     $this->query->createDatabase($request['dbName'], $dbOptions['Charset'], $dbOptions['Collation']);
 
-    Route::redirectHome(['success', 'Database Created!']);
+    $this->route->redirectHome(['success', 'Database Created!']);
   }
 }

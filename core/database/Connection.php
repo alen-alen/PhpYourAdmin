@@ -4,14 +4,13 @@ namespace PhpYourAdimn\Core\Database;
 
 use PhpYourAdimn\Core\Request;
 use PhpYourAdimn\App\File\UserFile;
-use PhpYourAdimn\App\Helpers\Cookie;
 
 class Connection
 {
     /**
      * @var PDO $connection
      */
-    public static $pdo = NULL;
+    public $pdo = NULL;
 
     /**
      * Instance of this class
@@ -23,18 +22,34 @@ class Connection
     /**
      * Connection configuration data
      * 
-     * @var array $config
+     * @var array|null $config
      */
-    private array $config = [];
+    private $config = null;
 
-    private function __construct($dbName = NULL)
+    /**
+     * @var Request $request
+     */
+    public Request $request;
+
+    /**
+     * @var UserFile $userfile
+     */
+    public UserFile $userFile;
+
+    /**
+     * @param Request $request
+     * @param UserFile $userfile
+     */
+    private function __construct(Request $request, UserFile $userFile)
     {
-        $this->config = UserFile::getUserById(Cookie::get('user'));
+        $this->userFile = $userFile;
+        $this->request = $request;
 
-        if ($dbName) {
-            return $this->connectDb($dbName);
+        $this->setConfig();
+
+        if ($this->config) {
+            return $this->createConnection();
         }
-        return  $this->createConnection();
     }
 
     /**
@@ -44,26 +59,28 @@ class Connection
      */
     private function createConnection(): void
     {
+        $dns = "mysql:host={$this->config['host']};";
+        $dns .= $this->request->has('db') ? "dbname={$this->request->parameter('db')}" : "";
+
         try {
-            self::$pdo = new \PDO("mysql:host={$this->config['host']}", $this->config['username'], $this->config['password']);
+            $this->pdo = new \PDO($dns, $this->config['username'], $this->config['password']);
         } catch (\PDOException $e) {
             die($e->getMessage());
         }
     }
 
     /**
-     * Update the connection with the selected database
-     * 
-     * @param string $dbName
-     * @return void
+     * Set the connection configuration data
      */
-    public function connectDb(string $dbName): void
+    private function setConfig()
     {
-        try {
-            self::$pdo = new \PDO("mysql:host={$this->config['host']};dbname={$dbName}", $this->config['username'], $this->config['password']);
-        } catch (\PDOException $e) {
-            die($e->getMessage());
-        }
+        $userId = $this->request->cookie->has('user') ?
+            $this->request->cookie->get('user') :
+            false;
+
+        $this->config = !empty($this->userFile->getUserById($userId)) ?
+            $this->userFile->getUserById($userId) :
+            null;
     }
 
     /**
@@ -71,13 +88,14 @@ class Connection
      * 
      * @return Connection
      */
-    public static function getInstance(): Connection
+    public static function getInstance(Request $request, UserFile $userFile): Connection
     {
         if (!self::$instance) {
-            self::$instance = new Connection(Request::getDatabaseName());
+            self::$instance = new Connection($request, $userFile);
         }
         return self::$instance;
     }
+
     /**
      * Return the PDO connection
      * 
@@ -85,29 +103,7 @@ class Connection
      */
     public function getConnection()
     {
-        return self::$pdo;
-    }
-
-    /**
-     * Try to establish a connection to  mysql 
-     * 
-     * @param string $host
-     * @param string $username
-     * @param string $password
-     * 
-     * @return true -on success
-     * @return false -on failure
-     */
-    public static function validate(string $host, string $username, string $password): bool
-    {
-        if (!self::$pdo) {
-            try {
-                new \PDO("mysql:host=$host", $username, $password);
-                return true;
-            } catch (\PDOException $e) {
-                return false;
-            }
-        }
+        return $this->pdo;
     }
 
     /**
@@ -115,10 +111,10 @@ class Connection
      * 
      * @return void
      */
-    public static function close(): void
+    public function close(): void
     {
-        if (!self::$pdo) {
-            self::$pdo = null;
+        if ($this->pdo) {
+            $this->pdo = null;
         }
     }
 }

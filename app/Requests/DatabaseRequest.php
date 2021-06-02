@@ -12,6 +12,7 @@ class DatabaseRequest
      * @var array $data
      */
     private $data;
+
     /**
      * @var array $messages
      */
@@ -24,14 +25,18 @@ class DatabaseRequest
      */
     private $error = false;
 
+    public Route $route;
+
     /**
+     * @param Route $route;
      * @param array $userInputs
      */
-    public function __construct(array $userInputs)
+    public function __construct(array $userInputs, Route $route)
     {
-
+        $this->route = $route;
         $this->data = $userInputs;
     }
+
     /**
      * On error redirect back with error messages,
      * else return the request.
@@ -57,7 +62,7 @@ class DatabaseRequest
         }
 
         if ($this->error) {
-            Route::redirect('database/create', ['error', $this->messages]);
+            $this->route->redirect('database/create', ['error', $this->messages]);
         }
         return $this->data;
     }

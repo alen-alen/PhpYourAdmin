@@ -4,7 +4,7 @@ namespace PhpYourAdimn\Core\Database;
 
 use PhpYourAdimn\App\Models\MysqlUser;
 
-class Query
+class Query extends Connection
 {
     /**
      * @var PDO $pdo 
@@ -17,9 +17,28 @@ class Query
      */
     public array $tables;
 
-    public function __construct($pdo = null)
+    /**
+     * @param Connection $connection
+     */
+    public function __construct(Connection $connection)
     {
-        $this->pdo = $pdo;
+        $this->pdo = $connection->getConnection();
+    }
+
+    /**
+     * Try to establish a connection to  mysql 
+     * 
+     * @param string $host
+     * @param string $username
+     * @param string $password
+     * 
+     * @return PDOException  on failure 
+     */
+    public function validateConnection(string $host, string $username, string $password)
+    {
+        if (!$this->pdo) {
+            new \PDO("mysql:host=$host", $username, $password);
+        }
     }
 
     /**
@@ -71,20 +90,7 @@ class Query
 
         $statement = $this->pdo->prepare($sql);
 
-        if (!$statement->execute([':username' => $user->username, ':host' => $user->host, ':password' => $user->password])) {
-            die(var_dump($statement->errorInfo()[2]));
-        };
-    }
-
-    public function checkPrivileges()
-    {
-        $sql='SHOW GRANTS';
-
-        $statement = $this->pdo->prepare($sql);
-
-        $statement->execute();
-
-       return $statement->fetch(\PDO::FETCH_ASSOC);
+        $statement->execute([':username' => $user->username, ':host' => $user->host, ':password' => $user->password]);
     }
 
     /**
@@ -139,6 +145,7 @@ class Query
 
         $statement->execute();
     }
+
     /**
      * Query for showing all tables
      * 

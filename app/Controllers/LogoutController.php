@@ -2,12 +2,38 @@
 
 namespace PhpYourAdimn\App\Controllers;
 
+use PhpYourAdimn\Core\Request;
+use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\App\File\UserFile;
 use PhpYourAdimn\App\Helpers\Route;
-use PhpYourAdimn\App\Helpers\Cookie;
+use PhpYourAdimn\Core\Database\Query;
 
 class LogoutController extends Controller
 {
+    /**
+     * @var UserFile $userFile
+     */
+    public UserFile $userFile;
+
+    /**
+     * Translate constructor.
+     * @param Route $route
+     * @param Query $query
+     * @param UserAuth $userAuth
+     * @param Request $request
+     * @param UserFile $userFile
+     */
+    public function __construct(
+        Query $query,
+        Request $request,
+        Route $route,
+        UserFile $userFile,
+        UserAuth $userAuth
+    ) {
+        parent::__construct($query, $request, $route, $userAuth);
+        $this->userAuth->autorize();
+        $this->userFile = $userFile;
+    }
     /**
      * Delete the user from the txt file and
      * destroy the user cookie
@@ -16,10 +42,10 @@ class LogoutController extends Controller
      */
     public function logout(): void
     {
-        UserFile::deleteUser(Cookie::get('user'));
+        $this->userFile->deleteUser($this->request->cookie->get('user'));
 
-        Cookie::destroy('user');
+        $this->request->cookie->destroy('user');
 
-        Route::redirectHome();
+        $this->route->redirectHome();
     }
 }

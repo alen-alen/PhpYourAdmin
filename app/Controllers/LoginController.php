@@ -2,15 +2,43 @@
 
 namespace PhpYourAdimn\App\Controllers;
 
+use PhpYourAdimn\Core\Request;
 use PhpYourAdimn\App\Models\User;
+use PhpYourAdimn\App\Auth\UserAuth;
 use PhpYourAdimn\App\File\UserFile;
 use PhpYourAdimn\App\Helpers\Route;
-use PhpYourAdimn\App\Helpers\Cookie;
+use PhpYourAdimn\Core\Database\Query;
 use PhpYourAdimn\App\Requests\LoginRequest;
-use PhpYourAdimn\Core\Request;
 
 class LoginController extends Controller
 {
+    /**
+     * @var UserFile $userFile
+     */
+    public UserFile $userFile;
+
+    /**
+     * @param Route $route
+     * @param Query $query
+     * @param UserAuth $userAuth
+     * @param Request $request
+     * @param UserFile $userFile
+     */
+    public function __construct(
+        Query $query,
+        Request $request,
+        Route $route,
+        UserFile $userFile,
+        UserAuth $userAuth
+    ) {
+        parent::__construct($query, $request, $route, $userAuth);
+
+        $this->userFile = $userFile;
+    }
+    
+    /**
+     * Show the login form
+     */
     public function index()
     {
         return $this->view('login');
@@ -18,21 +46,20 @@ class LoginController extends Controller
 
     /**
      * Saves the user in a txt file and creates a connection with mysql
-     * 
-     * @param array $request
      */
-    public function login(Request $request)
+    public function login()
     {
-        $loginRequest = new LoginRequest($request->postParameters());
-
+      
+        $loginRequest = new LoginRequest($this->query, $this->request->requestData(), $this->route);
+      
         $request = $loginRequest->validate();
-
+        
         $user = new User();
 
-        UserFile::saveUser($request['host'], $request['username'], $request['password'], $user->getId());
+        $this->userFile->saveUser($request['host'], $request['username'], $request['password'], $user->getId());
 
-        Cookie::set('user', time());
+        $this->request->cookie->set('user', time());
 
-        Route::redirect('database/dashboard');
+        $this->route->redirect('database/dashboard');
     }
 }

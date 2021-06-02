@@ -33,16 +33,25 @@ class MysqlUserRequest
     private $error = false;
 
     /**
+     * @var Route $route
+     */
+    private Route $route;
+
+    /**
      * @param array $userInputs
      * @param array $existingUser
+     * @param Route $route
      */
-    public function __construct(array $userInputs, array $existingUsers)
+    public function __construct(array $userInputs, array $existingUsers, Route $route)
     {
+        $this->route = $route;
         $this->existingUsers = $existingUsers;
+
         $this->data = array_map(function ($input) {
             return trim($input);
         }, $userInputs);
     }
+
     /**
      * On error redirect back with error messages,
      * else return the request.
@@ -68,12 +77,16 @@ class MysqlUserRequest
             $this->error = true;
         }
         if ($this->error) {
-            Route::redirect('database/users/create', ['error', $this->messages]);
+            $this->route->redirect('database/users/create', ['error', $this->messages]);
         }
         return $this->data;
     }
 
-    public function userExists()
+    /**
+     * Check if the user already exists
+     * @return bool
+     */
+    public function userExists(): bool
     {
         $username = $this->data['username'];
         $host = $this->data['host'];
