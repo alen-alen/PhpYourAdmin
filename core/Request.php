@@ -53,9 +53,9 @@ class Request
      * 
      * @param string $key
      * 
-     * @return string|array
+     * @return string
      */
-    public function parameter($key)
+    public function parameter($key): string
     {
         return self::method() === "POST" ? $_POST[$key] : $_GET[$key];
     }

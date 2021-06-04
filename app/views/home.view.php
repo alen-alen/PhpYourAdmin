@@ -20,8 +20,10 @@ require 'app/views/parcels/head.php'; ?>
 
             <div class="row">
                 <div class="col-12 mb-2">
-                    <a href="<?= Route::path('database/import', [['db', $request->parameter('db')]]) ?>" class='btn btn-secondary'>Import</a>
-                    <a href="<?= Route::path('database/export', [['db', $request->parameter('db')]]) ?>" class='btn btn-secondary'>Export</a>
+                    <?php if ($request->has('db')) { ?>
+                        <a href="<?= Route::path('database/import', [['db', $request->parameter('db')]]) ?>" class='btn btn-secondary'>Import</a>
+                        <a href="<?= Route::path('database/export', [['db', $request->parameter('db')]]) ?>" class='btn btn-secondary'>Export</a>
+                    <?php } ?>
                     <a href="<?= Route::path('database/users') ?>" class='btn btn-secondary'>User Accounts</a>
                 </div>
                 <div class="col-12 border-top pt-3">

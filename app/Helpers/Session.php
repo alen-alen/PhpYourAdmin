@@ -9,14 +9,14 @@ class Session
      * 
      * @var bool $active 
      */
-    private $active = false;
+    private bool $active = false;
 
     /**
      * Start a session
      * 
      * @return void
      */
-    public function start()
+    public function start(): void
     {
         if (!$this->active) {
             session_start();
@@ -42,7 +42,7 @@ class Session
      * @param string $key
      * @param string $secondKey if session value is an array
      * 
-     * @return mixed session item value
+     * @return mixed session item value array|string
      */
     public function get(string $key, $secondKey = false)
     {
@@ -64,7 +64,7 @@ class Session
      * @param string $key
      * @return bool
      */
-    public function has($key)
+    public function has($key): bool
     {
         return isset($_SESSION[$key]);
     }

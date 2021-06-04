@@ -4,10 +4,19 @@ namespace PhpYourAdmin\App\Helpers;
 
 class Route
 {
+    /**
+     * @var string HOME_ROUTE
+     */
     const HOME_ROUTE = "database/dashboard";
 
+    /**
+     * @var Session $session
+     */
     public Session $session;
 
+    /**
+     * @param Session $session
+     */
     public function __construct(Session $session)
     {
         $this->session = $session;
@@ -18,6 +27,7 @@ class Route
      * 
      * @param array $data
      * @param string $path redirect route
+     * @return void
      */
     public function redirect($path, array $data = null): void
     {
@@ -34,8 +44,9 @@ class Route
      * Redirect to home route with $data in session
      * 
      * @param array $data 
+     * @return void
      */
-    public function redirectHome($data = null)
+    public function redirectHome($data = null): void
     {
         if (!$data) {
             header("Location:/" . self::HOME_ROUTE);

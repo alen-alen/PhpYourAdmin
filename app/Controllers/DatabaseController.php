@@ -39,7 +39,6 @@ class DatabaseController extends Controller
    */
   public function dashboard(): void
   {
-    $this->query->getDatabases();
     $this->view('home');
   }
 
