@@ -1,14 +1,15 @@
 <?php
 
-namespace PhpYourAdimn\App\Controllers;
+namespace PhpYourAdmin\App\Controllers;
 
 use Exception;
-use PhpYourAdimn\App\Auth\UserAuth;
-use PhpYourAdimn\Core\Request;
-use PhpYourAdimn\App\Helpers\Route;
-use PhpYourAdimn\Core\Database\Query;
-use PhpYourAdimn\App\Requests\DatabaseRequest;
-
+use PhpYourAdmin\Core\Request;
+use PhpYourAdmin\App\Auth\UserAuth;
+use PhpYourAdmin\App\Exceptions\RequestException;
+use PhpYourAdmin\App\Helpers\Route;
+use PhpYourAdmin\Core\Database\Query;
+use PhpYourAdmin\App\Requests\DatabaseRequest;
+use PhpYourAdmin\Core\Log\FileLogger;
 
 class DatabaseController extends Controller
 {
@@ -18,14 +19,16 @@ class DatabaseController extends Controller
    * @param Query $query
    * @param UserAuth $userAuth
    * @param Request $request
+   * @param FileLogger $logger
    */
   public function __construct(
     Query $query,
     Request $request,
     Route $route,
-    UserAuth $userAuth
+    UserAuth $userAuth,
+    FileLogger $logger
   ) {
-    parent::__construct($query, $request, $route, $userAuth);
+    parent::__construct($query, $request, $route, $userAuth, $logger);
 
     $this->userAuth->autorize();
   }
@@ -36,7 +39,6 @@ class DatabaseController extends Controller
    */
   public function dashboard(): void
   {
-    $this->query->getDatabases();
     $this->view('home');
   }
 
@@ -71,6 +73,7 @@ class DatabaseController extends Controller
         array_keys($tableData[0]) :
         $this->query->getTableColumns($this->request->parameter('table'));
     } catch (Exception $e) {
+      $this->logger->error($e->getMessage());
       $message = $e->getMessage();
     }
     $this->view('home', compact('tableData', 'columns', 'message'));
@@ -98,9 +101,14 @@ class DatabaseController extends Controller
    */
   public function store(): void
   {
-    $databaseRequest = new DatabaseRequest($this->request->requestData(), $this->route);
+    $databaseRequest = new DatabaseRequest($this->request->requestData());
 
-    $request = $databaseRequest->validate($this->query->getDatabases());
+    try {
+      $request = $databaseRequest->validate($this->query->getDatabases());
+    } catch (RequestException $e) {
+      $this->logger->notice($e->getMessage());
+      $this->route->redirect('database/create', ['error', $e->getMessage()]);
+    }
 
     $dbOptions = $this->query->getCollationById($request['collationId']);
 

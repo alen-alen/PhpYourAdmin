@@ -1,11 +1,10 @@
 <?php
 
-namespace PhpYourAdimn\App\Requests;
+namespace PhpYourAdmin\App\Requests;
 
 use PDOException;
-use PhpYourAdimn\App\Helpers\Route;
-use PhpYourAdimn\Core\Database\Query;
-
+use PhpYourAdmin\App\Exceptions\RequestException;
+use PhpYourAdmin\Core\Database\Query;
 
 class LoginRequest
 {
@@ -14,19 +13,7 @@ class LoginRequest
      * 
      * @var array $data
      */
-    private $data;
-    
-    /**
-     * @var array $messages
-     */
-    private $messages;
-
-    /**
-     * flag if there are errors
-     * 
-     * @var bool $error
-     */
-    private $error = false;
+    private array $data;
 
     /**
      * Query $query
@@ -34,49 +21,36 @@ class LoginRequest
     private Query $query;
 
     /**
-     * Route $route
-     */
-    private Route $route;
-
-    /**
      * @param array $userInputs
-     * @param Route $route
      * @param Query $query
      */
-    public function __construct(Query $query, array $userInputs, Route $route)
+    public function __construct(Query $query, array $userInputs)
     {
         $this->query = $query;
         $this->data = $userInputs;
-        $this->route = $route;
     }
 
     /**
-     * On error redirect back with error messages,
-     * else return the request.
+     * On error throw RequestException,
+     * else return the request data.
      */
-    public function validate()
+    public function validate():array
     {
         if (!isset($this->data['username']) || empty($this->data['username'])) {
-            $this->messages['username'] = 'Username field cannot be empty';
-            $this->error = true;
+            throw new RequestException('Username field cannot be empty');
         }
         if (!isset($this->data['host']) || empty($this->data['host'])) {
-            $this->messages['host'] = 'Host field cannot be empty';
-            $this->error = true;
+            throw new RequestException('Host field cannot be empty');
         }
         if (!isset($this->data['password']) || empty($this->data['password'])) {
             $this->data['password'] = '';
         }
 
-        if (!$this->error) {
-            try {
-                $this->query->validateConnection($this->data['host'], $this->data['username'], $this->data['password']);
-                return $this->data;
-            } catch (PDOException $e) {
-                $this->messages['connection'] = $e->getMessage();
-                $this->route->redirect('login', ['error', $this->messages]);
-            }
+        try {
+            $this->query->validateConnection($this->data['host'], $this->data['username'], $this->data['password']);
+            return $this->data;
+        } catch (PDOException $e) {
+            throw new RequestException($e->getMessage());
         }
-        $this->route->redirect('login', ['error', $this->messages]);
     }
 }

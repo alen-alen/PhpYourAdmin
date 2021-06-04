@@ -1,11 +1,8 @@
 <?php
 
-use Monolog\Logger;
 use DI\ContainerBuilder;
-use PhpYourAdimn\Core\App;
-use PhpYourAdimn\Core\Router;
-use PhpYourAdimn\Core\Env\DotEnv;
-use Monolog\Handler\StreamHandler;
+use PhpYourAdmin\App\Helpers\Session;
+use PhpYourAdmin\Core\Env\DotEnv;
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -17,11 +14,11 @@ $builder->addDefinitions(__DIR__ . './core/config.php');
 
 $container = $builder->build();
 
-$session = $container->get('PhpYourAdimn\App\Helpers\Session');
+$session = $container->get(Session::class);
 
 $session->start();
 
-$app = new App(new Router($container));
+$app = $container->get('PhpYourAdmin\Core\App');
 
 $app->run();
 

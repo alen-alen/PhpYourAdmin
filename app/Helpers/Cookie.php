@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpYourAdimn\App\Helpers;
+namespace PhpYourAdmin\App\Helpers;
 
 class Cookie
 {
@@ -10,9 +10,9 @@ class Cookie
      * 
      * @param string  $key 
      * 
-     * @return string|array
+     * @return string
      */
-    public function get(string $key)
+    public function get(string $key): string
     {
         $cookie = explode('--', $_COOKIE[$key]);
         $value = $cookie[0];
@@ -51,7 +51,7 @@ class Cookie
      * @param string $key
      * @return bool
      */
-    public function has($key)
+    public function has(string $key): bool
     {
         return isset($_COOKIE[$key]);
     }

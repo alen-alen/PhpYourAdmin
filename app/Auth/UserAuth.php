@@ -1,11 +1,11 @@
 <?php
 
-namespace PhpYourAdimn\App\Auth;
+namespace PhpYourAdmin\App\Auth;
 
-use PhpYourAdimn\App\File\UserFile;
-use PhpYourAdimn\App\Helpers\Route;
-use PhpYourAdimn\App\Helpers\Cookie;
-use PhpYourAdimn\Core\Database\Query;
+use PhpYourAdmin\App\File\UserFile;
+use PhpYourAdmin\App\Helpers\Route;
+use PhpYourAdmin\App\Helpers\Cookie;
+use PhpYourAdmin\Core\Database\Query;
 
 class UserAuth
 {
@@ -30,7 +30,6 @@ class UserAuth
     public Query $query;
 
     /**
-     * Translate constructor.
      * @param Cookie $cookie
      * @param Route $route
      * @param UserFile $userFile
@@ -47,7 +46,7 @@ class UserAuth
         $this->userFile = $userFile;
         $this->query = $query;
     }
-    
+
     /**
      * Check if there is a user loged in if not redirects to login page
      */
@@ -61,7 +60,7 @@ class UserAuth
     /**
      * Check if the Mysqluser  has grant privileges
      */
-    public function isAdmin()
+    public function checkAdmin()
     {
         $users = $this->query->getMysqlUsers();
 

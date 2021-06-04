@@ -1,19 +1,20 @@
 <?php
 
-namespace PhpYourAdimn\App\Controllers;
+namespace PhpYourAdmin\App\Controllers;
 
-use PhpYourAdimn\Core\Request;
-use PhpYourAdimn\App\Auth\UserAuth;
-use PhpYourAdimn\App\File\UserFile;
-use PhpYourAdimn\App\Helpers\Route;
-use PhpYourAdimn\Core\Database\Query;
+use PhpYourAdmin\Core\Request;
+use PhpYourAdmin\App\Auth\UserAuth;
+use PhpYourAdmin\App\File\UserFile;
+use PhpYourAdmin\App\Helpers\Route;
+use PhpYourAdmin\Core\Database\Query;
+use PhpYourAdmin\Core\Log\FileLogger;
 
 class LogoutController extends Controller
 {
     /**
      * @var UserFile $userFile
      */
-    public UserFile $userFile;
+    private UserFile $userFile;
 
     /**
      * Translate constructor.
@@ -28,9 +29,10 @@ class LogoutController extends Controller
         Request $request,
         Route $route,
         UserFile $userFile,
-        UserAuth $userAuth
+        UserAuth $userAuth,
+        FileLogger $logger
     ) {
-        parent::__construct($query, $request, $route, $userAuth);
+        parent::__construct($query, $request, $route, $userAuth, $logger);
         $this->userAuth->autorize();
         $this->userFile = $userFile;
     }

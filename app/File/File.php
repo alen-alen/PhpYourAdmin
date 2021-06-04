@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpYourAdimn\App\File;
+namespace PhpYourAdmin\App\File;
 
-use PhpYourAdimn\App\Helpers\Hash;
+use PhpYourAdmin\App\Helpers\Hash;
 
 class File
 {
@@ -11,20 +11,21 @@ class File
      * 
      * @param string $filePath
      * 
-     * @return string on success
-     * @return false if the file dosent exist
+
+     * @return string 
      */
-    public function getFile($filePath)
+    public function getFile(string $filePath): string
     {
-        return file_exists($filePath) ? file_get_contents($filePath) : false;
+        return file_exists($filePath) ? file_get_contents($filePath) : '';
     }
+
     /**
      * Returns the decrypted txt file as a string
      * 
      * @param string $filePath
      * @return string
      */
-   protected function getDecryptedData(string $filePath): string
+    protected function getDecryptedData(string $filePath): string
     {
         return Hash::decrypt(file_get_contents($filePath));
     }
@@ -36,7 +37,7 @@ class File
      * @param array $array
      * @return string
      */
-   protected function convertToString(array $array): string
+    protected function convertToString(array $array): string
     {
         $string = '';
 
@@ -52,7 +53,7 @@ class File
      * @param string $string
      * @return array
      */
-   protected function convertToArray(string $data): array
+    protected function convertToArray(string $data): array
     {
         $fileUsers = explode('|', $data);
 
@@ -79,7 +80,7 @@ class File
      * @param string $filePath 
      * @return void
      */
-   protected function save(string $data, $filePath)
+    protected function save(string $data, $filePath): void
     {
         $encryptNewStrig = Hash::encrypt($data);
 

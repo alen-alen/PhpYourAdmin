@@ -1,8 +1,9 @@
 <?php
 
-namespace PhpYourAdimn\Core;
+namespace PhpYourAdmin\Core;
 
 use DI\Container;
+use Exception;
 
 class Router
 {
@@ -37,11 +38,14 @@ class Router
     public function load(string $file)
     {
         $router = new $this($this->container);
-
+        if (!file_exists($file)) {
+            throw new Exception('The routes filepath dosent exist');
+        }
         require $file;
 
         return $router;
     }
+
     /**
      * Set a get route in the routes property array
      * 
@@ -53,6 +57,7 @@ class Router
     {
         $this->routes['GET'][$uri] = $controller;
     }
+
     /**
      * Set a post route in the routes property array
      * 
@@ -70,13 +75,14 @@ class Router
      * 
      * @param string $uri
      * @param string $requestType GET or POST
+     * @return void
      */
-    public function direct(string $uri, string $requestType)
+    public function direct(string $uri, string $requestType): void
     {
-        if (array_key_exists($uri, $this->routes[$requestType])) {
-            return  $this->callAction(...explode('@', $this->routes[$requestType][$uri]));
+        if (!array_key_exists($uri, $this->routes[$requestType])) {
+            throw new \Exception('No routes defined');
         }
-        throw new \Exception('No routes defined');
+        $this->callAction(...explode('@', $this->routes[$requestType][$uri]));
     }
 
     /**
@@ -84,10 +90,11 @@ class Router
      * 
      * @param string $controller
      * @param string $action
+     * @return void
      */
-    protected function callAction(string $controller, string $action)
+    protected function callAction(string $controller, string $action): void
     {
-        $controller = "PhpYourAdimn\\App\\Controllers\\{$controller}";
+        $controller = "PhpYourAdmin\\App\\Controllers\\{$controller}";
 
         if (!method_exists($controller, $action)) {
             throw new \Exception("{$controller} does not respond to the {$action} action.");
@@ -95,6 +102,6 @@ class Router
 
         $controller = $this->container->get($controller);
 
-        return $controller->$action();
+        $controller->$action();
     }
 }

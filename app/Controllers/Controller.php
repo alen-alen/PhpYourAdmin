@@ -1,33 +1,39 @@
 <?php
 
-namespace PhpYourAdimn\App\Controllers;
+namespace PhpYourAdmin\App\Controllers;
 
-use PhpYourAdimn\App\Auth\UserAuth;
-use PhpYourAdimn\Core\Request;
-use PhpYourAdimn\App\Helpers\Route;
-use PhpYourAdimn\Core\Database\Query;
+use PhpYourAdmin\Core\Request;
+use PhpYourAdmin\App\Auth\UserAuth;
+use PhpYourAdmin\App\Helpers\Route;
+use PhpYourAdmin\Core\Database\Query;
+use PhpYourAdmin\Core\Log\FileLogger;
 
 class Controller
 {
     /**
      * @var Query $query
      */
-    public Query $query;
+    protected Query $query;
 
     /**
      * @var Request $request
      */
-    public Request $request;
+    protected Request $request;
 
     /**
      * @var Route $route
      */
-    public Route $route;
+    protected Route $route;
 
     /**
      * @var UserAuth $userAuth
      */
-    public UserAuth $userAuth;
+    protected UserAuth $userAuth;
+
+    /**
+     * @var FileLogger $logger
+     */
+    protected FileLogger $logger;
 
     /**
      * Translate constructor.
@@ -36,17 +42,20 @@ class Controller
      * @param Request $request
      * @param Route $route
      * @param UserAuth $userAuth
+     * @param FileLogger
      */
     public function __construct(
         Query $query = null,
         Request $request,
         Route $route,
-        UserAuth $userAuth
+        UserAuth $userAuth,
+        FileLogger $logger
     ) {
         $this->userAuth = $userAuth;
         $this->query = $query;
         $this->route = $route;
         $this->request = $request;
+        $this->logger = $logger;
     }
 
     /**
@@ -55,7 +64,7 @@ class Controller
      * @param string $name file path in the view directory
      * @param array $data data that is sent to the view
      */
-    public function view($name, array $data = [])
+    protected function view($name, array $data = [])
     {
         $request = $this->request;
         extract($data);

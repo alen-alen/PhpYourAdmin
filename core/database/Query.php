@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpYourAdimn\Core\Database;
+namespace PhpYourAdmin\Core\Database;
 
-use PhpYourAdimn\App\Models\MysqlUser;
+use PhpYourAdmin\App\Models\MysqlUser;
 
-class Query extends Connection
+class Query
 {
     /**
      * @var PDO $pdo 
@@ -39,27 +39,6 @@ class Query extends Connection
         if (!$this->pdo) {
             new \PDO("mysql:host=$host", $username, $password);
         }
-    }
-
-    /**
-     * Query for showing all databases from the connection
-     * 
-     * @return array
-     */
-    public function getDatabases(): array
-    {
-        $statement = $this->pdo->prepare('SHOW DATABASES');
-
-        $statement->execute();
-
-        $databases = $statement->fetchAll(\PDO::FETCH_ASSOC);
-
-        $databases = array_map(function ($database) {
-            array_values($database);
-            return array_pop($database);
-        }, $databases);
-
-        return $databases;
     }
 
     /**
@@ -123,11 +102,32 @@ class Query extends Connection
      * @param string $host
      * @return void
      */
-    public function deleteSqlUser($username, $host)
+    public function deleteSqlUser(string $username,string $host)
     {
         $sql = "DROP USER :username@:host";
         $statement = $this->pdo->prepare($sql);
         $statement->execute([':username' => $username, ':host' => $host]);
+    }
+
+    /**
+     * Query for showing all databases from the connection
+     * 
+     * @return array
+     */
+    public function getDatabases(): array
+    {
+        $statement = $this->pdo->prepare('SHOW DATABASES');
+
+        $statement->execute();
+
+        $databases = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        $databases = array_map(function ($database) {
+            array_values($database);
+            return array_pop($database);
+        }, $databases);
+
+        return $databases;
     }
 
     /**
@@ -222,7 +222,7 @@ class Query extends Connection
      * @param string $table table name
      * @return array
      */
-    public function getCollationById($id)
+    public function getCollationById(string $id)
     {
         $sql = "SHOW COLLATION WHERE ID = :id";
 
@@ -256,7 +256,7 @@ class Query extends Connection
      * 
      * @return  $data|PDO exception
      */
-    public function rawSql($query)
+    public function rawSql(string $query)
     {
         $statement = $this->pdo->prepare($query);
 

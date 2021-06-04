@@ -1,7 +1,7 @@
 <?php
 
-use PhpYourAdimn\App\Helpers\Route;
-use PhpYourAdimn\App\Helpers\Session;
+use PhpYourAdmin\App\Helpers\Route;
+use PhpYourAdmin\App\Helpers\Session;
 
 require 'app/views/parcels/head.php'; ?>
 
@@ -13,13 +13,12 @@ require 'app/views/parcels/head.php'; ?>
             </div>
         </div>
         <div class="col-9  pt-3 ">
-            <?php if (Session::has('success')) { ?>
-                <div class='alert alert-success'><?= Session::get('success') ?></div>
+            <?php if ($this->request->session->has('success')) { ?>
+                <div class='alert alert-success'><?= $this->request->session->get('success') ?></div>
             <?php } ?>
-            <?php if (Session::has('error')) {
-                foreach (Session::get('error') as $error) { ?>
-                    <div class='alert alert-danger'><?= $error ?></div>
-            <?php }
+            <?php if ($this->request->session->has('error')) { ?>
+                <div class='alert alert-danger'><?= $this->request->session->get('error') ?></div>
+            <?php
             } ?>
             <div class="row">
                 <div class="col-12 ">

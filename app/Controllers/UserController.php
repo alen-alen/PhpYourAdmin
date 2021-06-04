@@ -1,14 +1,15 @@
 <?php
 
-namespace PhpYourAdimn\App\Controllers;
+namespace PhpYourAdmin\App\Controllers;
 
-use PhpYourAdimn\Core\Request;
-use PhpYourAdimn\Core\Traits\Auth;
-use PhpYourAdimn\App\Auth\UserAuth;
-use PhpYourAdimn\App\Helpers\Route;
-use PhpYourAdimn\Core\Database\Query;
-use PhpYourAdimn\App\Models\MysqlUser;
-use PhpYourAdimn\App\Requests\MysqlUserRequest;
+use PhpYourAdmin\Core\Request;
+use PhpYourAdmin\App\Auth\UserAuth;
+use PhpYourAdmin\App\Exceptions\RequestException;
+use PhpYourAdmin\App\Helpers\Route;
+use PhpYourAdmin\Core\Database\Query;
+use PhpYourAdmin\Core\Log\FileLogger;
+use PhpYourAdmin\App\Models\MysqlUser;
+use PhpYourAdmin\App\Requests\MysqlUserRequest;
 
 class UserController extends Controller
 {
@@ -23,9 +24,10 @@ class UserController extends Controller
         Query $query,
         Request $request,
         Route $route,
-        UserAuth $userAuth
+        UserAuth $userAuth,
+        FileLogger $logger
     ) {
-        parent::__construct($query, $request, $route, $userAuth);
+        parent::__construct($query, $request, $route, $userAuth, $logger);
 
         $this->userAuth->autorize();
     }
@@ -45,7 +47,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $this->userAuth->isAdmin();
+        $this->userAuth->checkAdmin();
 
         return $this->view('user/create');
     }
@@ -56,11 +58,15 @@ class UserController extends Controller
      */
     public function store()
     {
-        $this->userAuth->isAdmin();
+        $this->userAuth->checkAdmin();
 
-        $MysqlUserRequest = new MysqlUserRequest($this->request->requestData(), $this->query->getMysqlUsers(), $this->route);
+        $mysqlUserRequest = new MysqlUserRequest($this->request->requestData(), $this->query->getMysqlUsers());
 
-        $inputs = $MysqlUserRequest->validate();
+        try {
+            $inputs = $mysqlUserRequest->validate();
+        } catch (RequestException $e) {
+            $this->route->redirect('database/users/create', ['error', $e->getMessage()]);
+        }
 
         $user = new MysqlUser($inputs['username'], $inputs['host'], $inputs['type'], $inputs['password']);
 
@@ -76,7 +82,7 @@ class UserController extends Controller
      */
     public function delete()
     {
-        $this->userAuth->isAdmin();
+        $this->userAuth->checkAdmin();
 
         $users = $this->query->getMysqlUsers();
 

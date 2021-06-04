@@ -1,13 +1,13 @@
 <?php
 
-namespace PhpYourAdimn\App\Controllers;
+namespace PhpYourAdmin\App\Controllers;
 
-use PhpYourAdimn\App\Auth\UserAuth;
-use PhpYourAdimn\Core\Request;
-use PhpYourAdimn\Core\Traits\Auth;
-use PhpYourAdimn\App\File\UserFile;
-use PhpYourAdimn\App\Helpers\Route;
-use PhpYourAdimn\Core\Database\Query;
+use PhpYourAdmin\Core\Request;
+use PhpYourAdmin\App\Auth\UserAuth;
+use PhpYourAdmin\App\File\UserFile;
+use PhpYourAdmin\App\Helpers\Route;
+use PhpYourAdmin\Core\Database\Query;
+use PhpYourAdmin\Core\Log\FileLogger;
 
 class ExportController extends Controller
 {
@@ -23,16 +23,17 @@ class ExportController extends Controller
      * @param UserAuth $userAuth
      * @param Request $request
      * @param UserFile $userFile
+     * @param FileLogger $logger
      */
     public function __construct(
         Query $query,
         Request $request,
         Route $route,
         UserFile $userFile,
-        UserAuth $userAuth
+        UserAuth $userAuth,
+        FileLogger $logger
     ) {
-        parent::__construct($query, $request, $route, $userAuth);
-
+        parent::__construct($query, $request, $route, $userAuth, $logger);
         $this->userAuth->autorize();
         $this->userFile = $userFile;
     }
@@ -41,7 +42,7 @@ class ExportController extends Controller
      * Exports and downloads the selected database
      * @return void
      */
-    public function export()
+    public function export(): void
     {
         if (empty($this->request->parameter('db'))) {
 
@@ -55,12 +56,12 @@ class ExportController extends Controller
         $hostname = $userCredentials['host'];
         $dbname   =  $this->request->parameter('db');
         $dumpFileName = $dbname . ".sql";
-        $command = getenv('MYSQL_DUMP') . " --host $hostname --user $username ";
+        $command = getenv('MYSQL_DUMP') . " --host $hostname --user $username";
 
         if (!empty($password)) {
-            $command .= "--password $password";
+            $command .= " --password $password";
         }
-        $command .= "--database $dbname";
+        $command .= " $dbname";
 
         header("Content-Type: application/octet-stream");
         header("Content-Disposition: attachment; filename=$dumpFileName");

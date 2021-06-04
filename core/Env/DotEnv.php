@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpYourAdimn\Core\Env;
+namespace PhpYourAdmin\Core\Env;
 
 class DotEnv
 {

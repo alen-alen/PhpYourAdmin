@@ -1,14 +1,17 @@
 <?php
 
-namespace PhpYourAdimn\App\Controllers;
+namespace PhpYourAdmin\App\Controllers;
 
-use PhpYourAdimn\Core\Request;
-use PhpYourAdimn\App\Models\User;
-use PhpYourAdimn\App\Auth\UserAuth;
-use PhpYourAdimn\App\File\UserFile;
-use PhpYourAdimn\App\Helpers\Route;
-use PhpYourAdimn\Core\Database\Query;
-use PhpYourAdimn\App\Requests\LoginRequest;
+use PhpYourAdmin\Core\Request;
+use PhpYourAdmin\App\Models\User;
+use PhpYourAdmin\App\Auth\UserAuth;
+use PhpYourAdmin\App\File\UserFile;
+use PhpYourAdmin\App\Helpers\Route;
+use PhpYourAdmin\Core\Database\Query;
+use PhpYourAdmin\Core\Log\FileLogger;
+use PhpYourAdmin\App\Requests\LoginRequest;
+use PhpYourAdmin\App\Controllers\Controller;
+use PhpYourAdmin\App\Exceptions\RequestException;
 
 class LoginController extends Controller
 {
@@ -29,13 +32,13 @@ class LoginController extends Controller
         Request $request,
         Route $route,
         UserFile $userFile,
-        UserAuth $userAuth
+        UserAuth $userAuth,
+        FileLogger $logger
     ) {
-        parent::__construct($query, $request, $route, $userAuth);
-
+        parent::__construct($query, $request, $route, $userAuth, $logger);
         $this->userFile = $userFile;
     }
-    
+
     /**
      * Show the login form
      */
@@ -47,13 +50,16 @@ class LoginController extends Controller
     /**
      * Saves the user in a txt file and creates a connection with mysql
      */
-    public function login()
+    public function login(): void
     {
-      
-        $loginRequest = new LoginRequest($this->query, $this->request->requestData(), $this->route);
-      
-        $request = $loginRequest->validate();
-        
+        $loginRequest = new LoginRequest($this->query, $this->request->requestData());
+        try {
+            $request = $loginRequest->validate();
+        } catch (RequestException $e) {
+            $this->logger->info($e->getMessage());
+            $this->route->redirect('login', ['error', [$e->getMessage()]]);
+        }
+
         $user = new User();
 
         $this->userFile->saveUser($request['host'], $request['username'], $request['password'], $user->getId());

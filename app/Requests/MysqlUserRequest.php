@@ -1,8 +1,9 @@
 <?php
 
-namespace PhpYourAdimn\App\Requests;
+namespace PhpYourAdmin\App\Requests;
 
-use PhpYourAdimn\App\Helpers\Route;
+use PhpYourAdmin\App\Helpers\Route;
+use PhpYourAdmin\App\Exceptions\RequestException;
 
 class MysqlUserRequest
 {
@@ -21,63 +22,33 @@ class MysqlUserRequest
     private array $existingUsers;
 
     /**
-     * @var array $messages
-     */
-    private $messages = [];
-
-    /**
-     * flag if there are errors
-     * 
-     * @var bool $error
-     */
-    private $error = false;
-
-    /**
-     * @var Route $route
-     */
-    private Route $route;
-
-    /**
      * @param array $userInputs
      * @param array $existingUser
      * @param Route $route
      */
-    public function __construct(array $userInputs, array $existingUsers, Route $route)
+    public function __construct(array $userInputs, array $existingUsers)
     {
-        $this->route = $route;
         $this->existingUsers = $existingUsers;
-
-        $this->data = array_map(function ($input) {
-            return trim($input);
-        }, $userInputs);
+        $this->data = $userInputs;
     }
 
     /**
-     * On error redirect back with error messages,
-     * else return the request.
+     * On error throw RequestException,
+     * else return the request data.
      */
-    public function validate()
+    public function validate(): array
     {
-        if (!isset($this->data['username']) && empty($this->data['username'])) {
-            $this->messages['username'] = 'Username cannot be empty!';
-            $this->error = true;
+        if (!isset($this->data['username']) || empty($this->data['username'])) {
+            throw new RequestException('Username cannot be empty!');
         }
-        if (empty($this->data['host'])) {
-            $this->messages['host'] = 'Host cannot be empty!';
-            $this->error = true;
+        if (!isset($this->data['host']) || empty($this->data['host'])) {
+            throw new RequestException('Host cannot be empty!');
         }
-
         if ($this->userExists()) {
-            $this->messages['user'] = 'User already exists !';
-            $this->error = true;
+            throw new RequestException('User already exists !');
         }
-
-        if (empty($this->data['type'])) {
-            $this->messages['type'] = 'User type cannot be empty!';
-            $this->error = true;
-        }
-        if ($this->error) {
-            $this->route->redirect('database/users/create', ['error', $this->messages]);
+        if (!isset($this->data['type']) || empty($this->data['type'])) {
+            throw new RequestException('User type cannot be empty!');
         }
         return $this->data;
     }

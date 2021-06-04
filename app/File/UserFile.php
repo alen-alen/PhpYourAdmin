@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpYourAdimn\App\File;
+namespace PhpYourAdmin\App\File;
 
-use PhpYourAdimn\App\File\File;
+use PhpYourAdmin\App\File\File;
 
 class UserFile extends File
 {
@@ -18,6 +18,7 @@ class UserFile extends File
             fopen($filePath, 'w');
         }
     }
+
     /**
      * Retrun the active user as an array
      * or false if there is no user
@@ -27,7 +28,6 @@ class UserFile extends File
      */
     public function getUserById(string $userId)
     {
-
         $users = $this->convertToArray($this->getDecryptedData(getenv('FILE_PATH')));
 
         $user = array_filter($users, function ($user) use ($userId) {

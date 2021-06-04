@@ -1,7 +1,7 @@
 <?php
 require 'app/views/parcels/head.php';
 
-use PhpYourAdimn\App\Helpers\Route;
+use PhpYourAdmin\App\Helpers\Route;
 
 ?>
 
@@ -11,10 +11,9 @@ use PhpYourAdimn\App\Helpers\Route;
             <h1>Create Database</h1>
             <form action="<?= Route::path('database/store') ?>" method="POST">
                 <form>
-                    <?php if ($request->session->has('error')) {
-                        foreach ($request->session->get('error') as $error) { ?>
-                            <div class='alert alert-danger'><?= $error ?></div>
-                    <?php }
+                    <?php if ($request->session->has('error')) { ?>
+                        <div class='alert alert-danger'><?= $request->session->get('error') ?></div>
+                    <?php
                     } ?>
                     <div class="form-group">
                         <label for="dbName">Database name</label>

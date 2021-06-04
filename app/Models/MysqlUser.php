@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpYourAdimn\App\Models;
+namespace PhpYourAdmin\App\Models;
 
 class MysqlUser
 {
@@ -57,7 +57,7 @@ class MysqlUser
      * 
      * @return void
      */
-    public function __construct($username, $host, $type, $password = null)
+    public function __construct(string $username, string $host, string $type, string $password = '')
     {
         $this->username = $username;
         $this->host = $host;
@@ -71,7 +71,7 @@ class MysqlUser
      * Sets the privilege propery based on the user type
      * @return void
      */
-    public function setPriviliges()
+    public function setPriviliges(): void
     {
         switch ($this->type) {
             case 'user':

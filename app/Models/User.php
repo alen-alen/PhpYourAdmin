@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpYourAdimn\App\Models;
+namespace PhpYourAdmin\App\Models;
 
 class User
 {
@@ -9,7 +9,7 @@ class User
      * 
      * @var string $id
      */
-    private $id;
+    private string $id;
 
     public function __construct()
     {

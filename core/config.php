@@ -1,11 +1,19 @@
 <?php
 
-use PhpYourAdimn\Core\Request;
-use PhpYourAdimn\App\File\UserFile;
-use PhpYourAdimn\App\Helpers\Cookie;
-use PhpYourAdimn\App\Helpers\Session;
-use PhpYourAdimn\Core\Database\Connection;
+use PhpYourAdmin\Core\Request;
+use PhpYourAdmin\App\File\UserFile;
+use PhpYourAdmin\App\Helpers\Cookie;
+use PhpYourAdmin\App\Helpers\Session;
+use PhpYourAdmin\Core\Log\FileLogger;
+use PhpYourAdmin\Core\Database\Connection;
 
 return [
-    'PhpYourAdimn\\Core\\Database\\Connection' => Connection::getInstance(new Request(new Session(), new Cookie()), new UserFile())
+    'PhpYourAdmin\\Core\\Database\\Connection' => Connection::getInstance(
+        new Request(
+            new Session(),
+            new Cookie()
+        ),
+        new UserFile(),
+        new FileLogger()
+    ),
 ];

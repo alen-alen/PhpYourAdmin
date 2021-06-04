@@ -1,9 +1,10 @@
 <?php
 
-namespace PhpYourAdimn\Core\Database;
+namespace PhpYourAdmin\Core\Database;
 
-use PhpYourAdimn\Core\Request;
-use PhpYourAdimn\App\File\UserFile;
+use PhpYourAdmin\Core\Request;
+use PhpYourAdmin\App\File\UserFile;
+use PhpYourAdmin\Core\Log\FileLogger;
 
 class Connection
 {
@@ -37,13 +38,20 @@ class Connection
     public UserFile $userFile;
 
     /**
-     * @param Request $request
-     * @param UserFile $userfile
+     * @var FileLogger $logger
      */
-    private function __construct(Request $request, UserFile $userFile)
+    public FileLogger $logger;
+
+    /**
+     * @param Request $request
+     * @param UserFile $userFile
+     * @param FileLogger $logger
+     */
+    private function __construct(Request $request, UserFile $userFile, FileLogger $logger)
     {
         $this->userFile = $userFile;
         $this->request = $request;
+        $this->logger = $logger;
 
         $this->setConfig();
 
@@ -65,6 +73,7 @@ class Connection
         try {
             $this->pdo = new \PDO($dns, $this->config['username'], $this->config['password']);
         } catch (\PDOException $e) {
+            $this->logger->error($e->getMessage);
             die($e->getMessage());
         }
     }
@@ -88,10 +97,11 @@ class Connection
      * 
      * @return Connection
      */
-    public static function getInstance(Request $request, UserFile $userFile): Connection
+    public static function getInstance(Request $request, UserFile $userFile, FileLogger $logger): Connection
     {
+
         if (!self::$instance) {
-            self::$instance = new Connection($request, $userFile);
+            self::$instance = new Connection($request, $userFile, $logger);
         }
         return self::$instance;
     }

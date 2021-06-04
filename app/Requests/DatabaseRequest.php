@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpYourAdimn\App\Requests;
+namespace PhpYourAdmin\App\Requests;
 
-use PhpYourAdimn\App\Helpers\Route;
+use PhpYourAdmin\App\Exceptions\RequestException;
 
 class DatabaseRequest
 {
@@ -11,59 +11,35 @@ class DatabaseRequest
      * 
      * @var array $data
      */
-    private $data;
+    private array $data;
 
     /**
-     * @var array $messages
-     */
-    private $messages = [];
-
-    /**
-     * flag if there are errors
-     * 
-     * @var bool $error
-     */
-    private $error = false;
-
-    public Route $route;
-
-    /**
-     * @param Route $route;
      * @param array $userInputs
      */
-    public function __construct(array $userInputs, Route $route)
+    public function __construct(array $userInputs)
     {
-        $this->route = $route;
         $this->data = $userInputs;
     }
 
     /**
-     * On error redirect back with error messages,
-     * else return the request.
+     * On error throw RequestException,
+     * else return the request data.
      */
-    public function validate($existingDatabases)
+    public function validate(array $existingDatabases): array
     {
         if (!isset($this->data['dbName']) || empty($this->data['dbName'])) {
-            $this->messages['emptyField'] = 'Database name field cannot be empty';
-            $this->error = true;
-        } else {
-            if (in_array($this->data['dbName'], $existingDatabases)) {
-                $this->messages['dbName'] = 'Database already exists';
-                $this->error = true;
-            }
+            throw new RequestException('Database name field cannot be empty');
+        }
+        if (in_array($this->data['dbName'], $existingDatabases)) {
+            throw new RequestException('Database already exists');
         }
         if (!isset($this->data['collationId']) || !is_numeric($this->data['collationId'])) {
-            $this->messages['collation'] = 'Please select a collation';
-            $this->error = true;
+            throw new RequestException('Please select a collation');
         }
         if (!is_numeric($this->data['collationId'])) {
-            $this->messages['collation'] = 'Please select a valid collation';
-            $this->error = true;
+            throw new RequestException('Please select a valid collation');
         }
 
-        if ($this->error) {
-            $this->route->redirect('database/create', ['error', $this->messages]);
-        }
         return $this->data;
     }
 }
