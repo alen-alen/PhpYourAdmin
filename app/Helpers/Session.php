@@ -64,7 +64,7 @@ class Session
      * @param string $key
      * @return bool
      */
-    public function has($key): bool
+    public function has(string $key): bool
     {
         return isset($_SESSION[$key]);
     }

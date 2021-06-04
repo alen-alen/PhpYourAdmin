@@ -25,7 +25,7 @@ class DatabaseRequest
      * On error throw RequestException,
      * else return the request data.
      */
-    public function validate($existingDatabases)
+    public function validate(array $existingDatabases): array
     {
         if (!isset($this->data['dbName']) || empty($this->data['dbName'])) {
             throw new RequestException('Database name field cannot be empty');

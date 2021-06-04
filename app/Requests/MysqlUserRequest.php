@@ -36,7 +36,7 @@ class MysqlUserRequest
      * On error throw RequestException,
      * else return the request data.
      */
-    public function validate()
+    public function validate(): array
     {
         if (!isset($this->data['username']) || empty($this->data['username'])) {
             throw new RequestException('Username cannot be empty!');

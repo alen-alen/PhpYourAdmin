@@ -102,7 +102,7 @@ class Query
      * @param string $host
      * @return void
      */
-    public function deleteSqlUser($username, $host)
+    public function deleteSqlUser(string $username,string $host)
     {
         $sql = "DROP USER :username@:host";
         $statement = $this->pdo->prepare($sql);
@@ -222,7 +222,7 @@ class Query
      * @param string $table table name
      * @return array
      */
-    public function getCollationById($id)
+    public function getCollationById(string $id)
     {
         $sql = "SHOW COLLATION WHERE ID = :id";
 
@@ -256,7 +256,7 @@ class Query
      * 
      * @return  $data|PDO exception
      */
-    public function rawSql($query)
+    public function rawSql(string $query)
     {
         $statement = $this->pdo->prepare($query);
 

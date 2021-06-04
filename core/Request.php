@@ -33,7 +33,7 @@ class Request
      * @param string $key
      * @return bool
      */
-    public function has($key): bool
+    public function has(string $key): bool
     {
         return isset($_POST[$key]) || isset($_GET[$key]);
     }
@@ -55,7 +55,7 @@ class Request
      * 
      * @return string
      */
-    public function parameter($key): string
+    public function parameter(string $key): string
     {
         return self::method() === "POST" ? $_POST[$key] : $_GET[$key];
     }
@@ -67,7 +67,7 @@ class Request
      * 
      * @return array  $_FILES[$key] 
      */
-    public  function file($name): array
+    public  function file(string $name): array
     {
         if (isset($_FILES[$name])) {
             return $_FILES[$name];

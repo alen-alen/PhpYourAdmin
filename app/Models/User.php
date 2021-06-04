@@ -9,7 +9,7 @@ class User
      * 
      * @var string $id
      */
-    private $id;
+    private string $id;
 
     public function __construct()
     {

@@ -75,13 +75,14 @@ class Router
      * 
      * @param string $uri
      * @param string $requestType GET or POST
+     * @return void
      */
-    public function direct(string $uri, string $requestType)
+    public function direct(string $uri, string $requestType): void
     {
-        if (array_key_exists($uri, $this->routes[$requestType])) {
-            return  $this->callAction(...explode('@', $this->routes[$requestType][$uri]));
+        if (!array_key_exists($uri, $this->routes[$requestType])) {
+            throw new \Exception('No routes defined');
         }
-        throw new \Exception('No routes defined');
+        $this->callAction(...explode('@', $this->routes[$requestType][$uri]));
     }
 
     /**
@@ -89,8 +90,9 @@ class Router
      * 
      * @param string $controller
      * @param string $action
+     * @return void
      */
-    protected function callAction(string $controller, string $action)
+    protected function callAction(string $controller, string $action): void
     {
         $controller = "PhpYourAdmin\\App\\Controllers\\{$controller}";
 
@@ -100,6 +102,6 @@ class Router
 
         $controller = $this->container->get($controller);
 
-        return $controller->$action();
+        $controller->$action();
     }
 }

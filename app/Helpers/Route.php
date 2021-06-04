@@ -29,7 +29,7 @@ class Route
      * @param string $path redirect route
      * @return void
      */
-    public function redirect($path, array $data = null): void
+    public function redirect(string $path, array $data = null): void
     {
         if (!$data) {
             header("Location:/{$path}");
@@ -46,9 +46,9 @@ class Route
      * @param array $data 
      * @return void
      */
-    public function redirectHome($data = null): void
+    public function redirectHome(array $data = []): void
     {
-        if (!$data) {
+        if (empty($data)) {
             header("Location:/" . self::HOME_ROUTE);
             exit();
         }
@@ -64,7 +64,7 @@ class Route
      * @param string $path
      * @return string
      */
-    public static function path($path = null, $params = []): string
+    public static function path($path = null, array $params = []): string
     {
         if (!$path) {
             $path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');

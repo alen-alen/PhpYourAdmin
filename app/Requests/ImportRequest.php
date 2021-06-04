@@ -26,7 +26,7 @@ class ImportRequest
      * On error rthrow RequestException,
      * else return the request data.
      */
-    public function validate()
+    public function validate(): array
     {
         if (empty($this->data['name'])) {
             throw new RequestException('Must select a file');
